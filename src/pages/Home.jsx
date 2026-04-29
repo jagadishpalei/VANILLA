@@ -289,8 +289,9 @@ export default function Home() {
             {menuCategories.slice(1).map((cat, index) => {
               let gridClass = "lux-card-standard";
               if (index === 0) gridClass = "lux-card-tall"; // Pizza
-              if (index === 3) gridClass = "lux-card-wide"; // Pasta & Sides
+              if (index === 3) gridClass = "lux-card-wide"; // Sandwiches
               if (index === 6) gridClass = "lux-card-tall"; // Shakes
+              if (index === 8) gridClass = "lux-card-wide"; // Fries & Snacks
               
               return (
                 <RevealSection key={cat.id} delay={(index % 3) * 0.1}>

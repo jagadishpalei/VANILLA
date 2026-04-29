@@ -401,6 +401,7 @@
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 240px;
   gap: 1.2rem;
+  grid-auto-flow: dense; /* Fills gaps automatically */
 }
 
 /* Asymmetrical spans */
@@ -410,6 +411,11 @@
 
 .lux-card-wide {
   grid-column: span 2;
+}
+
+.lux-card-big {
+  grid-column: span 2;
+  grid-row: span 2;
 }
 
 @media (max-width: 1024px) {
