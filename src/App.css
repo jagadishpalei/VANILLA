@@ -1,0 +1,184 @@
+/* App.css — Charcoal + Matte Orange + White Global Theme */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background-color: #1C1C1E;
+  color: #F5F2ED;
+  margin: 0;
+}
+
+.d2c-layout {
+  font-family: 'Inter', 'Varela Round', sans-serif;
+  background-color: #1C1C1E;
+  color: #F5F2ED;
+  overflow-x: hidden;
+}
+
+/* ── Global Navbar ── */
+.d2c-navbar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  background: rgba(28, 28, 30, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1rem 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(245, 242, 237, 0.06);
+  transition: all 0.3s ease;
+}
+
+.d2c-navbar.scrolled {
+  background: rgba(19, 19, 21, 0.95);
+  padding: 0.7rem 0;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+}
+
+.d2c-nav-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.d2c-logo { height: 50px; object-fit: contain; }
+
+.d2c-nav-links {
+  display: flex;
+  gap: 3rem;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+
+.d2c-nav-links li {
+  color: rgba(245, 242, 237, 0.7);
+  font-weight: 400;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.d2c-nav-links li:hover { color: #D4621A; }
+
+.d2c-cart-btn {
+  background: transparent;
+  color: #D4621A;
+  border: 1px solid rgba(212, 98, 26, 0.4);
+  padding: 0.7rem 1.8rem;
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  font-family: inherit;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.d2c-cart-btn:hover {
+  background: #D4621A;
+  color: #1C1C1E;
+  border-color: #D4621A;
+  box-shadow: 0 5px 20px rgba(212, 98, 26, 0.3);
+}
+
+/* ── Hero Section (legacy) ── */
+.d2c-hero {
+  padding-top: 140px;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #1C1C1E;
+}
+
+.d2c-hero-content {
+  flex: 1;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6rem;
+}
+
+.d2c-hero-text {
+  flex: 0 0 550px;
+  z-index: 10;
+}
+
+.d2c-headline {
+  font-size: 5.5rem;
+  line-height: 1.1;
+  color: #F5F2ED;
+  margin-bottom: 2rem;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 300;
+}
+
+.d2c-highlight { color: #D4621A; }
+
+.d2c-subheadline {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: rgba(245, 242, 237, 0.5);
+  margin-bottom: 3rem;
+  font-weight: 400;
+}
+
+.d2c-hero-visuals {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  min-height: 700px;
+  display: flex;
+  perspective: 1000px;
+}
+
+.d2c-blob-bg {
+  position: absolute;
+  width: 800px; height: 800px;
+  background-color: rgba(212, 98, 26, 0.08);
+  border-radius: 50% 40% 60% 40% / 40% 50% 60% 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  filter: blur(60px);
+}
+
+.floating-item {
+  position: absolute;
+  z-index: 2;
+  object-fit: cover;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  background-color: #252528;
+  cursor: grab;
+  transform-style: preserve-3d;
+  border: 6px solid rgba(245, 242, 237, 0.06);
+}
+
+.floating-item:active { cursor: grabbing; }
+
+.item-1 { width: 220px; top: 10%; left: 10%; transform: rotate(-10deg); z-index: 4; }
+.item-2 { width: 320px; top: 40%; left: 35%; transform: translate(-50%, -50%) rotate(5deg); z-index: 5; }
+.item-3 { width: 180px; bottom: 20%; left: 15%; transform: rotate(-8deg); z-index: 3; }
+.item-4 { width: 200px; top: 20%; right: 5%; transform: rotate(12deg); z-index: 2; }
+.item-5 { width: 260px; bottom: 15%; right: 15%; transform: rotate(-5deg); z-index: 6; }
+
+@media (max-width: 1200px) {
+  .d2c-hero-content { flex-direction: column; text-align: left; padding: 0 2rem; }
+  .d2c-hero-text { flex: 0 0 auto; max-width: 100%; }
+  .d2c-hero-visuals { width: 100%; min-height: 500px; }
+  .d2c-nav-container { padding: 0 2rem; }
+}

@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Varela+Round&display=swap');
+
+:root {
+  --primary: #ffffff;
+  --accent: #FF7A00;
+  --secondary: #0A0A0A;
+  --text-dim: rgba(255, 255, 255, 0.7);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(12px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--secondary);
+  color: var(--primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.brand-font {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Base styles for app */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
