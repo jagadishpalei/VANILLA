@@ -91,18 +91,30 @@ export default function Home() {
             </motion.div>
             <div className="luxury-nav-links">
               {['Menu', 'Why Us', 'Reviews', 'Contact'].map((item, i) => (
-                <motion.a
-                  key={item}
-                  href={item === 'Menu' ? '/menu' : `#${item.toLowerCase().replace(' ', '-')}`}
-                  onClick={item === 'Menu' ? (e) => { e.preventDefault(); window.location.href = '/menu'; } : undefined}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 * i }}
-                  className="luxury-nav-link"
-                >
-                  {item}
-                  <span className="luxury-nav-underline" />
-                </motion.a>
+                item === 'Menu' ? (
+                  <Link key={item} to="/menu" className="luxury-nav-link">
+                    <motion.span
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.1 * i }}
+                    >
+                      {item}
+                      <span className="luxury-nav-underline" />
+                    </motion.span>
+                  </Link>
+                ) : (
+                  <motion.a
+                    key={item}
+                    href={`#${item.toLowerCase().replace(' ', '-')}`}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 * i }}
+                    className="luxury-nav-link"
+                  >
+                    {item}
+                    <span className="luxury-nav-underline" />
+                  </motion.a>
+                )
               ))}
             </div>
           </div>
