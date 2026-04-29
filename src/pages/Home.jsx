@@ -50,6 +50,8 @@ export default function Home() {
   const parallaxY  = useTransform(scrollY, [0, 500], [0, 150]);
   const parallaxY2 = useTransform(scrollY, [0, 500], [0, -100]);
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   useEffect(() => {
     const handleMouseMove = (e) => {
       const cx = window.innerWidth  / 2;
@@ -89,7 +91,9 @@ export default function Home() {
               </div>
               <span style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 300, letterSpacing: '0.15em', fontFamily: "'Inter', sans-serif", textTransform: 'uppercase' }}>VANILLA</span>
             </motion.div>
-            <div className="luxury-nav-links">
+
+            {/* Desktop Links */}
+            <div className="luxury-nav-links desktop-only">
               {['Menu', 'Why Us', 'Reviews', 'Contact'].map((item, i) => (
                 item === 'Menu' ? (
                   <Link key={item} to="/menu" className="luxury-nav-link">
@@ -117,7 +121,43 @@ export default function Home() {
                 )
               ))}
             </div>
+
+            {/* Mobile Toggle */}
+            <motion.button 
+              className="mobile-toggle"
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <div className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`}>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </motion.button>
           </div>
+
+          {/* Mobile Menu Dropdown */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.div 
+                className="mobile-menu"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+              >
+                {['Menu', 'Why Us', 'Reviews', 'Contact'].map((item) => (
+                  <Link 
+                    key={item} 
+                    to={item === 'Menu' ? '/menu' : `/#${item.toLowerCase().replace(' ', '-')}`}
+                    className="mobile-menu-link"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item}
+                  </Link>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </nav>
 
         {/* Animated radial gradient background */}
