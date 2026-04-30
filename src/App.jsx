@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Home from './pages/Home';
@@ -7,6 +7,7 @@ import MenuSubCategory from './pages/MenuSubCategory';
 import WhyUs from './pages/WhyUs';
 import Contact from './pages/Contact';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
+import SplashScreen from './components/SplashScreen';
 import './App.css';
 
 function AnimatedRoutes() {
@@ -26,11 +27,19 @@ function AnimatedRoutes() {
 }
 
 function App() {
+  const [splashDone, setSplashDone] = useState(false);
+
   return (
-    <Router>
-      <AnimatedRoutes />
-      <FloatingWhatsApp />
-    </Router>
+    <>
+      <AnimatePresence>
+        {!splashDone && <SplashScreen onComplete={() => setSplashDone(true)} />}
+      </AnimatePresence>
+
+      <Router>
+        <AnimatedRoutes />
+        <FloatingWhatsApp />
+      </Router>
+    </>
   );
 }
 
