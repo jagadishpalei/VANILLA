@@ -3,71 +3,66 @@ import { motion, AnimatePresence } from 'framer-motion';
 import './SplashScreen.css';
 
 export default function SplashScreen({ onComplete }) {
-  const [phase, setPhase] = useState('enter'); // 'enter' → 'hold' → 'exit'
+  const [phase, setPhase] = useState('show'); // 'show' | 'exit'
 
   useEffect(() => {
-    // Phase 1: logo appears → hold
-    const holdTimer = setTimeout(() => setPhase('exit'), 1400);
-    return () => clearTimeout(holdTimer);
+    const t = setTimeout(() => setPhase('exit'), 1400);
+    return () => clearTimeout(t);
   }, []);
 
-  // When exit animation is done, notify parent
-  const handleExitComplete = () => {
-    if (phase === 'exit') onComplete();
-  };
-
   return (
-    <AnimatePresence onExitComplete={handleExitComplete}>
-      {phase !== 'exit' && (
-        <motion.div
-          className="splash-overlay"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: 'easeInOut' }}
-        >
-          {/* Ambient glow */}
-          <div className="splash-glow" />
+    <>
+      {/* ── BACKGROUND — fades out separately ── */}
+      <AnimatePresence onExitComplete={onComplete}>
+        {phase === 'show' && (
+          <motion.div
+            className="splash-bg"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.7, delay: 1.0 }}
+          >
+            <div className="splash-glow" />
 
-          {/* Logo group — scales down & slides to top-left on exit */}
+            {/* Brand text */}
+            <motion.span
+              className="splash-brand-name"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8, transition: { duration: 0.25 } }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              VANILLA
+            </motion.span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── LOGO — moves to top-left independently ── */}
+      <AnimatePresence>
+        {phase === 'show' && (
           <motion.div
             className="splash-logo-group"
-            initial={{ scale: 1, x: 0, y: 0, opacity: 0 }}
-            animate={{ scale: 1, x: 0, y: 0, opacity: 1 }}
+            /* Start: centered on viewport */
+            initial={{ x: '-50%', y: '-50%', scale: 0.8, opacity: 0 }}
+            animate={{ x: '-50%', y: '-50%', scale: 1, opacity: 1 }}
+            /* Exit: slide toward navbar logo position + shrink */
             exit={{
-              scale: 0.18,
               x: 'calc(-50vw + 42px)',
               y: 'calc(-50vh + 36px)',
+              scale: 0.28,
               opacity: 0,
+              transition: { duration: 1.6, ease: [0.4, 0, 0.2, 1] },
             }}
-            transition={{
-              exit: { duration: 0.7, ease: [0.76, 0, 0.24, 1] },
-              opacity: { duration: 0.5 },
-            }}
+            transition={{ duration: 0.5 }}
           >
-            {/* Outer rotating ring */}
             <div className="splash-ring splash-ring-outer" />
-
-            {/* Inner dashed ring */}
             <div className="splash-ring splash-ring-inner" />
-
-            {/* Logo image */}
             <div className="splash-logo-wrap">
               <img src="/logo3.png" alt="Vanilla" className="splash-logo-img" />
             </div>
           </motion.div>
-
-          {/* Brand name below logo — fades out faster */}
-          <motion.span
-            className="splash-brand-name"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.5, delay: 0.2, exit: { duration: 0.3 } }}
-          >
-            VANILLA
-          </motion.span>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

@@ -2,7 +2,8 @@
    VANILLA — CINEMATIC SPLASH SCREEN
 ══════════════════════════════════════════════ */
 
-.splash-overlay {
+/* Background overlay — fades independently */
+.splash-bg {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -12,9 +13,10 @@
   justify-content: center;
   background: radial-gradient(ellipse at center, #1a1208 0%, #0A0A0A 60%, #000 100%);
   overflow: hidden;
+  pointer-events: all;
 }
 
-/* Soft ambient glow behind the logo */
+/* Soft ambient glow */
 .splash-glow {
   position: absolute;
   width: 400px;
@@ -23,23 +25,42 @@
   background: radial-gradient(circle, rgba(255, 122, 0, 0.18) 0%, transparent 70%);
   filter: blur(60px);
   pointer-events: none;
-  animation: splashGlowPulse 1.8s ease-in-out infinite alternate;
+  animation: splashGlowPulse 2s ease-in-out infinite alternate;
 }
 
 @keyframes splashGlowPulse {
   from { transform: scale(0.9); opacity: 0.6; }
-  to   { transform: scale(1.1); opacity: 1;   }
+  to   { transform: scale(1.1); opacity: 1; }
 }
 
-/* Logo group — contains rings + logo */
+/* Brand name text — sits inside the background */
+.splash-brand-name {
+  position: absolute;
+  /* Below the logo group (offset from center) */
+  top: calc(50% + 110px);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 300;
+  letter-spacing: 0.45em;
+  color: rgba(245, 242, 237, 0.75);
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+/* ── Logo group — floats independently over everything ── */
 .splash-logo-group {
-  position: relative;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* Framer Motion will apply its own transform on top of CSS —
+     initial x/y of '-50%' centers it correctly */
   width: 160px;
   height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  z-index: 10000; /* above the background overlay */
+  pointer-events: none;
 }
 
 /* Rings */
@@ -48,7 +69,6 @@
   border-radius: 50%;
   top: 50%;
   left: 50%;
-  transform-origin: center center;
 }
 
 .splash-ring-outer {
@@ -103,41 +123,38 @@
   mix-blend-mode: multiply;
 }
 
-/* Brand name text */
-.splash-brand-name {
-  margin-top: 1.6rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.05rem;
-  font-weight: 300;
-  letter-spacing: 0.45em;
-  color: rgba(245, 242, 237, 0.75);
-  text-transform: uppercase;
-  position: relative;
-  z-index: 2;
-}
-
-/* ── Mobile tweaks ── */
+/* ── Mobile ── */
 @media (max-width: 480px) {
   .splash-glow {
-    width: 280px;
-    height: 280px;
+    width: 260px;
+    height: 260px;
   }
+
+  .splash-brand-name {
+    top: calc(50% + 88px);
+    font-size: 0.9rem;
+    letter-spacing: 0.35em;
+  }
+
   .splash-logo-group {
     width: 130px;
     height: 130px;
   }
+
   .splash-ring-outer {
     width: 130px;
     height: 130px;
     margin-left: -65px;
     margin-top: -65px;
   }
+
   .splash-ring-inner {
     width: 96px;
     height: 96px;
     margin-left: -48px;
     margin-top: -48px;
   }
+
   .splash-logo-wrap {
     width: 64px;
     height: 64px;
