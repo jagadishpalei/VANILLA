@@ -53,6 +53,8 @@ export default function MenuCategories() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
         >
           <Link to={`/menu/${heroCategory.id}`} className="hero-category-card">
+            <div className="lux-frame-emblem"></div>
+            <div className="lux-frame-ornament"></div>
             <div className="hero-image-wrapper">
               <img src={heroCategory.image} alt={heroCategory.title} className="hero-image" />
               <div className="hero-gradient"></div>
@@ -60,9 +62,8 @@ export default function MenuCategories() {
             <div className="hero-content">
               <span className="hero-eyebrow">Signature</span>
               <h2 className="hero-title">{heroCategory.title}</h2>
-              <span className="hero-cta">Explore ✦</span>
+              <div className="lux-title-divider"></div>
             </div>
-            <div className="hero-glow"></div>
           </Link>
         </motion.div>
 
@@ -84,14 +85,16 @@ export default function MenuCategories() {
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: (index % 3) * 0.1 }}
               >
                 <Link to={`/menu/${cat.id}`} className="lux-card-inner">
+                  <div className="lux-frame-emblem"></div>
+                  <div className="lux-frame-ornament"></div>
                   <div className="lux-image-wrapper">
                     <img src={cat.image} alt={cat.title} className="lux-image" />
                     <div className="lux-overlay"></div>
                   </div>
                   <div className="lux-content">
                     <h3 className="lux-title">{cat.title}</h3>
+                    <div className="lux-title-divider"></div>
                   </div>
-                  <div className="lux-glow-effect"></div>
                 </Link>
               </motion.div>
             )

@@ -4,7 +4,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 const NAV_ITEMS = [
   { label: 'Menu',    to: '/menu' },
-  { label: 'Why Us',  to: '/#why-us' },
+  { label: 'About Us',to: '/why-us' },
+  { label: 'Gallery', to: '/#gallery' },
   { label: 'Reviews', to: '/#reviews' },
   { label: 'Contact', to: '/contact' },
 ];

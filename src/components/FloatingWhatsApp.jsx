@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 export default function FloatingWhatsApp() {
   return (
     <motion.a
-      href="https://wa.me/917008061760"
+      href="https://api.whatsapp.com/send?phone=917008061760&text=Hello%20Vanilla,%20I%20want%20to%20enquire."
       target="_blank"
       rel="noreferrer"
       className="whatsapp-float"

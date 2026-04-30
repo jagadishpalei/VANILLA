@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import '../App.css';
@@ -8,15 +9,49 @@ import './Menu.css';
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: 'Booking', message: '' });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success' or 'error'
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleForm = (e) => {
+  const handleForm = async (e) => {
     e.preventDefault();
-    const { name, email, phone, subject, message } = formData;
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nSubject: ${subject}\n\n${message}`);
-    window.location.href = `mailto:hello@vanilla.in?subject=Enquiry - ${subject}&body=${body}`;
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      /* 
+        To make this work, sign up at emailjs.com and create a service & template.
+        Replace 'YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', and 'YOUR_PUBLIC_KEY'.
+        The template should use variables: {{from_name}}, {{reply_to}}, {{phone}}, {{subject}}, {{message}}
+      */
+      await emailjs.send(
+        'YOUR_SERVICE_ID', 
+        'YOUR_TEMPLATE_ID', 
+        {
+          from_name: formData.name,
+          reply_to: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+          to_email: 'vanillafc17@gmail.com'
+        },
+        'YOUR_PUBLIC_KEY'
+      );
+
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', phone: '', subject: 'Booking', message: '' });
+      
+      // Clear success message after 5 seconds
+      setTimeout(() => setSubmitStatus(null), 5000);
+    } catch (error) {
+      console.error('Failed to send email:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const MAP_URL = "https://www.google.com/maps/place/Vanilla+Food+Court+-+Cafe+%26+Cake+Shop+in+Keonjhar/@21.6362285,85.5816713,14z/data=!4m10!1m2!2m1!1svanilla+food+court+keonjhar!3m6!1s0x3a1efd6964a0eee7:0x33708f66ddbb494!8m2!3d21.6362285!4d85.6177202!15sCht2YW5pbGxhIGZvb2QgY291cnQga2VvbmpoYXJaHSIbdmFuaWxsYSBmb29kIGNvdXJ0IGtlb25qaGFykgEGYmFrZXJ54AEA!16s%2Fg%2F11f3ts857t?entry=ttu";
@@ -39,7 +74,7 @@ export default function Contact() {
       </div>
 
       <section className="section-contact" style={{ paddingTop: '160px', paddingBottom: '100px', minHeight: '100vh' }}>
-        <div className="section-header" style={{ textAlign: 'left', maxWidth: '1200px', margin: '0 auto 4rem', padding: '0 2rem' }}>
+        <div className="section-header contact-header">
           <motion.h1 
             className="section-title"
             style={{ fontSize: 'clamp(3.5rem, 8vw, 5.5rem)', marginBottom: '1rem', lineHeight: 1.1 }}
@@ -59,7 +94,7 @@ export default function Contact() {
           </motion.p>
         </div>
 
-        <div className="contact-grid" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+        <div className="contact-grid contact-grid-wrapper">
           
           {/* Left Column: Info & Action */}
           <motion.div 
@@ -92,7 +127,7 @@ export default function Contact() {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                 Call Now
               </a>
-              <a href="https://wa.me/917008061760" target="_blank" rel="noreferrer" className="btn-action btn-whatsapp">
+              <a href="https://api.whatsapp.com/send?phone=917008061760&text=Hello%20Vanilla,%20I%20want%20to%20enquire." target="_blank" rel="noreferrer" className="btn-action btn-whatsapp">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.412.001 12.049a11.82 11.82 0 001.578 5.919L0 24l6.117-1.605a11.803 11.803 0 005.925 1.577h.005c6.635 0 12.044-5.412 12.048-12.05a11.802 11.802 0 00-3.48-8.514z"></path></svg>
                 WhatsApp
               </a>
@@ -112,7 +147,7 @@ export default function Contact() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '24px', padding: '2.5rem' }}>
+            <div className="contact-form-wrapper">
               <form className="contact-form" onSubmit={handleForm}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.2rem' }}>
                   <div>
@@ -140,9 +175,31 @@ export default function Contact() {
                     <textarea className="form-input form-textarea" placeholder="How can we help you?" rows={5} required value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })} style={{ background: 'rgba(255,255,255,0.03)' }} />
                   </div>
                 </div>
-                <button type="submit" className="form-submit-btn" style={{ marginTop: '1.5rem', width: '100%' }}>
-                  Send Enquiry
+                <button 
+                  type="submit" 
+                  className="form-submit-btn" 
+                  style={{ marginTop: '1.5rem', width: '100%', opacity: isSubmitting ? 0.7 : 1 }}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Enquiry'}
                 </button>
+                
+                {submitStatus === 'success' && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} 
+                    style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(37, 211, 102, 0.1)', border: '1px solid rgba(37, 211, 102, 0.3)', borderRadius: '8px', color: '#25D366', textAlign: 'center', fontSize: '0.9rem' }}
+                  >
+                    Enquiry sent successfully! We will get back to you soon.
+                  </motion.div>
+                )}
+                {submitStatus === 'error' && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} 
+                    style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(255, 60, 60, 0.1)', border: '1px solid rgba(255, 60, 60, 0.3)', borderRadius: '8px', color: '#FF3C3C', textAlign: 'center', fontSize: '0.9rem' }}
+                  >
+                    Failed to send. Please try again or contact us directly.
+                  </motion.div>
+                )}
               </form>
             </div>
           </motion.div>
