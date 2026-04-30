@@ -272,7 +272,7 @@
 
 .menu-header h1 {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
   font-weight: 400;
   margin-bottom: 0.5rem;
   color: var(--white, #F5F2ED);
