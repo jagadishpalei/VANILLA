@@ -44,13 +44,13 @@ const REVIEWS = [
 ════════════════════════════════════════════════════ */
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: 'Booking', message: '' });
+
 
   const { scrollY } = useScroll();
   const parallaxY  = useTransform(scrollY, [0, 500], [0, 150]);
   const parallaxY2 = useTransform(scrollY, [0, 500], [0, -100]);
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -62,12 +62,7 @@ export default function Home() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const handleForm = (e) => {
-    e.preventDefault();
-    const { name, email, phone, subject, message } = formData;
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nSubject: ${subject}\n\n${message}`);
-    window.location.href = `mailto:hello@vanilla.in?subject=Enquiry - ${subject}&body=${body}`;
-  };
+
 
   return (
     <motion.div
@@ -82,83 +77,7 @@ export default function Home() {
       ══════════════════════════════════════ */}
       <section className="luxury-hero">
 
-        {/* Navbar — white links over dark bg */}
-        <nav className="luxury-nav">
-          <div className="luxury-nav-inner">
-            <motion.div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }} whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
-              <div style={{ width: '45px', height: '45px', borderRadius: '50%', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <img src="/logo3.png" alt="Vanilla Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scale(1.15)', mixBlendMode: 'multiply' }} />
-              </div>
-              <span style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 300, letterSpacing: '0.15em', fontFamily: "'Inter', sans-serif", textTransform: 'uppercase' }}>VANILLA</span>
-            </motion.div>
-
-            {/* Desktop Links */}
-            <div className="luxury-nav-links desktop-only">
-              {['Menu', 'Why Us', 'Reviews', 'Contact'].map((item, i) => (
-                item === 'Menu' ? (
-                  <Link key={item} to="/menu" className="luxury-nav-link">
-                    <motion.span
-                      initial={{ opacity: 0, y: -20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.1 * i }}
-                    >
-                      {item}
-                      <span className="luxury-nav-underline" />
-                    </motion.span>
-                  </Link>
-                ) : (
-                  <motion.a
-                    key={item}
-                    href={`#${item.toLowerCase().replace(' ', '-')}`}
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 * i }}
-                    className="luxury-nav-link"
-                  >
-                    {item}
-                    <span className="luxury-nav-underline" />
-                  </motion.a>
-                )
-              ))}
-            </div>
-
-            {/* Mobile Toggle */}
-            <motion.button 
-              className="mobile-toggle"
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              <div className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`}>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </motion.button>
-          </div>
-
-          {/* Mobile Menu Dropdown */}
-          <AnimatePresence>
-            {isMobileMenuOpen && (
-              <motion.div 
-                className="mobile-menu"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-              >
-                {['Menu', 'Why Us', 'Reviews', 'Contact'].map((item) => (
-                  <Link 
-                    key={item} 
-                    to={item === 'Menu' ? '/menu' : `/#${item.toLowerCase().replace(' ', '-')}`}
-                    className="mobile-menu-link"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item}
-                  </Link>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </nav>
+      <Navbar />
 
         {/* Animated radial gradient background */}
         <div className="luxury-bg">
@@ -197,7 +116,7 @@ export default function Home() {
           <div className="luxury-float-overlay-bottom" />
         </motion.div>
 
-        {/* Floating image — Right (burger) */}
+        {/* Floating image — Right (cheesecake) */}
         <motion.div
           style={{ y: parallaxY2 }}
           animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
@@ -240,22 +159,22 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.8 }}
           >
-            <Link to="/menu">
-              <motion.button
-                className="luxury-cta-btn"
-                whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(255,122,0,0.6)' }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span className="luxury-cta-text">Explore Menu</span>
-                <motion.div
-                  className="luxury-cta-fill"
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: 0 }}
-                  transition={{ duration: 0.5 }}
-                />
-                <span className="luxury-cta-hover-text">Explore Menu</span>
-              </motion.button>
-            </Link>
+              <Link to="/menu">
+                <motion.button
+                  className="luxury-cta-btn"
+                  whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(255,122,0,0.6)' }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <span className="luxury-cta-text">Explore Menu</span>
+                  <motion.div
+                    className="luxury-cta-fill"
+                    initial={{ x: '-100%' }}
+                    whileHover={{ x: 0 }}
+                    transition={{ duration: 0.5 }}
+                  />
+                  <span className="luxury-cta-hover-text">Explore Menu</span>
+                </motion.button>
+              </Link>
           </motion.div>
         </div>
 
@@ -390,57 +309,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          SECTION 4 — CONTACT
-      ══════════════════════════════════════ */}
-      <section className="section-contact" id="contact">
-        <RevealSection>
-          <div className="section-header">
-            <p className="section-eyebrow">Get in Touch</p>
-            <h2 className="section-title">Contact Us</h2>
-          </div>
-        </RevealSection>
 
-        <div className="contact-grid">
-          <RevealSection>
-            <div className="contact-info">
-              <div className="contact-block">
-                <h4>📍 Locations</h4>
-                <p>Keonjhar, Odisha</p>
-                <p>Bhubaneswar</p>
-              </div>
-              <div className="contact-block">
-                <h4>📞 Phone</h4>
-                <p>+91 XXXXX XXXXX</p>
-              </div>
-              <div className="contact-block">
-                <h4>✉️ Email</h4>
-                <p>hello@vanilla.in</p>
-              </div>
-              <div className="qr-box">
-                <div className="qr-placeholder"><span>QR</span></div>
-                <p className="qr-label">Scan for Location</p>
-                <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="map-btn">View on Map</a>
-              </div>
-            </div>
-          </RevealSection>
-
-          <RevealSection delay={0.15}>
-            <form className="contact-form" onSubmit={handleForm}>
-              <input className="form-input" type="text" placeholder="Full Name" required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
-              <input className="form-input" type="email" placeholder="Email Address" required value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
-              <input className="form-input" type="tel" placeholder="Phone Number (optional)" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
-              <select className="form-input form-select" value={formData.subject} onChange={e => setFormData({ ...formData, subject: e.target.value })}>
-                <option>Booking</option>
-                <option>Catering</option>
-                <option>General</option>
-              </select>
-              <textarea className="form-input form-textarea" placeholder="Your message..." rows={5} required value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })} />
-              <button type="submit" className="form-submit-btn">Send Enquiry ✦</button>
-            </form>
-          </RevealSection>
-        </div>
-      </section>
 
       {/* ══════════════════════════════════════
           SECTION 5 — REVIEWS

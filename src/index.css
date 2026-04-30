@@ -8,6 +8,21 @@
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-blur: blur(12px);
+
+  /* New Theme Tokens */
+  --charcoal:       #0A0A0A;
+  --charcoal-light: #121212;
+  --charcoal-mid:   #1A1A1A;
+  --charcoal-card:  #121212;
+  --orange:         #FF7A00;
+  --orange-muted:   #E06A00;
+  --orange-glow:    rgba(255, 122, 0, 0.15);
+  --orange-border:  rgba(255, 122, 0, 0.3);
+  --white:          #FFFFFF;
+  --white-soft:     rgba(255, 255, 255, 0.85);
+  --white-dim:      rgba(255, 255, 255, 0.45);
+  --white-ghost:    rgba(255, 255, 255, 0.08);
+  --divider:        rgba(255, 255, 255, 0.08);
 }
 
 * {
