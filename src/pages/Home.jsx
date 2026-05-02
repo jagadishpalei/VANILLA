@@ -47,7 +47,7 @@ function MobileCardStack() {
   const wrapperRef = useRef(null);
   const touchStartY = useRef(null);
   const touchStartX = useRef(null);
-  // null = undecided, 'v' = vertical (card swipe), 'h' = horizontal (ignore)
+  // null = undecided, 'h' = horizontal (card swipe), 'v' = vertical (ignore)
   const touchAxis = useRef(null);
   const total = menuCategories.length;
 
@@ -66,65 +66,40 @@ function MobileCardStack() {
     setActiveIndex(i => (i - 1 + total) % total);
   }, [total, stopBounce]);
 
-  // Non-passive native listeners so e.preventDefault() blocks page scroll
-  useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
+  // Simple React synthetic handlers — horizontal swipe doesn't conflict with page scroll
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    touchAxis.current = null;
+  };
 
-    const onStart = (e) => {
-      touchStartY.current = e.touches[0].clientY;
-      touchStartX.current = e.touches[0].clientX;
-      touchAxis.current = null;
-    };
+  const handleTouchMove = (e) => {
+    if (touchStartX.current === null) return;
+    const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
+    const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+    if (touchAxis.current === null && (dx > 8 || dy > 8)) {
+      touchAxis.current = dx > dy ? 'h' : 'v';
+    }
+    // pan-y CSS lets browser handle vertical scroll; no preventDefault needed
+  };
 
-    const onMove = (e) => {
-      if (touchStartY.current === null) return;
-      const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
-      const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
-
-      // Lock axis after 8px of movement
-      if (touchAxis.current === null && (dx > 8 || dy > 8)) {
-        touchAxis.current = dy > dx ? 'v' : 'h';
-      }
-
-      // Block page scroll only when vertical swipe on this card is confirmed
-      if (touchAxis.current === 'v') {
-        e.preventDefault();
-      }
-    };
-
-    const onEnd = (e) => {
-      // Only act on vertical swipes — horizontal are ignored (page scroll)
-      if (touchAxis.current !== 'v' || touchStartY.current === null) {
-        touchStartY.current = null;
-        touchStartX.current = null;
-        touchAxis.current = null;
-        return;
-      }
-
-      const dy = touchStartY.current - e.changedTouches[0].clientY;
-      const THRESHOLD = 50;
-
-      if (Math.abs(dy) > THRESHOLD) {
-        if (dy > 0) goNext(); // swipe up → next card
-        else goPrev();        // swipe down → previous card
-      }
-
-      touchStartY.current = null;
+  const handleTouchEnd = (e) => {
+    if (touchAxis.current !== 'h' || touchStartX.current === null) {
       touchStartX.current = null;
+      touchStartY.current = null;
       touchAxis.current = null;
-    };
-
-    el.addEventListener('touchstart', onStart, { passive: true });
-    el.addEventListener('touchmove',  onMove,  { passive: false });
-    el.addEventListener('touchend',   onEnd,   { passive: true });
-
-    return () => {
-      el.removeEventListener('touchstart', onStart);
-      el.removeEventListener('touchmove',  onMove);
-      el.removeEventListener('touchend',   onEnd);
-    };
-  }, [goNext, goPrev]);
+      return;
+    }
+    const dx = touchStartX.current - e.changedTouches[0].clientX;
+    const THRESHOLD = 50;
+    if (Math.abs(dx) > THRESHOLD) {
+      if (dx > 0) goNext(); // swipe left → next
+      else goPrev();        // swipe right → prev
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+    touchAxis.current = null;
+  };
 
   // Keyboard fallback
   useEffect(() => {
@@ -152,6 +127,9 @@ function MobileCardStack() {
     <div
       ref={wrapperRef}
       className="msc-deck-wrapper"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Card stack — rendered back to front */}
       {[...visibleSlots].reverse().map((offset) => {
@@ -192,8 +170,8 @@ function MobileCardStack() {
                 <div className="msc-top-row">
                   <span className="msc-counter">{activeIndex + 1} / {total}</span>
                   <div className="msc-swipe-hint">
-                    <span className="msc-swipe-arrow">↕</span>
-                    <span className="msc-swipe-label">Swipe Up</span>
+                    <span className="msc-swipe-arrow">↔</span>
+                    <span className="msc-swipe-label">Swipe</span>
                   </div>
                 </div>
 
