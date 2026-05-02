@@ -44,9 +44,10 @@ function MobileCardStack() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [expandedId, setExpandedId] = useState(null);
   const [isBouncing, setIsBouncing] = useState(true);
+  const wrapperRef = useRef(null);
   const touchStartY = useRef(null);
   const touchStartX = useRef(null);
-  // null = undecided, 'h' = horizontal locked, 'v' = vertical (ignore)
+  // null = undecided, 'v' = vertical (card swipe), 'h' = horizontal (ignore)
   const touchAxis = useRef(null);
   const total = menuCategories.length;
 
@@ -65,82 +66,92 @@ function MobileCardStack() {
     setActiveIndex(i => (i - 1 + total) % total);
   }, [total, stopBounce]);
 
-  const handleTouchStart = (e) => {
-    touchStartY.current = e.touches[0].clientY;
-    touchStartX.current = e.touches[0].clientX;
-    touchAxis.current = null; // reset axis lock
-  };
+  // Non-passive native listeners so e.preventDefault() blocks page scroll
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
 
-  const handleTouchMove = (e) => {
-    if (touchStartX.current === null) return;
+    const onStart = (e) => {
+      touchStartY.current = e.touches[0].clientY;
+      touchStartX.current = e.touches[0].clientX;
+      touchAxis.current = null;
+    };
 
-    const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
-    const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+    const onMove = (e) => {
+      if (touchStartY.current === null) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
+      const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
 
-    // Only lock the axis once the user has moved enough to determine intent
-    if (touchAxis.current === null && (dx > 8 || dy > 8)) {
-      touchAxis.current = dx > dy ? 'h' : 'v';
-    }
+      // Lock axis after 8px of movement
+      if (touchAxis.current === null && (dx > 8 || dy > 8)) {
+        touchAxis.current = dy > dx ? 'v' : 'h';
+      }
 
-    // If horizontal swipe is detected, prevent page scroll
-    if (touchAxis.current === 'h') {
-      e.preventDefault();
-    }
-  };
+      // Block page scroll only when vertical swipe on this card is confirmed
+      if (touchAxis.current === 'v') {
+        e.preventDefault();
+      }
+    };
 
-  const handleTouchEnd = (e) => {
-    // Only act on horizontal swipes — vertical are normal page scroll
-    if (touchAxis.current !== 'h' || touchStartX.current === null) {
+    const onEnd = (e) => {
+      // Only act on vertical swipes — horizontal are ignored (page scroll)
+      if (touchAxis.current !== 'v' || touchStartY.current === null) {
+        touchStartY.current = null;
+        touchStartX.current = null;
+        touchAxis.current = null;
+        return;
+      }
+
+      const dy = touchStartY.current - e.changedTouches[0].clientY;
+      const THRESHOLD = 50;
+
+      if (Math.abs(dy) > THRESHOLD) {
+        if (dy > 0) goNext(); // swipe up → next card
+        else goPrev();        // swipe down → previous card
+      }
+
       touchStartY.current = null;
       touchStartX.current = null;
       touchAxis.current = null;
-      return;
-    }
+    };
 
-    const dx = touchStartX.current - e.changedTouches[0].clientX;
-    const absDx = Math.abs(dx);
-    const THRESHOLD = 50; // minimum px to count as intentional swipe
+    el.addEventListener('touchstart', onStart, { passive: true });
+    el.addEventListener('touchmove',  onMove,  { passive: false });
+    el.addEventListener('touchend',   onEnd,   { passive: true });
 
-    if (absDx > THRESHOLD) {
-      if (dx > 0) goNext(); else goPrev();
-    }
-
-    touchStartY.current = null;
-    touchStartX.current = null;
-    touchAxis.current = null;
-  };
+    return () => {
+      el.removeEventListener('touchstart', onStart);
+      el.removeEventListener('touchmove',  onMove);
+      el.removeEventListener('touchend',   onEnd);
+    };
+  }, [goNext, goPrev]);
 
   // Keyboard fallback
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight') goNext();
-      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') goPrev();
+      if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  goPrev();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [goNext, goPrev]);
 
   // Compute relative position for each card slot
-  // We show main card + 2 ghost cards peeking behind
   const getCardStyle = (offset) => {
-    // offset 0 = main, 1 = second, 2 = third
     const styles = [
-      { scale: 1,    opacity: 1,    blur: 0,  translateY: 0,   zIndex: 30 },
+      { scale: 1,    opacity: 1,    blur: 0,   translateY: 0,   zIndex: 30 },
       { scale: 0.94, opacity: 0.8,  blur: 1.5, translateY: 65,  zIndex: 20 },
       { scale: 0.88, opacity: 0.5,  blur: 3.5, translateY: 110, zIndex: 10 },
     ];
     return styles[offset] || null;
   };
 
-  // Render only 3 layers: active, next, next+1
   const visibleSlots = [0, 1, 2];
 
   return (
     <div
+      ref={wrapperRef}
       className="msc-deck-wrapper"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
     >
       {/* Card stack — rendered back to front */}
       {[...visibleSlots].reverse().map((offset) => {
@@ -182,7 +193,7 @@ function MobileCardStack() {
                   <span className="msc-counter">{activeIndex + 1} / {total}</span>
                   <div className="msc-swipe-hint">
                     <span className="msc-swipe-arrow">↕</span>
-                    <span className="msc-swipe-label">Swipe</span>
+                    <span className="msc-swipe-label">Swipe Up</span>
                   </div>
                 </div>
 
