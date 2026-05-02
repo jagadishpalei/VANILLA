@@ -12,15 +12,34 @@ const NAV_ITEMS = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
 
-  /* scroll listener */
+  /* scroll listener: handles background change + hide/show on scroll direction */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Handle background change (scrolled state)
+      setScrolled(currentScrollY > 50);
+
+      // Handle visibility (show on scroll up, hide on scroll down)
+      if (currentScrollY < 10) {
+        setVisible(true); // Always show at the very top
+      } else if (currentScrollY > lastScrollY) {
+        setVisible(false); // Scrolling down
+      } else {
+        setVisible(true); // Scrolling up
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   /* lock body scroll when overlay is open */
   useEffect(() => {
@@ -36,7 +55,10 @@ export default function Navbar() {
   return (
     <>
       {/* ─── Navbar bar ──────────────────────────────────── */}
-      <nav className={`d2c-navbar ${scrolled ? 'scrolled' : ''}`} style={{ position: 'fixed' }}>
+      <nav 
+        className={`d2c-navbar ${scrolled ? 'scrolled' : ''} ${!visible ? 'nav-hidden' : ''}`}
+        style={{ position: 'fixed' }}
+      >
         <div className="d2c-nav-container">
 
           {/* Logo */}

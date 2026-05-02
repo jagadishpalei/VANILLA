@@ -988,6 +988,399 @@ section { padding: 7rem 4rem; }
     margin: 0;
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
   }
+  /* ── OLD SLIDER (kept for reviews scroll) ── */
+  .mobile-slider-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  .mobile-slider-arrow {
+    position: absolute;
+    top: calc(50% - 1rem);
+    transform: translateY(-50%);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(20,20,20,0.65);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 20;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    padding: 0;
+  }
+  .mobile-slider-arrow:hover, .mobile-slider-arrow:active {
+    background: rgba(30,30,30,0.85);
+    transform: translateY(-50%) scale(1.05);
+    border-color: rgba(255,255,255,0.3);
+    box-shadow: 0 4px 15px rgba(255,122,0,0.2);
+  }
+  .left-arrow { left: 2px; }
+  .right-arrow { right: 2px; }
+
+  /* ═══════════════════════════════════════════════════════
+     MOBILE STACKED CARD DECK (MSC)
+  ═══════════════════════════════════════════════════════ */
+
+  /* Outer wrapper: reserves space for the card stack + nav */
+  .msc-deck-wrapper {
+    position: relative;
+    width: 100%;
+    padding: 0 16px;
+    padding-bottom: 80px; /* room for dots + nav */
+    /* Fixed height = main card height + maximum peek offset */
+    height: calc(420px + 110px);
+    box-sizing: border-box;
+    touch-action: pan-x pan-y;
+  }
+
+  /* ── Individual card ── */
+  .msc-card {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    /* Base: full height for main card */
+    height: 420px;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    /* Apply CSS-var-driven depth transform */
+    transform:
+      translateY(var(--card-ty, 0))
+      scale(var(--card-scale, 1));
+    opacity: var(--card-opacity, 1);
+    filter: blur(var(--card-blur, 0));
+    /* Spring-like easing for card transitions */
+    transition:
+      transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+      opacity   0.45s cubic-bezier(0.25, 0.8, 0.25, 1),
+      filter    0.45s cubic-bezier(0.25, 0.8, 0.25, 1),
+      height    0.5s  cubic-bezier(0.34, 1.2,  0.64, 1),
+      box-shadow 0.35s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    top: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Expanded (tapped) state — main card only */
+  .msc-card.msc-expanded {
+    height: 520px;
+    box-shadow:
+      0 12px 48px rgba(0, 0, 0, 0.6),
+      0 0 0 1.5px rgba(255, 122, 0, 0.3);
+  }
+
+  /* Bounce animation — prompts first interaction */
+  @keyframes mscBounce {
+    0%, 100% { transform: translateY(var(--card-ty, 0)) scale(var(--card-scale, 1)); }
+    30%       { transform: translateY(calc(var(--card-ty, 0) - 10px)) scale(var(--card-scale, 1)); }
+    60%       { transform: translateY(calc(var(--card-ty, 0) - 5px)) scale(var(--card-scale, 1)); }
+  }
+  .msc-card.msc-bounce {
+    animation: mscBounce 2.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) 1.2s infinite;
+  }
+
+  /* ── Background image ── */
+  .msc-img-wrap {
+    position: absolute;
+    inset: 0;
+  }
+  .msc-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.55s ease, filter 0.45s ease;
+    transform: scale(1.04);
+  }
+  .msc-img-dimmed {
+    transform: scale(1.0) !important;
+    filter: brightness(0.35) saturate(0.6);
+  }
+  .msc-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(6, 6, 8, 0.92) 0%,
+      rgba(6, 6, 8, 0.45) 45%,
+      rgba(6, 6, 8, 0.12) 100%
+    );
+    transition: background 0.4s ease;
+  }
+  .msc-expanded .msc-img-overlay {
+    background: rgba(6, 6, 8, 0.68);
+  }
+
+  /* ── Main card content layer ── */
+  .msc-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px 18px 18px;
+    z-index: 5;
+  }
+
+  /* Top row: counter + swipe hint */
+  .msc-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .msc-counter {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: rgba(245, 242, 237, 0.5);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .msc-swipe-hint {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 3px 10px 3px 8px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .msc-swipe-arrow {
+    font-size: 0.7rem;
+    color: rgba(255, 122, 0, 0.85);
+  }
+  .msc-swipe-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 500;
+    color: rgba(245, 242, 237, 0.65);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Bottom row: title + expand chevron */
+  .msc-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .msc-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .msc-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.7rem;
+    font-weight: 500;
+    color: #F5F2ED;
+    margin: 0;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
+    line-height: 1.1;
+  }
+  .msc-tap-hint {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.66rem;
+    color: rgba(255, 122, 0, 0.88);
+    margin: 0;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* Expand chevron button */
+  .msc-expand-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+    transition:
+      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background 0.3s ease,
+      border-color 0.3s ease;
+    margin-bottom: 2px;
+  }
+  .msc-expand-btn-open {
+    transform: rotate(180deg);
+    background: rgba(255, 122, 0, 0.2);
+    border-color: rgba(255, 122, 0, 0.5);
+  }
+
+  /* ── Expanded submenu ── */
+  .msc-submenu {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity    0.35s ease 0.08s;
+    pointer-events: none;
+  }
+  .msc-submenu-open {
+    max-height: 240px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .msc-submenu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 14px;
+    margin-top: 4px;
+  }
+  .msc-submenu-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: none;
+  }
+  .msc-submenu-open .msc-submenu-item {
+    animation: mscItemIn 0.38s ease forwards;
+  }
+  @keyframes mscItemIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .msc-item-dot {
+    font-size: 0.42rem;
+    color: #FF7A00;
+    flex-shrink: 0;
+  }
+  .msc-item-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.83rem;
+    color: rgba(245, 242, 237, 0.88);
+    letter-spacing: 0.03em;
+  }
+
+  /* CTA */
+  .msc-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #FF7A00, #D4621A);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.73rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(255, 122, 0, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .msc-cta:active {
+    transform: scale(0.96);
+    box-shadow: 0 2px 8px rgba(255, 122, 0, 0.25);
+  }
+
+  /* Pulse ring */
+  .msc-pulse-ring {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 122, 0, 0.55);
+    animation: mscPulse 2.6s ease-out infinite;
+    pointer-events: none;
+    z-index: 6;
+  }
+  @keyframes mscPulse {
+    0%   { transform: scale(1);   opacity: 0.75; }
+    70%  { transform: scale(2.0); opacity: 0; }
+    100% { transform: scale(2.0); opacity: 0; }
+  }
+
+  /* ── Peeking ghost card label ── */
+  .msc-peek-label {
+    position: absolute;
+    bottom: 14px;
+    left: 20px;
+    z-index: 6;
+    pointer-events: none;
+  }
+  .msc-peek-label span {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: rgba(245, 242, 237, 0.45);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* ── Navigation dots ── */
+  .msc-dots {
+    position: absolute;
+    bottom: -21px;
+    left: 37%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 40;
+  }
+  .msc-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(245, 242, 237, 0.25);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .msc-dot-active {
+    width: 20px;
+    border-radius: 3px;
+    background: #FF7A00;
+  }
+
+  /* ── Prev / Next buttons ── */
+  .msc-nav-btns {
+    position: absolute;
+    bottom: -34px;
+    right: 55px;
+    display: flex;
+    gap: 8px;
+    z-index: 40;
+  }
+  .msc-nav-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(20, 20, 22, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .msc-nav-btn:active {
+    background: rgba(255, 122, 0, 0.2);
+    border-color: rgba(255, 122, 0, 0.4);
+    transform: scale(0.92);
+  }
 }
 
 /* ══════════════════════════════════════════
@@ -1024,16 +1417,6 @@ section { padding: 7rem 4rem; }
     padding: 2rem 2rem;
   }
 }
-
-/*
-  ref-navbar-portal: hides the d2c-navbar bar visually since ref-hero
-  has its own header. The fixed-position slide-out panel overlays
-  (fsm-panel, fsm-backdrop) escape this wrapper and still work correctly.
-*/
-.ref-navbar-portal .d2c-navbar {
-  display: none;
-}
-
 
 /* ── Background ── */
 .ref-hero-bg {
@@ -1102,7 +1485,7 @@ section { padding: 7rem 4rem; }
   text-decoration: none;
 }
 
-.ref-logo-sm { width: 72px; height: 72px; }
+.ref-logo-sm { width: 55px; height: 59px; }
 .ref-logo-lg { width: 82px; height: 82px; }
 
 .ref-logo-img {
@@ -1121,80 +1504,6 @@ section { padding: 7rem 4rem; }
   border: 1px dashed rgba(255, 122, 0, 0.38);
   pointer-events: none;
 }
-
-/* ── MOBILE HEADER ── (flex lg:hidden) */
-.ref-mobile-header {
-  position: relative;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 1.5rem 24px 0; /* Pushed to corners */
-}
-
-/* ── Hamburger button ── */
-.ref-hamburger-btn {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.ref-ham-line {
-  display: block;
-  width: 22px;
-  height: 1.5px;
-  background: #ffffff;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-  transform-origin: center;
-}
-
-/* ── DESKTOP HEADER ── (hidden lg:flex) */
-.ref-desktop-header {
-  display: none; /* hidden on mobile */
-  position: relative;
-  z-index: 20;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0rem 0% 0; /* User requested reset */
-}
-
-/* ── Desktop nav links ── */
-.ref-desktop-nav {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem; /* Reduced unnecessary spacing */
-}
-
-.ref-nav-link {
-  position: relative;
-  color: rgba(229, 229, 229, 0.80);
-  text-decoration: none;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 400;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  transition: color 0.3s ease;
-  padding-bottom: 2px;
-}
-
-.ref-nav-link:hover { color: #FF7A00; }
-
-/* Animated hover underline */
 .ref-nav-underline {
   position: absolute;
   bottom: -2px;
@@ -1225,6 +1534,9 @@ section { padding: 7rem 4rem; }
   .ref-hero-content-wrap {
     padding: 212px 24px;
   }
+  .ref-hero-content {
+    padding: 35px;
+  }
 }
 
 /* ── Content block ── */
@@ -1252,9 +1564,9 @@ section { padding: 7rem 4rem; }
 /* ── Main title ── */
 .ref-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(3.2rem, 8vw, 5.5rem);
+  font-size: clamp(4.2rem, 8vw, 6.5rem);
   font-weight: 400;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.04em;
   line-height: 1;
   color: #F5F5F5;
   margin: 0 0 0.5rem 0; /* Medium gap */
@@ -1265,7 +1577,7 @@ section { padding: 7rem 4rem; }
 
 /* ── Animated underline ── */
 .ref-underline {
-  height: 1px;
+  height: 4px;
   background: #FF7A00;
   box-shadow: 0 0 9px rgba(255, 122, 0, 0.55);
   transition: width 1s ease-out 0.4s; /* delay matches reference */
@@ -1273,7 +1585,7 @@ section { padding: 7rem 4rem; }
 
 /* Mobile underline: mb-5, shown on mobile, hidden on desktop */
 .ref-underline-mobile {
-  margin-bottom: 1rem; /* Small gap */
+  margin-bottom: 2rem; /* Increased gap */
   display: block;
 }
 

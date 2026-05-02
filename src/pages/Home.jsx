@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -33,6 +33,207 @@ const REVIEWS = [
   { name: 'Debi Prasad Pradhan', stars: 5, text: 'Ordered a cake for my sister’s birthday, and it was an amazing experience. The service was friendly, helpful, and on time. The cake was beautifully crafted and tasted amazing. Highly recommended!' },
   { name: 'Kumar Prittam', stars: 5, text: 'The cake was absolutely amazing and delicious 😋 — as always! 😁 For the past 6 years, Vanilla has consistently maintained its taste and quality, and it has only improved over time 💞 I tried the cheesecake for the first time, and it truly lived up to my expectations — rich, smooth, and incredibly satisfying 😊😍' },
 ];
+
+/* ════════════════════════════════════════════════════
+   MAIN HOME COMPONENT
+════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   MOBILE STACKED CARD DECK
+═══════════════════════════════════════════════════════════ */
+function MobileCardStack() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [expandedId, setExpandedId] = useState(null);
+  const [dragY, setDragY] = useState(0);
+  const [isBouncing, setIsBouncing] = useState(true);
+  const touchStartY = useRef(null);
+  const touchStartX = useRef(null);
+  const total = menuCategories.length;
+
+  // Stop bounce after first interaction
+  const stopBounce = useCallback(() => setIsBouncing(false), []);
+
+  const goNext = useCallback(() => {
+    stopBounce();
+    setExpandedId(null);
+    setActiveIndex(i => (i + 1) % total);
+  }, [total, stopBounce]);
+
+  const goPrev = useCallback(() => {
+    stopBounce();
+    setExpandedId(null);
+    setActiveIndex(i => (i - 1 + total) % total);
+  }, [total, stopBounce]);
+
+  const handleTouchStart = (e) => {
+    touchStartY.current = e.touches[0].clientY;
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartY.current === null) return;
+    const dy = touchStartY.current - e.changedTouches[0].clientY;
+    const dx = touchStartX.current - e.changedTouches[0].clientX;
+    const absDy = Math.abs(dy);
+    const absDx = Math.abs(dx);
+    const threshold = 40;
+    if (absDy > threshold && absDy > absDx) {
+      // vertical swipe
+      if (dy > 0) goNext(); else goPrev();
+    } else if (absDx > threshold && absDx > absDy) {
+      // horizontal swipe
+      if (dx > 0) goNext(); else goPrev();
+    }
+    touchStartY.current = null;
+    touchStartX.current = null;
+    setDragY(0);
+  };
+
+  // Keyboard fallback
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') goNext();
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') goPrev();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [goNext, goPrev]);
+
+  // Compute relative position for each card slot
+  // We show main card + 2 ghost cards peeking behind
+  const getCardStyle = (offset) => {
+    // offset 0 = main, 1 = second, 2 = third
+    const styles = [
+      { scale: 1,    opacity: 1,    blur: 0,  translateY: 0,   zIndex: 30 },
+      { scale: 0.94, opacity: 0.8,  blur: 1.5, translateY: 65,  zIndex: 20 },
+      { scale: 0.88, opacity: 0.5,  blur: 3.5, translateY: 110, zIndex: 10 },
+    ];
+    return styles[offset] || null;
+  };
+
+  // Render only 3 layers: active, next, next+1
+  const visibleSlots = [0, 1, 2];
+
+  return (
+    <div
+      className="msc-deck-wrapper"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Card stack — rendered back to front */}
+      {[...visibleSlots].reverse().map((offset) => {
+        const catIndex = (activeIndex + offset) % total;
+        const cat = menuCategories[catIndex];
+        const style = getCardStyle(offset);
+        if (!style) return null;
+        const isMain = offset === 0;
+        const isOpen = isMain && expandedId === cat.id;
+        const previewItems = cat.items ? cat.items.slice(0, 3) : [];
+
+        return (
+          <div
+            key={`slot-${offset}`}
+            className={`msc-card msc-slot-${offset}${isMain && isBouncing ? ' msc-bounce' : ''}${isOpen ? ' msc-expanded' : ''}`}
+            style={{
+              '--card-scale': style.scale,
+              '--card-opacity': style.opacity,
+              '--card-blur': `${style.blur}px`,
+              '--card-ty': `${style.translateY}px`,
+              zIndex: style.zIndex,
+            }}
+            onClick={isMain ? () => {
+              stopBounce();
+              setExpandedId(isOpen ? null : cat.id);
+            } : undefined}
+          >
+            {/* Background image */}
+            <div className="msc-img-wrap">
+              <img src={cat.image} alt={cat.title} className={`msc-img${isOpen ? ' msc-img-dimmed' : ''}`} />
+              <div className="msc-img-overlay" />
+            </div>
+
+            {/* Main card content */}
+            {isMain && (
+              <div className="msc-content">
+                {/* Top: swipe hint */}
+                <div className="msc-top-row">
+                  <span className="msc-counter">{activeIndex + 1} / {total}</span>
+                  <div className="msc-swipe-hint">
+                    <span className="msc-swipe-arrow">↕</span>
+                    <span className="msc-swipe-label">Swipe</span>
+                  </div>
+                </div>
+
+                {/* Bottom: title + expand */}
+                <div className="msc-bottom">
+                  <div className="msc-title-group">
+                    <h3 className="msc-title">{cat.title}</h3>
+                    {!isOpen && <p className="msc-tap-hint">Tap to explore</p>}
+                  </div>
+                  <div className={`msc-expand-btn${isOpen ? ' msc-expand-btn-open' : ''}`}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Expanded submenu */}
+                <div className={`msc-submenu${isOpen ? ' msc-submenu-open' : ''}`}>
+                  <div className="msc-submenu-items">
+                    {previewItems.map((item, i) => (
+                      <div key={i} className="msc-submenu-item" style={{ animationDelay: `${i * 60}ms` }}>
+                        <span className="msc-item-dot">✦</span>
+                        <span className="msc-item-name">{item.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Link
+                    to={`/menu/${cat.id}`}
+                    className="msc-cta"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    View Full Menu →
+                  </Link>
+                </div>
+
+                {/* Pulse ring */}
+                {!isOpen && <div className="msc-pulse-ring" />}
+              </div>
+            )}
+
+            {/* Peeking card label */}
+            {!isMain && (
+              <div className="msc-peek-label">
+                <span>{menuCategories[(activeIndex + offset) % total].title}</span>
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Navigation dots */}
+      <div className="msc-dots">
+        {menuCategories.map((_, i) => (
+          <button
+            key={i}
+            className={`msc-dot${i === activeIndex ? ' msc-dot-active' : ''}`}
+            onClick={() => { stopBounce(); setExpandedId(null); setActiveIndex(i); }}
+            aria-label={`Go to ${menuCategories[i].title}`}
+          />
+        ))}
+      </div>
+
+      {/* Prev/Next buttons */}
+      <div className="msc-nav-btns">
+        <button className="msc-nav-btn" onClick={goPrev} aria-label="Previous category">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button className="msc-nav-btn" onClick={goNext} aria-label="Next category">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  );
+}
 
 /* ════════════════════════════════════════════════════
    MAIN HOME COMPONENT
@@ -106,15 +307,12 @@ export default function Home() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
+      <Navbar />
+      
       {/* ══════════════════════════════════════
           UNIFIED HERO — reference design (mobile + desktop)
       ══════════════════════════════════════ */}
       <section className="ref-hero">
-
-        {/* Navbar hidden visually but still mounted so its slide-out panel works */}
-        <div className="ref-navbar-portal">
-          <Navbar />
-        </div>
 
         {/* ── Background image + gradient overlays ── */}
         <div className="ref-hero-bg">
@@ -129,45 +327,6 @@ export default function Home() {
           <div className="ref-hero-grad-h" />
         </div>
 
-        {/* ── MOBILE HEADER: logo left + hamburger right ── */}
-        <header className="ref-mobile-header">
-
-          {/* Logo circle — top left */}
-          <Link to="/" className="ref-logo-frame ref-logo-sm">
-            <img src="/logo3.png" alt="Vanilla Logo" className="ref-logo-img" />
-            <div className="ref-logo-ring" />
-          </Link>
-
-          {/* Hamburger — opens the existing Navbar slide-out panel */}
-          <button
-            className="ref-hamburger-btn"
-            onClick={() => document.querySelector('.mobile-toggle')?.click()}
-            aria-label="Open navigation menu"
-          >
-            <span className="ref-ham-line" />
-            <span className="ref-ham-line" />
-            <span className="ref-ham-line" />
-          </button>
-        </header>
-
-        {/* ── DESKTOP HEADER: logo left + nav links ── */}
-        <header className="ref-desktop-header">
-          {/* Logo circle — top left */}
-          <Link to="/" className="ref-logo-frame ref-logo-lg">
-            <img src="/logo3.png" alt="Vanilla Logo" className="ref-logo-img" />
-            <div className="ref-logo-ring" />
-          </Link>
-
-          {/* Nav links */}
-          <nav className="ref-desktop-nav">
-            <Link to="/menu" className="ref-nav-link">Menu<span className="ref-nav-underline" /></Link>
-            <Link to="/why-us" className="ref-nav-link">About Us<span className="ref-nav-underline" /></Link>
-            <Link to="/#gallery" className="ref-nav-link">Gallery<span className="ref-nav-underline" /></Link>
-            <Link to="/#reviews" className="ref-nav-link">Reviews<span className="ref-nav-underline" /></Link>
-            <Link to="/contact" className="ref-nav-link">Contact<span className="ref-nav-underline" /></Link>
-          </nav>
-        </header>
-
         {/* ── HERO CONTENT ── */}
         <div className="ref-hero-content-wrap">
           <div className={`ref-hero-content${isVisible ? ' ref-content-visible' : ''}`}>
@@ -181,7 +340,7 @@ export default function Home() {
             {/* Animated underline — mobile */}
             <div
               className="ref-underline ref-underline-mobile"
-              style={{ width: isVisible ? '5.5rem' : '0px' }}
+              style={{ width: isVisible ? '14.3rem' : '0px' }}
             />
             {/* Animated underline — desktop */}
             <div
@@ -265,7 +424,7 @@ export default function Home() {
 
                 return (
                   <RevealSection key={cat.id} delay={(index % 3) * 0.1}>
-                    <div className={`lux-category-card ${gridClass}`} style={{ height: '100%' }}>
+                    <div className={`lux-category-card ${gridClass} lux-cat-${cat.id}`} style={{ height: '100%' }}>
                       <Link to={`/menu/${cat.id}`} className="lux-card-inner">
                         <div className="lux-image-wrapper">
                           <img src={cat.image} alt={cat.title} className="lux-image" />
@@ -283,37 +442,10 @@ export default function Home() {
             </div>
           </div>
 
-          {/* MOBILE SLIDER (Mobile Only) */}
-          <RevealSection>
-            <div className="show-on-mobile mobile-slider-wrapper">
-              <button className="mobile-slider-arrow left-arrow" onClick={() => scrollMobileSlider('left')} aria-label="Previous slide">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-              </button>
-
-              <div className="mobile-menu-slider" ref={mobileSliderRef}>
-                {menuCategories.map((cat, index) => (
-                  <div key={cat.id} className="mobile-menu-slide">
-                    <Link to={`/menu/${cat.id}`} className="lux-card-inner">
-                      <div className="lux-frame-emblem"></div>
-                      <div className="lux-frame-ornament"></div>
-                      <div className="lux-image-wrapper">
-                        <img src={cat.image} alt={cat.title} className="lux-image" />
-                        <div className="lux-overlay"></div>
-                      </div>
-                      <div className="lux-content">
-                        <h3 className="lux-title">{cat.title}</h3>
-                        <div className="lux-title-divider"></div>
-                      </div>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-
-              <button className="mobile-slider-arrow right-arrow" onClick={() => scrollMobileSlider('right')} aria-label="Next slide">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
-              </button>
-            </div>
-          </RevealSection>
+          {/* MOBILE STACKED CARDS (Mobile Only) */}
+          <div className="show-on-mobile" style={{ width: '100%' }}>
+            <MobileCardStack />
+          </div>
         </div>
       </section>
 

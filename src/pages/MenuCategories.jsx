@@ -52,8 +52,7 @@ export default function MenuCategories() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
         >
-          <Link to={`/menu/${heroCategory.id}`} className="hero-category-card">
-            <div className="lux-frame-emblem"></div>
+          <Link to={`/menu/${heroCategory.id}`} className={`hero-category-card lux-cat-${heroCategory.id}`}>
             <div className="lux-frame-ornament"></div>
             <div className="hero-image-wrapper">
               <img src={heroCategory.image} alt={heroCategory.title} className="hero-image" />
@@ -78,14 +77,13 @@ export default function MenuCategories() {
             return (
               <motion.div 
                 key={cat.id}
-                className={`lux-category-card ${gridClass}`}
+                className={`lux-category-card ${gridClass} lux-cat-${cat.id}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: (index % 3) * 0.1 }}
               >
                 <Link to={`/menu/${cat.id}`} className="lux-card-inner">
-                  <div className="lux-frame-emblem"></div>
                   <div className="lux-frame-ornament"></div>
                   <div className="lux-image-wrapper">
                     <img src={cat.image} alt={cat.title} className="lux-image" />

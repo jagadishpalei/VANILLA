@@ -2,7 +2,7 @@ export const menuCategories = [
   {
     id: "burgers",
     title: "Burgers",
-    image: "/images/categories/premium_burger_1777480208309.png",
+    image: "/images/categories/burger_v4.png",
     items: [
       { name: "Aloo Tikki Burger", image: "/images/burger/aloo tiki burger.avif", desc: "A golden spiced potato tikki nestled in a toasted bun with mint chutney and tangy tamarind glaze.", tag: "Vegetarian" },
       { name: "Butter Chicken Burger", image: "/images/burger/Butter Chicken Burger.avif", desc: "Tender chicken in a rich, velvety butter sauce — the comfort of a classic, reimagined between two soft buns.", tag: "Chef's Special" },
@@ -26,7 +26,7 @@ export const menuCategories = [
   {
     id: "pizza",
     title: "Pizza",
-    image: "/images/categories/premium_pizza_1777480226012.png",
+    image: "/images/categories/pizza_v2.jpg",
     items: [
       { name: "Chicken Golden Delight Pizza", image: "/images/pizza/Chicken Golden Delight Pizza.avif", desc: "Succulent golden chicken pieces on a cheesy base with a rich sauce, delivering warmth in every slice.", tag: "Chef's Special" },
       { name: "Chicken Pizza", image: "/images/pizza/Chicken Pizza.avif", desc: "Classic and comforting — tender seasoned chicken on a hand-stretched base with our signature tomato sauce.", tag: "Popular" },
@@ -43,7 +43,7 @@ export const menuCategories = [
   {
     id: "wraps",
     title: "Wraps",
-    image: "/images/categories/premium_wrap_1777480244867.png",
+    image: "/images/categories/wrap_v3.jpg",
     items: [
       { name: "Chicken Crispy Wrap", image: "/images/wrap/Crispy Chicken Wrap.avif", desc: "Golden crispy chicken fillet wrapped with shredded lettuce, fresh tomatoes, and a smoky chipotle sauce.", tag: "Popular" },
       { name: "Grilled Chicken Wrap", image: "/images/wrap/Grilled Chicken Wrap.avif", desc: "Chargrilled chicken strips with roasted peppers, crisp greens, and a tangy yogurt-herb dressing.", tag: "Chef's Special" },
@@ -54,7 +54,7 @@ export const menuCategories = [
   {
     id: "pasta",
     title: "Pasta & Sides",
-    image: "/images/categories/premium_pasta_1777480260103.png",
+    image: "/images/categories/pasta_v3.jpg",
     items: [
       { name: "Chicken Red Sauce Pasta", image: "/images/pasta/Chicken Red Sauce Pasta.avif", desc: "Tender chicken pieces in a slow-simmered roasted tomato sauce with herbs, garlic, and al dente pasta.", tag: "Popular" },
       { name: "Chicken White Sauce Pasta", image: "/images/pasta/Chicken White Sauce Pasta.avif", desc: "Silky béchamel with perfectly seasoned chicken and a hint of nutmeg — rich, creamy, and deeply comforting.", tag: "Chef's Special" },
@@ -66,7 +66,7 @@ export const menuCategories = [
   {
     id: "sandwiches",
     title: "Sandwiches",
-    image: "/images/categories/premium_sandwich_1777480274854.png",
+    image: "/images/categories/sandwich_v2.jpg",
     items: [
       { name: "Chicken Grilled Sandwich", image: "/images/sandwich/Chicken Grillled Sandwich.avif", desc: "Marinated chicken breast pressed and grilled to perfection with melted cheese and a smoky mustard spread.", tag: "Popular" },
       { name: "Egg Sandwich", image: "/images/sandwich/Egg Sandwich.avif", desc: "Fluffy scrambled eggs with a hint of cream cheese, nestled between toasted sourdough with fresh greens.", tag: "" },
@@ -79,7 +79,7 @@ export const menuCategories = [
   {
     id: "cheesecakes",
     title: "Cheesecakes",
-    image: "/images/categories/premium_cheesecake_1777480288391.png",
+    image: "/images/categories/cheesecake_v2.avif",
     items: [
       { name: "Blueberry Cheesecake", image: "/images/cheesecake/Blueberry Cheesecake.avif", desc: "A velvety New York-style cream cheese base crowned with a luscious fresh blueberry compote.", tag: "Chef's Special" },
       { name: "Chocolate Cheesecake", image: "/images/cheesecake/Chocolate Cheesecake.avif", desc: "Rich dark chocolate folded into a dense, silky cheesecake — deeply indulgent with a biscuit crumb base.", tag: "Popular" },
@@ -90,7 +90,7 @@ export const menuCategories = [
   {
     id: "coffee",
     title: "Coffee",
-    image: "/images/categories/premium_coffee_1777480316778.png",
+    image: "/images/categories/coffee_v2.jpg",
     items: [
       { name: "Caramel Cold Coffee", image: "/images/coffee/Caramel Cold Coffee.avif", desc: "Bold espresso blended smooth with milk and finished with a warm, silky caramel drizzle over crushed ice.", tag: "Popular" },
       { name: "Classic Cold Coffee", image: "/images/coffee/Classic Cold Coffee.avif", desc: "Our signature chilled brew — perfectly balanced, richly smooth, and refreshingly cold.", tag: "Classic" },
@@ -101,7 +101,7 @@ export const menuCategories = [
   {
     id: "shakes",
     title: "Shakes",
-    image: "/images/categories/premium_shake_1777480332338.png",
+    image: "/images/categories/shake_v3.jpg",
     items: [
       { name: "Butterscotch Shake", image: "/images/shake/Butterscotch Shake.avif", desc: "Thick, creamy butterscotch blended with chilled milk — nostalgic warmth in every cold sip.", tag: "Popular" },
       { name: "Choco Chip Shake", image: "/images/shake/Choco Chips Shake.avif", desc: "Velvety chocolate base loaded with crunchy chocolate chips — a textural indulgence in a glass.", tag: "" },
@@ -117,7 +117,7 @@ export const menuCategories = [
   {
     id: "pastries",
     title: "Pastries",
-    image: "/images/categories/premium_pastry_1777480348635.png",
+    image: "/images/categories/pastry_v2.avif",
     items: [
       { name: "Black Forest Pastry", image: "/images/pastries/Black Forest Pastry.avif", desc: "Layers of dark chocolate sponge, whipped cream, and tart cherries — a timeless European classic.", tag: "Classic" },
       { name: "Blueberry Pastry", image: "/images/pastries/Blueberry Pastry.avif", desc: "Light vanilla sponge crowned with a fresh blueberry glaze and airy whipped cream.", tag: "Popular" },
@@ -129,7 +129,7 @@ export const menuCategories = [
   {
     id: "fries-snacks",
     title: "Fries & Snacks",
-    image: "/images/categories/premium_fries_1777480363957.png",
+    image: "/images/categories/fries_v2.avif",
     items: [
       { name: "Chicken Corn Nuggets", image: "/images/fries/Cheese Corn Nuggets (6 Pcs).avif", desc: "Crispy golden nuggets with a sweet corn and cheese center — light, snackable, and satisfying.", tag: "Popular" },
       { name: "Chicken Nuggets", image: "/images/fries/Chicken Nuggets (6 Pcs).avif", desc: "Tender pieces of chicken in a perfectly seasoned golden crust — a timeless snack done with care.", tag: "Classic" },
@@ -147,7 +147,7 @@ export const menuCategories = [
   {
     id: "desserts",
     title: "Desserts",
-    image: "/images/categories/premium_dessert_1777480380958.png",
+    image: "/images/categories/dessert_v2.avif",
     items: [
       { name: "Brownie Hot", image: "/images/dessert/Brownie (hot).avif", desc: "A warm, fudgy dark chocolate brownie served fresh from the oven — dense, gooey, and unapologetically rich.", tag: "Popular" },
       { name: "Brownie with Hot Chocolate", image: "/images/dessert/Brownie With Hot Chocolate.avif", desc: "Our signature brownie drizzled with a silky warm chocolate ganache — the ultimate cold-weather indulgence.", tag: "Chef's Special" },
