@@ -1031,7 +1031,8 @@ section { padding: 7rem 4rem; }
     /* Fixed height = main card height + maximum peek offset */
     height: calc(420px + 110px);
     box-sizing: border-box;
-    touch-action: pan-x pan-y;
+    /* Allow vertical page scroll; JS handles horizontal swipe only */
+    touch-action: pan-y;
   }
 
   /* ── Individual card ── */

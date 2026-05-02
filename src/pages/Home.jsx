@@ -43,10 +43,11 @@ const REVIEWS = [
 function MobileCardStack() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [expandedId, setExpandedId] = useState(null);
-  const [dragY, setDragY] = useState(0);
   const [isBouncing, setIsBouncing] = useState(true);
   const touchStartY = useRef(null);
   const touchStartX = useRef(null);
+  // null = undecided, 'h' = horizontal locked, 'v' = vertical (ignore)
+  const touchAxis = useRef(null);
   const total = menuCategories.length;
 
   // Stop bounce after first interaction
@@ -67,25 +68,46 @@ function MobileCardStack() {
   const handleTouchStart = (e) => {
     touchStartY.current = e.touches[0].clientY;
     touchStartX.current = e.touches[0].clientX;
+    touchAxis.current = null; // reset axis lock
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStartX.current === null) return;
+
+    const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
+    const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+
+    // Only lock the axis once the user has moved enough to determine intent
+    if (touchAxis.current === null && (dx > 8 || dy > 8)) {
+      touchAxis.current = dx > dy ? 'h' : 'v';
+    }
+
+    // If horizontal swipe is detected, prevent page scroll
+    if (touchAxis.current === 'h') {
+      e.preventDefault();
+    }
   };
 
   const handleTouchEnd = (e) => {
-    if (touchStartY.current === null) return;
-    const dy = touchStartY.current - e.changedTouches[0].clientY;
+    // Only act on horizontal swipes — vertical are normal page scroll
+    if (touchAxis.current !== 'h' || touchStartX.current === null) {
+      touchStartY.current = null;
+      touchStartX.current = null;
+      touchAxis.current = null;
+      return;
+    }
+
     const dx = touchStartX.current - e.changedTouches[0].clientX;
-    const absDy = Math.abs(dy);
     const absDx = Math.abs(dx);
-    const threshold = 40;
-    if (absDy > threshold && absDy > absDx) {
-      // vertical swipe
-      if (dy > 0) goNext(); else goPrev();
-    } else if (absDx > threshold && absDx > absDy) {
-      // horizontal swipe
+    const THRESHOLD = 50; // minimum px to count as intentional swipe
+
+    if (absDx > THRESHOLD) {
       if (dx > 0) goNext(); else goPrev();
     }
+
     touchStartY.current = null;
     touchStartX.current = null;
-    setDragY(0);
+    touchAxis.current = null;
   };
 
   // Keyboard fallback
@@ -117,6 +139,7 @@ function MobileCardStack() {
     <div
       className="msc-deck-wrapper"
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       {/* Card stack — rendered back to front */}
