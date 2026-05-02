@@ -989,3 +989,526 @@ section { padding: 7rem 4rem; }
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
   }
 }
+
+/* ══════════════════════════════════════════
+   MOBILE PHOTO HERO — image background
+   (kept for backwards compat; hidden since ref-hero replaces it)
+══════════════════════════════════════════ */
+
+.mobile-photo-hero {
+  display: none;
+}
+
+
+/* ══════════════════════════════════════════════════════
+   REF-HERO — exact translation of reference HeroSection
+   Mobile + Desktop unified, vanilla CSS
+══════════════════════════════════════════════════════ */
+
+/* ── Container ── */
+.ref-hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/*
+  ref-navbar-portal: hides the d2c-navbar bar visually since ref-hero
+  has its own header. The fixed-position slide-out panel overlays
+  (fsm-panel, fsm-backdrop) escape this wrapper and still work correctly.
+*/
+.ref-navbar-portal .d2c-navbar {
+  display: none;
+}
+
+
+/* ── Background ── */
+.ref-hero-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.ref-hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 40% center;
+  /* Exact reference treatment: blur + dim + slight zoom */
+  filter: blur(2.5px) brightness(0.72);
+  transform: scale(1.07);
+  transform-origin: center;
+  display: block;
+}
+
+/* Vertical gradient — from-black/65 via-black/25 to-black/75 */
+.ref-hero-grad-v {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0.75)
+  );
+}
+
+/* Horizontal gradient — from-black/55 via-black/10 to-transparent */
+.ref-hero-grad-h {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0.10),
+    transparent
+  );
+}
+
+/* ── Logo Frame (both sizes) ── */
+.ref-logo-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 122, 0, 0.70);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    0 0 22px rgba(255, 122, 0, 0.36),
+    0 0 7px rgba(255, 122, 0, 0.16) inset;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.ref-logo-sm { width: 72px; height: 72px; }
+.ref-logo-lg { width: 82px; height: 82px; }
+
+.ref-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: drop-shadow(0 0 5px rgba(255, 122, 0, 0.5));
+}
+
+/* Dashed inner ring overlay */
+.ref-logo-ring {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 122, 0, 0.38);
+  pointer-events: none;
+}
+
+/* ── MOBILE HEADER ── (flex lg:hidden) */
+.ref-mobile-header {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.5rem 6% 0; /* Consistent horizontal padding */
+}
+
+/* ── Hamburger button ── */
+.ref-hamburger-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ref-ham-line {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* ── DESKTOP HEADER ── (hidden lg:flex) */
+.ref-desktop-header {
+  display: none; /* hidden on mobile */
+  position: relative;
+  z-index: 20;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 2rem 6% 0; /* Matches hero content padding */
+}
+
+/* ── Desktop nav links ── */
+.ref-desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Reduced unnecessary spacing */
+}
+
+.ref-nav-link {
+  position: relative;
+  color: rgba(229, 229, 229, 0.80);
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  padding-bottom: 2px;
+}
+
+.ref-nav-link:hover { color: #FF7A00; }
+
+/* Animated hover underline */
+.ref-nav-underline {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #FF7A00;
+  transition: width 0.3s ease;
+}
+
+.ref-nav-link:hover .ref-nav-underline { width: 100%; }
+
+/* ── HERO CONTENT WRAPPER ── */
+.ref-hero-content-wrap {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  align-items: flex-end; /* mobile: items-end */
+  padding-bottom: 3.5rem; /* pb-14 */
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 6%; /* Apply padding here so it calculates against viewport like headers */
+}
+
+/* ── Content block ── */
+.ref-hero-content {
+  width: 100%;
+  padding: 0; /* Removed padding to align perfectly with wrapper's inner edge */
+  opacity: 0;
+  transform: translateY(2rem); /* translate-y-8 */
+  transition: opacity 1s ease-out, transform 1s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Enforce left alignment */
+}
+
+.ref-content-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Welcome label ── */
+.ref-welcome {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: #A1A1A1;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0; /* Small gap to title */
+  padding: 0;
+}
+
+/* ── Main title ── */
+.ref-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(3.2rem, 8vw, 5.5rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: #F5F5F5;
+  margin: 0 0 0.5rem 0; /* Medium gap */
+  padding: 0;
+}
+
+.ref-title-v { color: #FF7A00; }
+
+/* ── Animated underline ── */
+.ref-underline {
+  height: 1px;
+  background: #FF7A00;
+  box-shadow: 0 0 9px rgba(255, 122, 0, 0.55);
+  transition: width 1s ease-out 0.4s; /* delay matches reference */
+}
+
+/* Mobile underline: mb-5, shown on mobile, hidden on desktop */
+.ref-underline-mobile {
+  margin-bottom: 1rem; /* Small gap */
+  display: block;
+}
+
+/* Desktop underline: mb-7, hidden on mobile, shown on desktop */
+.ref-underline-desktop {
+  margin-bottom: 1rem; /* Small gap */
+  display: none;
+}
+
+/* ── Tagline ── */
+.ref-tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(0.82rem, 2vw, 1.15rem);
+  line-height: 1.65;
+  color: #A1A1A1;
+  max-width: 20rem; /* max-w-xs */
+  margin: 0 0 1.5rem 0; /* Medium gap to button */
+  padding: 0;
+}
+
+/* ── CTA Button ── */
+.ref-cta-btn {
+  position: relative;
+  border: 1px solid #FF7A00;
+  color: #FF7A00;
+  background: transparent;
+  border-radius: 2px; /* rounded-sm */
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* gap-2 */
+  padding: 11px 1.75rem; /* py-[11px] px-7 */
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.ref-cta-btn:hover { color: #ffffff; }
+
+/* Fill overlay — scale-x from left on hover */
+.ref-cta-fill {
+  position: absolute;
+  inset: 0;
+  background: #FF7A00;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.ref-cta-btn:hover .ref-cta-fill { transform: scaleX(1); }
+
+.ref-cta-text {
+  position: relative;
+  font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.ref-cta-arrow {
+  position: relative;
+  font-size: 0.875rem;
+  transition: transform 0.3s ease;
+}
+
+.ref-cta-btn:hover .ref-cta-arrow { transform: translateX(4px); }
+
+/* ── Bottom vignette ── */
+.ref-bottom-vignette {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 9rem; /* h-36 */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.45), transparent);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ══════════════════════════════════════════
+   DESKTOP BREAKPOINT — lg: 1024px
+══════════════════════════════════════════ */
+@media (min-width: 1024px) {
+
+  /* Hide mobile header on desktop */
+  .ref-mobile-header { display: none; }
+
+  /* Show desktop header */
+  .ref-desktop-header {
+    display: flex;
+    /* padding handles dynamically via 5% now */
+  }
+
+  /* Desktop nav: slightly larger gap */
+  .ref-desktop-nav { gap: 1.5rem; }
+
+  /* Content wrapper: centered vertically, no bottom padding */
+  .ref-hero-content-wrap {
+    align-items: center;
+    padding-bottom: 0;
+  }
+
+  /* Content block: 55% width */
+  .ref-hero-content {
+    width: 55%;
+    /* padding handles dynamically via 5% now */
+  }
+
+  /* Welcome label */
+  .ref-welcome { margin-bottom: 0.5rem; }
+
+  /* Underline: hide mobile, show desktop */
+  .ref-underline-mobile { display: none; }
+  .ref-underline-desktop { display: block; }
+
+  /* Tagline */
+  .ref-tagline {
+    max-width: 24rem;
+    margin-bottom: 2rem;
+  }
+
+  /* CTA: py-[14px] px-9 */
+  .ref-cta-btn { padding: 14px 2.25rem; }
+}
+
+/* ══════════════════════════════════════════
+   XL BREAKPOINT — xl: 1280px
+══════════════════════════════════════════ */
+@media (min-width: 1280px) {
+  .ref-desktop-nav { gap: 2rem; }
+}
+
+
+@media (max-width: 768px) {
+  /* ── Show the section ── */
+  .mobile-photo-hero {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    min-height: 100vh;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: flex-end; /* pin content to bottom */
+  }
+
+  /* ── Full-bleed background image ── */
+  .mph-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .mph-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Moon/wall-light sits in the left portion of the source image;
+       40% centres it naturally on the narrow mobile viewport */
+    object-position: 40% center;
+    display: block;
+  }
+
+  /* Subtle dark overlay ~35% */
+  .mph-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.36);
+    /* Slight gradient: slightly darker at bottom for text readability */
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.62) 0%,
+      rgba(0, 0, 0, 0.30) 55%,
+      rgba(0, 0, 0, 0.10) 100%
+    );
+  }
+
+  /* ── Content block — bottom-left ── */
+  .mph-content {
+    position: relative;
+    z-index: 10;
+    padding: 0 1.6rem 3rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  /* WELCOME TO label */
+  .mph-welcome {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    color: #A1A1A1;
+    margin: 0 0 0.55rem 0;
+    text-transform: uppercase;
+  }
+
+  /* Main title — Playfair Display */
+  .mph-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(3.2rem, 14vw, 4.4rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: #F5F5F5;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.05;
+  }
+
+  /* Orange highlight on first letter V */
+  .mph-title-v {
+    color: #FF7A00;
+  }
+
+  /* Thin orange underline */
+  .mph-underline {
+    width: 2.8rem;
+    height: 1.5px;
+    background: #FF7A00;
+    margin-bottom: 1rem;
+  }
+
+  /* Tagline */
+  .mph-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #A1A1A1;
+    letter-spacing: 0.02em;
+    margin: 0 0 1.6rem 0;
+  }
+
+  /* Ghost CTA button */
+  .mph-cta-btn {
+    background: transparent;
+    border: 1px solid #FF7A00;
+    color: #FF7A00;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.72rem 1.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mph-cta-btn:active {
+    background: rgba(255, 122, 0, 0.12);
+  }
+}

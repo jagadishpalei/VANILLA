@@ -39,6 +39,8 @@ const REVIEWS = [
 ════════════════════════════════════════════════════ */
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isVisible, setIsVisible] = useState(false);   // ref-hero fade-in
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // ref-hero mobile nav
   const mobileSliderRef = useRef(null);
   const reviewsSliderRef = useRef(null);
   const location = useLocation();
@@ -85,6 +87,15 @@ export default function Home() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // ref-hero visibility trigger
+  useEffect(() => {
+    const t = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(t);
+  }, []);
+
+  // close ref-hero mobile nav when Navbar panel opens or route changes
+  useEffect(() => { setIsMenuOpen(false); }, [location]);
+
 
 
   return (
@@ -96,113 +107,106 @@ export default function Home() {
       transition={{ duration: 0.5 }}
     >
       {/* ══════════════════════════════════════
-          CINEMATIC HERO — full dark screen
+          UNIFIED HERO — reference design (mobile + desktop)
       ══════════════════════════════════════ */}
-      <section className="luxury-hero">
+      <section className="ref-hero">
 
-        <Navbar />
-
-        {/* Animated radial gradient background */}
-        <div className="luxury-bg">
-          <motion.div
-            className="luxury-gradient"
-            animate={{
-              background: [
-                'radial-gradient(ellipse at center, #FF7A00 0%, #E66A00 30%, #CC5500 60%, #0A0A0A 100%)',
-                'radial-gradient(ellipse at center, #FF8A10 0%, #F67A00 30%, #DD6500 60%, #0A0A0A 100%)',
-                'radial-gradient(ellipse at center, #FF7A00 0%, #E66A00 30%, #CC5500 60%, #0A0A0A 100%)',
-              ],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          {/* Film grain noise */}
-          <div className="luxury-noise" />
-          {/* Vignette */}
-          <div className="luxury-vignette" />
+        {/* Navbar hidden visually but still mounted so its slide-out panel works */}
+        <div className="ref-navbar-portal">
+          <Navbar />
         </div>
 
-        {/* Floating image — Left (vanilla shake) */}
-        <motion.div
-          style={{ y: parallaxY }}
-          animate={{ y: [0, -20, 0], rotate: [0, 3, 0] }}
-          transition={{
-            y: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
-            rotate: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
-          }}
-          className="luxury-float luxury-float-left"
-        >
+        {/* ── Background image + gradient overlays ── */}
+        <div className="ref-hero-bg">
           <img
-            src="/images/shake/Vanilla Shake.avif"
-            alt="Vanilla Shake"
-            className="luxury-float-img"
+            src="/hero-bg.webp"
+            alt="Restaurant Interior"
+            className="ref-hero-bg-img"
           />
-          <div className="luxury-float-overlay-bottom" />
-        </motion.div>
+          {/* Vertical gradient: dark top → light mid → dark bottom */}
+          <div className="ref-hero-grad-v" />
+          {/* Horizontal gradient: dark left → transparent right */}
+          <div className="ref-hero-grad-h" />
+        </div>
 
-        {/* Floating image — Right (cheesecake) */}
-        <motion.div
-          style={{ y: parallaxY2 }}
-          animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-          transition={{
-            y: { duration: 7, repeat: Infinity, ease: 'easeInOut' },
-            rotate: { duration: 9, repeat: Infinity, ease: 'easeInOut' },
-          }}
-          className="luxury-float luxury-float-right"
-        >
-          <img
-            src="/images/cheesecake/Blueberry Cheesecake.avif"
-            alt="Blueberry Cheesecake"
-            className="luxury-float-img"
-          />
-          <div className="luxury-float-overlay-top" />
-        </motion.div>
+        {/* ── MOBILE HEADER: logo centred + hamburger ── */}
+        <header className="ref-mobile-header">
+          {/* Spacer to balance hamburger */}
+          <div style={{ width: 40 }} />
 
-        {/* Centre text */}
-        <div className="luxury-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 50 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            style={{ x: mousePosition.x, y: mousePosition.y }}
+          {/* Logo circle — centred */}
+          <Link to="/" className="ref-logo-frame ref-logo-sm">
+            <img src="/logo3.png" alt="Vanilla Logo" className="ref-logo-img" />
+            <div className="ref-logo-ring" />
+          </Link>
+
+          {/* Hamburger — opens the existing Navbar slide-out panel */}
+          <button
+            className="ref-hamburger-btn"
+            onClick={() => document.querySelector('.mobile-toggle')?.click()}
+            aria-label="Open navigation menu"
           >
-            <h1 className="luxury-title">VANILLA</h1>
-          </motion.div>
+            <span className="ref-ham-line" />
+            <span className="ref-ham-line" />
+            <span className="ref-ham-line" />
+          </button>
+        </header>
 
-          <motion.p
-            className="luxury-tagline"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            Where Taste Meets Elegance
-          </motion.p>
+        {/* ── DESKTOP HEADER: logo left + nav links ── */}
+        <header className="ref-desktop-header">
+          {/* Logo circle — top left */}
+          <Link to="/" className="ref-logo-frame ref-logo-lg">
+            <img src="/logo3.png" alt="Vanilla Logo" className="ref-logo-img" />
+            <div className="ref-logo-ring" />
+          </Link>
 
-          <motion.div
-            className="hero-cta-wrapper"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-          >
-            <Link to="/menu">
-              <motion.button
-                className="luxury-cta-btn"
-                whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(255,122,0,0.6)' }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span className="luxury-cta-text">Explore Menu</span>
-                <motion.div
-                  className="luxury-cta-fill"
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: 0 }}
-                  transition={{ duration: 0.5 }}
-                />
-                <span className="luxury-cta-hover-text">Explore Menu</span>
-              </motion.button>
+          {/* Nav links */}
+          <nav className="ref-desktop-nav">
+            <Link to="/menu" className="ref-nav-link">Menu<span className="ref-nav-underline" /></Link>
+            <Link to="/why-us" className="ref-nav-link">About Us<span className="ref-nav-underline" /></Link>
+            <Link to="/#gallery" className="ref-nav-link">Gallery<span className="ref-nav-underline" /></Link>
+            <Link to="/#reviews" className="ref-nav-link">Reviews<span className="ref-nav-underline" /></Link>
+            <Link to="/contact" className="ref-nav-link">Contact<span className="ref-nav-underline" /></Link>
+          </nav>
+        </header>
+
+        {/* ── HERO CONTENT ── */}
+        <div className="ref-hero-content-wrap">
+          <div className={`ref-hero-content${isVisible ? ' ref-content-visible' : ''}`}>
+
+            <p className="ref-welcome">Welcome To</p>
+
+            <h1 className="ref-title">
+              <span className="ref-title-v">V</span>anilla
+            </h1>
+
+            {/* Animated underline — mobile */}
+            <div
+              className="ref-underline ref-underline-mobile"
+              style={{ width: isVisible ? '5.5rem' : '0px' }}
+            />
+            {/* Animated underline — desktop */}
+            <div
+              className="ref-underline ref-underline-desktop"
+              style={{ width: isVisible ? '9rem' : '0px' }}
+            />
+
+            <p className="ref-tagline">Where Taste Meets Elegance</p>
+
+            {/* CTA — Link preserves routing */}
+            <Link to="/menu" style={{ textDecoration: 'none' }}>
+              <button className="ref-cta-btn">
+                <span className="ref-cta-fill" aria-hidden="true" />
+                <span className="ref-cta-text">Explore Menu</span>
+                <span className="ref-cta-arrow">→</span>
+              </button>
             </Link>
-          </motion.div>
+
+          </div>
         </div>
 
-
+        {/* Bottom vignette */}
+        <div className="ref-bottom-vignette" />
 
       </section>
 
