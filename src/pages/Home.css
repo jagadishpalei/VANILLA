@@ -1013,6 +1013,18 @@ section { padding: 7rem 4rem; }
   overflow: hidden;
 }
 
+@media (max-width: 1024px) {
+  .ref-hero {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ref-hero {
+    padding: 2rem 2rem;
+  }
+}
+
 /*
   ref-navbar-portal: hides the d2c-navbar bar visually since ref-hero
   has its own header. The fixed-position slide-out panel overlays
@@ -1039,6 +1051,12 @@ section { padding: 7rem 4rem; }
   transform: scale(1.07);
   transform-origin: center;
   display: block;
+}
+
+@media (max-width: 1024px) {
+  .ref-hero-bg-img {
+    object-position: 29% center;
+  }
 }
 
 /* Vertical gradient — from-black/65 via-black/25 to-black/75 */
@@ -1112,9 +1130,7 @@ section { padding: 7rem 4rem; }
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 1.5rem 6% 0; /* Consistent horizontal padding */
+  padding: 1.5rem 24px 0; /* Pushed to corners */
 }
 
 /* ── Hamburger button ── */
@@ -1151,9 +1167,9 @@ section { padding: 7rem 4rem; }
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1440px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem 6% 0; /* Matches hero content padding */
+  padding: 0rem 0% 0; /* User requested reset */
 }
 
 /* ── Desktop nav links ── */
@@ -1200,9 +1216,15 @@ section { padding: 7rem 4rem; }
   align-items: flex-end; /* mobile: items-end */
   padding-bottom: 3.5rem; /* pb-14 */
   width: 100%;
-  max-width: 1440px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 6%; /* Apply padding here so it calculates against viewport like headers */
+  padding: 0 24px; /* Strict 24px container padding */
+}
+
+@media (max-width: 1024px) {
+  .ref-hero-content-wrap {
+    padding: 212px 24px;
+  }
 }
 
 /* ── Content block ── */
@@ -1224,13 +1246,7 @@ section { padding: 7rem 4rem; }
 
 /* ── Welcome label ── */
 .ref-welcome {
-  font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  color: #A1A1A1;
-  text-transform: uppercase;
-  margin: 0 0 0.5rem 0; /* Small gap to title */
-  padding: 0;
+  display: none;
 }
 
 /* ── Main title ── */
@@ -1354,33 +1370,53 @@ section { padding: 7rem 4rem; }
   /* Desktop nav: slightly larger gap */
   .ref-desktop-nav { gap: 1.5rem; }
 
-  /* Content wrapper: centered vertically, no bottom padding */
+  /* Content wrapper: centered vertically and horizontally */
   .ref-hero-content-wrap {
     align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 5%;
+    max-width: 1400px;
     padding-bottom: 0;
   }
 
-  /* Content block: 55% width */
+  /* Content block: strictly centered without left-bias */
   .ref-hero-content {
-    width: 55%;
-    /* padding handles dynamically via 5% now */
+    width: 100%;
+    max-width: 900px;
+    align-items: center;
+    text-align: center;
   }
 
-  /* Welcome label */
-  .ref-welcome { margin-bottom: 0.5rem; }
+  /* Main title: Extreme presence as requested */
+  .ref-title {
+    font-size: clamp(8rem, 13vw, 8rem);
+    letter-spacing: 0.2em;
+    text-align: center;
+  }
 
-  /* Underline: hide mobile, show desktop */
+  /* Underline: hide mobile, show desktop and center */
   .ref-underline-mobile { display: none; }
-  .ref-underline-desktop { display: block; }
+  .ref-underline-desktop { 
+    display: block; 
+    margin-left: auto; 
+    margin-right: auto; 
+  }
 
   /* Tagline */
   .ref-tagline {
     max-width: 24rem;
     margin-bottom: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
   }
 
   /* CTA: py-[14px] px-9 */
-  .ref-cta-btn { padding: 14px 2.25rem; }
+  .ref-cta-btn { 
+    padding: 14px 2.25rem; 
+    margin: 0 auto;
+  }
 }
 
 /* ══════════════════════════════════════════

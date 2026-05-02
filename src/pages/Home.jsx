@@ -129,12 +129,10 @@ export default function Home() {
           <div className="ref-hero-grad-h" />
         </div>
 
-        {/* ── MOBILE HEADER: logo centred + hamburger ── */}
+        {/* ── MOBILE HEADER: logo left + hamburger right ── */}
         <header className="ref-mobile-header">
-          {/* Spacer to balance hamburger */}
-          <div style={{ width: 40 }} />
 
-          {/* Logo circle — centred */}
+          {/* Logo circle — top left */}
           <Link to="/" className="ref-logo-frame ref-logo-sm">
             <img src="/logo3.png" alt="Vanilla Logo" className="ref-logo-img" />
             <div className="ref-logo-ring" />
