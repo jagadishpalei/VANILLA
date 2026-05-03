@@ -29,9 +29,9 @@ export default function SplashScreen({ onComplete }) {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8, transition: { duration: 0.25 } }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.55, delay: 0.25 }}
             >
-              VANILLA
+              <span className="splash-brand-v">V</span>anilla
             </motion.span>
           </motion.div>
         )}

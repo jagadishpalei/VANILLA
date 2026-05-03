@@ -62,11 +62,10 @@ export default function Navbar() {
         <div className="d2c-nav-container">
 
           {/* Logo */}
-          <Link to="/" onClick={close} style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', textDecoration: 'none' }}>
+          <Link to="/" onClick={close} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
             <div style={{ width: '45px', height: '45px', borderRadius: '50%', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
               <img src="/logo3.png" alt="Vanilla Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scale(1.15)', mixBlendMode: 'multiply' }} />
             </div>
-            <span style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 300, letterSpacing: '0.15em', fontFamily: "'Inter', sans-serif", textTransform: 'uppercase' }}>VANILLA</span>
           </Link>
 
           {/* Desktop links */}
@@ -119,7 +118,6 @@ export default function Navbar() {
                   <div className="fsm-logo-circle">
                     <img src="/logo3.png" alt="Vanilla" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scale(1.15)' }} />
                   </div>
-                  <span className="fsm-logo-text">VANILLA</span>
                 </Link>
                 <button className="fsm-close" onClick={close} aria-label="Close menu">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">

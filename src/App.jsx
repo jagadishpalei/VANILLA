@@ -8,6 +8,7 @@ import WhyUs from './pages/WhyUs';
 import Contact from './pages/Contact';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import SplashScreen from './components/SplashScreen';
+import Footer from './components/Footer';
 import './App.css';
 
 function AnimatedRoutes() {
@@ -38,6 +39,7 @@ function App() {
       <Router>
         <AnimatedRoutes />
         <FloatingWhatsApp />
+        <Footer />
       </Router>
     </>
   );

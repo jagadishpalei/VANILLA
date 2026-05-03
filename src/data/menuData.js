@@ -54,7 +54,7 @@ export const menuCategories = [
   {
     id: "pasta",
     title: "Pasta & Sides",
-    image: "/images/categories/pasta_v3.jpg",
+    image: "/images/categories/pasta_v4.jpg",
     items: [
       { name: "Chicken Red Sauce Pasta", image: "/images/pasta/Chicken Red Sauce Pasta.avif", desc: "Tender chicken pieces in a slow-simmered roasted tomato sauce with herbs, garlic, and al dente pasta.", tag: "Popular" },
       { name: "Chicken White Sauce Pasta", image: "/images/pasta/Chicken White Sauce Pasta.avif", desc: "Silky béchamel with perfectly seasoned chicken and a hint of nutmeg — rich, creamy, and deeply comforting.", tag: "Chef's Special" },
@@ -79,7 +79,7 @@ export const menuCategories = [
   {
     id: "cheesecakes",
     title: "Cheesecakes",
-    image: "/images/categories/cheesecake_v2.avif",
+    image: "/images/categories/cheesecake_v3.jpg",
     items: [
       { name: "Blueberry Cheesecake", image: "/images/cheesecake/Blueberry Cheesecake.avif", desc: "A velvety New York-style cream cheese base crowned with a luscious fresh blueberry compote.", tag: "Chef's Special" },
       { name: "Chocolate Cheesecake", image: "/images/cheesecake/Chocolate Cheesecake.avif", desc: "Rich dark chocolate folded into a dense, silky cheesecake — deeply indulgent with a biscuit crumb base.", tag: "Popular" },
@@ -147,7 +147,7 @@ export const menuCategories = [
   {
     id: "desserts",
     title: "Desserts",
-    image: "/images/categories/dessert_v2.avif",
+    image: "/images/categories/dessert_v3.jpg",
     items: [
       { name: "Brownie Hot", image: "/images/dessert/Brownie (hot).avif", desc: "A warm, fudgy dark chocolate brownie served fresh from the oven — dense, gooey, and unapologetically rich.", tag: "Popular" },
       { name: "Brownie with Hot Chocolate", image: "/images/dessert/Brownie With Hot Chocolate.avif", desc: "Our signature brownie drizzled with a silky warm chocolate ganache — the ultimate cold-weather indulgence.", tag: "Chef's Special" },

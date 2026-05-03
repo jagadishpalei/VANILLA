@@ -105,7 +105,7 @@ function MobileCardStack() {
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight') goNext();
-      if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  goPrev();
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') goPrev();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -114,9 +114,9 @@ function MobileCardStack() {
   // Compute relative position for each card slot
   const getCardStyle = (offset) => {
     const styles = [
-      { scale: 1,    opacity: 1,    blur: 0,   translateY: 0,   zIndex: 30 },
-      { scale: 0.94, opacity: 0.8,  blur: 1.5, translateY: 65,  zIndex: 20 },
-      { scale: 0.88, opacity: 0.5,  blur: 3.5, translateY: 110, zIndex: 10 },
+      { scale: 1, opacity: 1, blur: 0, translateY: 0, zIndex: 30 },
+      { scale: 0.94, opacity: 0.8, blur: 1.5, translateY: 65, zIndex: 20 },
+      { scale: 0.88, opacity: 0.5, blur: 3.5, translateY: 110, zIndex: 10 },
     ];
     return styles[offset] || null;
   };
@@ -181,11 +181,7 @@ function MobileCardStack() {
                     <h3 className="msc-title">{cat.title}</h3>
                     {!isOpen && <p className="msc-tap-hint">Tap to explore</p>}
                   </div>
-                  <div className={`msc-expand-btn${isOpen ? ' msc-expand-btn-open' : ''}`}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M6 9l6 6 6-6" />
-                    </svg>
-                  </div>
+
                 </div>
 
                 {/* Expanded submenu */}
@@ -237,10 +233,10 @@ function MobileCardStack() {
       {/* Prev/Next buttons */}
       <div className="msc-nav-btns">
         <button className="msc-nav-btn" onClick={goPrev} aria-label="Previous category">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
         </button>
         <button className="msc-nav-btn" onClick={goNext} aria-label="Next category">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
         </button>
       </div>
     </div>
@@ -320,7 +316,7 @@ export default function Home() {
       transition={{ duration: 0.5 }}
     >
       <Navbar />
-      
+
       {/* ══════════════════════════════════════
           UNIFIED HERO — reference design (mobile + desktop)
       ══════════════════════════════════════ */}
@@ -371,7 +367,92 @@ export default function Home() {
               </button>
             </Link>
 
+            {/* ── Mobile Hero Feature Strip ── */}
+            {(() => {
+              const features = [
+                {
+                  icon: (
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF7A00" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="9" y1="3" x2="9" y2="6"/>
+                      <line x1="15" y1="2" x2="15" y2="5"/>
+                      <circle cx="9" cy="2.5" r="0.6" fill="#FF7A00" stroke="none"/>
+                      <circle cx="15" cy="1.5" r="0.6" fill="#FF7A00" stroke="none"/>
+                      <rect x="8" y="6" width="8" height="4" rx="0.5"/>
+                      <rect x="5" y="10" width="14" height="4" rx="0.5"/>
+                      <rect x="3" y="14" width="18" height="5" rx="0.5"/>
+                      <line x1="2" y1="19" x2="22" y2="19"/>
+                    </svg>
+                  ),
+                  title: 'Crafted Cakes',
+                  desc: 'Made with quality ingredients',
+                },
+                {
+                  icon: (
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF7A00" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+                      {/* Top bun — rounded dome */}
+                      <path d="M4 10 C4 5 20 5 20 10"/>
+                      <line x1="4" y1="10" x2="20" y2="10"/>
+                      {/* Sesame dots */}
+                      <circle cx="10.5" cy="7.2" r="0.55" fill="#FF7A00" stroke="none"/>
+                      <circle cx="14" cy="6.5" r="0.55" fill="#FF7A00" stroke="none"/>
+                      {/* Lettuce wavy layer */}
+                      <path d="M3 12.5 Q5.5 11 8 12.5 Q10.5 14 13 12.5 Q15.5 11 18 12.5 Q19.5 13.5 21 12.5"/>
+                      {/* Patty — thick solid bar */}
+                      <rect x="3" y="13.5" width="18" height="2.5" rx="1"/>
+                      {/* Bottom bun — flat with slight curve */}
+                      <path d="M4 16 L20 16"/>
+                      <path d="M5 16 Q12 20 19 16"/>
+                    </svg>
+                  ),
+                  title: 'Favourite Bites',
+                  desc: 'Burgers, wraps & more',
+                },
+                {
+                  icon: (
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF7A00" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 21 C12 21 3 15 3 9 C3 5 7 2 12 2 C17 2 21 5 21 9 C21 15 12 21 12 21Z"/>
+                      <line x1="12" y1="21" x2="12" y2="5"/>
+                      <path d="M12 10 L8 7"/>
+                      <path d="M12 10 L16 7"/>
+                      <path d="M12 14 L8 11"/>
+                      <path d="M12 14 L16 11"/>
+                    </svg>
+                  ),
+                  title: 'Fresh Quality',
+                  desc: 'Ingredients that matter',
+                },
+              ];
+              const [hfsActive, setHfsActive] = React.useState(null);
+              return (
+                <div className={`hfs-row${isVisible ? ' hfs-visible' : ''}`}>
+                  {features.map((f, i, arr) => (
+                    <React.Fragment key={i}>
+                      <div
+                        className={`hfs-item${hfsActive === i ? ' hfs-item-active' : ''}`}
+                        onClick={() => setHfsActive(hfsActive === i ? null : i)}
+                      >
+                        <span className="hfs-icon">{f.icon}</span>
+                        <h4 className="hfs-title">{f.title}</h4>
+                        <p className="hfs-desc">{f.desc}</p>
+                      </div>
+                      {i < arr.length - 1 && <div className="hfs-divider" />}
+                    </React.Fragment>
+                  ))}
+                </div>
+              );
+            })()}
+
           </div>
+        </div>
+
+        {/* Mobile scroll indicator */}
+        <div className="hero-scroll-indicator">
+          <svg className="hero-scroll-chevron hero-scroll-chevron-1" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="#FF7A00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="2,2 10,10 18,2"/>
+          </svg>
+          <svg className="hero-scroll-chevron hero-scroll-chevron-2" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="#FF7A00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="2,2 10,10 18,2"/>
+          </svg>
         </div>
 
         {/* Bottom vignette */}

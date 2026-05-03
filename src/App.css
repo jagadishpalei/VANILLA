@@ -44,7 +44,7 @@ body {
 .d2c-nav-container {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 0 4rem;
+  padding: 0 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -579,3 +579,124 @@ body {
   }
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   VANILLA TYPOGRAPHY SYSTEM
+   Global utility classes — hero sections strictly excluded
+   Fonts: Montserrat (700/600) · Poppins (400/300) · Times NR
+═══════════════════════════════════════════════════════════ */
+
+/* ── Base font variables ── */
+:root {
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body:    'Poppins', sans-serif;
+  --font-accent:  'Times New Roman', Times, serif;
+
+  --color-heading: #FFFFFF;
+  --color-body:    #A1A1A1;
+  --color-accent:  #FF7A00;
+
+  --lh-heading: 1.2;
+  --lh-body:    1.6;
+  --lh-small:   1.5;
+}
+
+/* ── H1 — Montserrat Bold ── */
+.heading-primary {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 4vw, 3.5rem);
+  line-height: var(--lh-heading);
+  color: var(--color-heading);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.01em;
+}
+
+/* ── H2 — Montserrat SemiBold ── */
+.heading-secondary {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+  line-height: var(--lh-heading);
+  color: var(--color-heading);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.005em;
+}
+
+/* ── Body — Poppins Regular ── */
+.text-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(0.9375rem, 1.5vw, 1.125rem);
+  line-height: var(--lh-body);
+  color: var(--color-body);
+  margin: 0 0 12px 0;
+}
+
+/* ── Small — Poppins Light ── */
+.text-small {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: clamp(0.78125rem, 1vw, 0.875rem);
+  line-height: var(--lh-small);
+  color: var(--color-body);
+  margin: 0;
+}
+
+/* ── Accent / Quote — Times New Roman Italic ── */
+.text-accent {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--color-accent);
+  margin: 0;
+}
+
+/* ── Color helpers ── */
+.text-orange { color: var(--color-accent) !important; }
+.text-white  { color: #FFFFFF !important; }
+.text-muted  { color: var(--color-body) !important; }
+
+/* ── Alignment utilities ── */
+.text-left   { text-align: left; }
+.text-center { text-align: center; }
+
+/* ── Vertical rhythm helpers ── */
+.mb-heading  { margin-bottom: 8px; }
+.mb-sub      { margin-bottom: 12px; }
+.mb-body     { margin-bottom: 18px; }
+
+/* ── HERO EXCLUSION — never touch these zones ── */
+.ref-hero .heading-primary,
+.ref-hero .heading-secondary,
+.ref-hero .text-body,
+.ref-hero .text-small,
+.ref-hero .text-accent,
+.hero .heading-primary,
+.hero .heading-secondary,
+.hero .text-body,
+.hero .text-small,
+.hero .text-accent,
+.hero-content .heading-primary,
+.hero-content .heading-secondary,
+.hero-content .text-body,
+.hero-content .text-small,
+.hero-content .text-accent { all: revert; }
+
+/* ── Mobile scale ── */
+@media (max-width: 768px) {
+  .heading-primary   { font-size: clamp(1.75rem, 6vw, 2.125rem); }
+  .heading-secondary { font-size: clamp(1.25rem, 4.5vw, 1.5rem); }
+  .text-body         { font-size: 0.9375rem; }
+  .text-small        { font-size: 0.78125rem; }
+}
+
+/* ── Desktop scale ── */
+@media (min-width: 1024px) {
+  .heading-primary   { font-size: clamp(2.625rem, 4vw, 3.5rem); }
+  .heading-secondary { font-size: clamp(1.625rem, 2.5vw, 2rem); }
+  .text-body         { font-size: clamp(1rem, 1.5vw, 1.125rem); }
+  .text-small        { font-size: clamp(0.8125rem, 1vw, 0.875rem); }
+}

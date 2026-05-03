@@ -36,15 +36,19 @@
 /* Brand name text — sits inside the background */
 .splash-brand-name {
   position: absolute;
-  /* Below the logo group (offset from center) */
   top: calc(50% + 110px);
-  font-family: 'Inter', sans-serif;
-  font-size: 1.05rem;
-  font-weight: 300;
-  letter-spacing: 0.45em;
-  color: rgba(245, 242, 237, 0.75);
-  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: #FFFFFF;
+  text-transform: none;
   z-index: 2;
+}
+
+/* Orange accent on first letter */
+.splash-brand-v {
+  color: #FF7A00;
 }
 
 /* ── Logo group — floats independently over everything ── */
@@ -132,8 +136,8 @@
 
   .splash-brand-name {
     top: calc(50% + 88px);
-    font-size: 0.9rem;
-    letter-spacing: 0.35em;
+    font-size: 1.35rem;
+    letter-spacing: 0.26em;
   }
 
   .splash-logo-group {
