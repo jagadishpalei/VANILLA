@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
 
@@ -31,6 +31,22 @@ const IconWhatsApp = () => (
   </svg>
 );
 
+const ChevronDown = () => (
+  <svg
+    className="vf-accordion-chevron"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+);
+
 const NAV_LINKS = [
   { label: 'About Vanilla', to: '/' },
   { label: 'Our Menu',      to: '/menu' },
@@ -52,7 +68,36 @@ const SOCIAL_LINKS = [
   { label: 'WhatsApp',  href: 'https://wa.me/917008061760', icon: <IconWhatsApp /> },
 ];
 
+/* ── Accordion Section (mobile-only wrapper) ── */
+function AccordionSection({ id, title, openId, onToggle, children }) {
+  const isOpen = openId === id;
+  return (
+    <div className={`vf-col vf-accordion-item${isOpen ? ' vf-accordion-open' : ''}`}>
+      {/* Clickable header — mobile only */}
+      <button
+        className="vf-accordion-header"
+        onClick={() => onToggle(id)}
+        aria-expanded={isOpen}
+      >
+        <h4 className="vf-col-heading vf-col-heading--accordion">{title}</h4>
+        <ChevronDown />
+      </button>
+      {/* Collapsible body */}
+      <div className="vf-accordion-body">
+        <div className="vf-accordion-body-inner">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Footer() {
+  /* null = all collapsed by default */
+  const [openSection, setOpenSection] = useState(null);
+
+  const toggle = (id) => setOpenSection(prev => (prev === id ? null : id));
+
   return (
     <footer className="vf-footer">
       {/* Top divider */}
@@ -61,8 +106,7 @@ export default function Footer() {
       <div className="vf-inner">
 
         {/* ── Col 1: About ── */}
-        <div className="vf-col">
-          <h4 className="vf-col-heading">About</h4>
+        <AccordionSection id="about" title="About" openId={openSection} onToggle={toggle}>
           <ul className="vf-link-list">
             {NAV_LINKS.map(({ label, to }) => (
               <li key={label}>
@@ -70,11 +114,10 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-        </div>
+        </AccordionSection>
 
         {/* ── Col 2: Quick Links ── */}
-        <div className="vf-col">
-          <h4 className="vf-col-heading">Quick Links</h4>
+        <AccordionSection id="quick" title="Quick Links" openId={openSection} onToggle={toggle}>
           <ul className="vf-link-list">
             {QUICK_LINKS.map(({ label, to }) => (
               <li key={label}>
@@ -82,11 +125,10 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-        </div>
+        </AccordionSection>
 
         {/* ── Col 3: Follow Us ── */}
-        <div className="vf-col">
-          <h4 className="vf-col-heading">Follow Us</h4>
+        <AccordionSection id="social" title="Follow Us" openId={openSection} onToggle={toggle}>
           <ul className="vf-link-list">
             {SOCIAL_LINKS.map(({ label, href }) => (
               <li key={label}>
@@ -94,11 +136,10 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-        </div>
+        </AccordionSection>
 
         {/* ── Col 4: Contact ── */}
-        <div className="vf-col">
-          <h4 className="vf-col-heading">Contact</h4>
+        <AccordionSection id="contact" title="Contact" openId={openSection} onToggle={toggle}>
           <ul className="vf-contact-list">
             <li className="vf-contact-item">
               <span className="vf-contact-icon">
@@ -130,7 +171,7 @@ export default function Footer() {
               <a href="mailto:vanillafc17@gmail.com" className="vf-contact-text vf-link">vanillafc17@gmail.com</a>
             </li>
           </ul>
-        </div>
+        </AccordionSection>
 
       </div>
 

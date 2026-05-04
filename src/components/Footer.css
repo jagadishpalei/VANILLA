@@ -166,31 +166,100 @@ a.vf-contact-text:hover {
 }
 
 /* ══════════════════════════════════════════
+   ACCORDION — hidden on desktop,
+   activated via @media below
+══════════════════════════════════════════ */
+
+/* Accordion button — invisible on desktop */
+.vf-accordion-header {
+  display: none;
+}
+
+/* Accordion chevron icon */
+.vf-accordion-chevron {
+  flex-shrink: 0;
+  color: #777;
+  transition: transform 0.3s ease, color 0.22s ease;
+}
+
+/* Accordion body is always visible on desktop */
+.vf-accordion-body {
+  overflow: visible;
+}
+
+/* ══════════════════════════════════════════
    MOBILE
 ══════════════════════════════════════════ */
 @media (max-width: 768px) {
 
+  /* Reset grid → single column */
   .vf-inner {
     grid-template-columns: 1fr;
-    padding: 44px 1.4rem 36px;
-    gap: 2.4rem;
-    text-align: center;
-  }
-
-  .vf-col-heading::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .vf-link-list {
-    align-items: center;
-  }
-
-  .vf-contact-item {
-    justify-content: center;
+    padding: 0;
+    gap: 0;
     text-align: left;
   }
 
+  /* Each accordion item gets a bottom border */
+  .vf-accordion-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  /* ── Accordion trigger button ── */
+  .vf-accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 18px 1.4rem;
+    gap: 0.75rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Heading inside the button — no bottom margin/padding since button handles spacing */
+  .vf-col-heading--accordion {
+    margin: 0;
+    padding-bottom: 0;
+  }
+
+  /* Remove the orange underline on accordion mode */
+  .vf-col-heading--accordion::after {
+    display: none;
+  }
+
+  /* Rotate chevron when section is open */
+  .vf-accordion-open .vf-accordion-chevron {
+    transform: rotate(180deg);
+    color: #FF7A00;
+  }
+
+  /* ── Collapsible body ── */
+  .vf-accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  /* When open, allow enough room for any content */
+  .vf-accordion-open .vf-accordion-body {
+    max-height: 400px;
+  }
+
+  /* Inner padding so content doesn't hug the edges */
+  .vf-accordion-body-inner {
+    padding: 4px 1.4rem 20px;
+  }
+
+  /* Left-align contact items on mobile */
+  .vf-contact-item {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  /* Bottom bar stays centered */
   .vf-bottom-bar {
     flex-direction: column;
     align-items: center;
