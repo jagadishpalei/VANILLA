@@ -352,10 +352,15 @@ All item images stored in `/public/images/<category-name>/`
 - [x] **OTP Login Flow**: Implemented a simulated multi-step `AuthModal` (Phone → OTP → Details) with smooth transitions.
 - [x] **Cart & Ordering**: Developed a full-featured Cart system with pricing (₹), quantity management, and subtotal/tax calculations.
 - [x] **Editorial Add-to-Cart**: Integrated `AddToCartButton` with quantity toggles directly into the `MenuSubCategory` editorial items.
-- [x] **Mobile Cart Optimization**: Heavily optimized the Cart UI for mobile, reducing image sizes, font weights, and button footprints to prevent overflow.
+- [x] **Mobile Cart Optimization**: Heavily optimized the Cart UI for mobile, reducing image sizes, font weights, and button footprints to prevent overflow. Fixed empty cart SVG sizing.
 - [x] **Premium Feature Icons**: Updated Hero features with meaningful category-specific icons (Cake Box, Pizza Slice, Leaf) using brand-consistent orange filters.
 - [x] **Layout Centering**: Refined the Cart header and layout for perfect vertical and horizontal centering on phone views.
 - [x] **UI Scaling**: Scaled down overall mobile layout elements to improve usability and visual balance on small screens.
+- [x] **Performance - CSS Rendering**: Replaced extremely heavy `backdrop-filter` blurs with performant high-opacity backgrounds across the Navbar, AuthModal, Cart, and Gallery. Scaled down massive `box-shadow` blur radii site-wide.
+- [x] **Performance - Animations**: Removed aggressive scroll-triggered state updates (blur/scale) in the Gallery to eliminate scroll stutter. Added `will-change: transform` hints for GPU acceleration.
+- [x] **Performance - React**: Memoized Cart totals and state context in `AuthContext` to prevent unnecessary re-renders during interactions.
+- [x] **Performance - Assets**: Implemented native `loading="lazy"` across all non-hero images (Menu, Gallery, Cart).
+- [x] **Reviews UX**: Built a "Read More / Show Less" expandable text feature for review cards, truncating at 130 characters with smooth `framer-motion` layout transitions.
 
 ---
 
