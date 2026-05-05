@@ -760,8 +760,26 @@ section {
   color: var(--white-dim);
   font-size: 0.95rem;
   line-height: 1.8;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.5rem;
   font-style: italic;
+}
+
+.review-read-more-btn {
+  background: transparent;
+  border: none;
+  color: var(--orange, #FF7A00);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 1.2rem;
+  transition: opacity 0.2s ease;
+  display: inline-block;
+  outline: none;
+}
+.review-read-more-btn:hover {
+  opacity: 0.8;
 }
 
 .review-name {

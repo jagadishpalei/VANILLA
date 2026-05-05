@@ -34,6 +34,31 @@ const REVIEWS = [
   { name: 'Kumar Prittam', stars: 5, text: 'The cake was absolutely amazing and delicious 😋 — as always! 😁 For the past 6 years, Vanilla has consistently maintained its taste and quality, and it has only improved over time 💞 I tried the cheesecake for the first time, and it truly lived up to my expectations — rich, smooth, and incredibly satisfying 😊😍' },
 ];
 
+function ReviewCard({ review }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const maxLength = 130;
+  const isLong = review.text.length > maxLength;
+
+  return (
+    <motion.div className="review-card" layout>
+      <motion.div className="review-stars" layout>{'★'.repeat(review.stars)}</motion.div>
+      <motion.p className="review-text" layout>
+        {isExpanded ? review.text : (isLong ? `${review.text.substring(0, maxLength)}...` : review.text)}
+      </motion.p>
+      {isLong && (
+        <motion.button 
+          className="review-read-more-btn"
+          onClick={() => setIsExpanded(!isExpanded)}
+          layout
+        >
+          {isExpanded ? 'Show Less' : 'Read More'}
+        </motion.button>
+      )}
+      <motion.p className="review-name" layout>— {review.name}</motion.p>
+    </motion.div>
+  );
+}
+
 /* ════════════════════════════════════════════════════
    MAIN HOME COMPONENT
 ════════════════════════════════════════════════════ */
@@ -567,11 +592,7 @@ export default function Home() {
           <div className="reviews-grid" ref={reviewsSliderRef}>
             {REVIEWS.map((r, i) => (
               <RevealSection key={i} delay={i * 0.08}>
-                <div className="review-card">
-                  <div className="review-stars">{'★'.repeat(r.stars)}</div>
-                  <p className="review-text">"{r.text}"</p>
-                  <p className="review-name">— {r.name}</p>
-                </div>
+                <ReviewCard review={r} />
               </RevealSection>
             ))}
           </div>
