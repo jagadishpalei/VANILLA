@@ -371,8 +371,8 @@ body {
   gap: 1rem;
 }
 .cart-empty-icon {
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   background: rgba(255,122,0,0.06);
   border-radius: 50%;
   display: flex;
