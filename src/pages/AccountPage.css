@@ -1,0 +1,290 @@
+/* ══════════════════════════════════════════
+   ACCOUNT PAGE — Vanilla Dark Theme
+══════════════════════════════════════════ */
+.account-page { min-height: 100vh; background: #0A0A0A; color: #fff; }
+
+.account-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 110px 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Hero ── */
+.account-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  background: linear-gradient(135deg, rgba(255,122,0,0.08) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid rgba(255,122,0,0.15);
+  border-radius: 20px;
+  padding: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.account-avatar {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF7A00, #E06000);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 1.4rem;
+  color: #fff; flex-shrink: 0;
+  box-shadow: 0 6px 25px rgba(255,122,0,0.35);
+  letter-spacing: -0.02em;
+}
+
+.account-hero-info { flex: 1; min-width: 0; }
+.account-hero-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 1.3rem;
+  color: #fff; margin: 0 0 0.2rem;
+  letter-spacing: -0.01em;
+}
+.account-hero-phone {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem; color: rgba(255,255,255,0.4);
+  margin: 0;
+}
+
+}
+
+/* ── Toast ── */
+.account-toast {
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem; color: #4ADE80;
+  text-align: center;
+}
+
+/* ── Card ── */
+.account-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.account-card-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 0;
+}
+.account-card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 1rem;
+  color: #fff; margin: 0;
+}
+.account-edit-btn {
+  display: flex; align-items: center; gap: 0.35rem;
+  background: rgba(255,122,0,0.1);
+  border: 1px solid rgba(255,122,0,0.2);
+  color: #FF7A00;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem; font-weight: 500;
+  padding: 0.4rem 0.85rem; border-radius: 50px;
+  cursor: pointer; transition: all 0.2s;
+}
+.account-edit-btn:hover {
+  background: rgba(255,122,0,0.18);
+  border-color: rgba(255,122,0,0.4);
+}
+
+/* ── Profile fields ── */
+.account-fields {
+  display: flex; flex-direction: column;
+  padding: 1rem 0;
+}
+.profile-field {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0.85rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.15s;
+}
+.profile-field:last-child { border-bottom: none; }
+.profile-field:hover { background: rgba(255,255,255,0.02); }
+
+.pf-icon {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: rgba(255,122,0,0.08);
+  border: 1px solid rgba(255,122,0,0.12);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,122,0,0.8); flex-shrink: 0;
+}
+.pf-content { flex: 1; min-width: 0; }
+.pf-label {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.7rem; font-weight: 500;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin-bottom: 0.15rem;
+}
+.pf-value {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.92rem; color: rgba(255,255,255,0.85);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ── Edit form ── */
+.account-edit-form {
+  display: flex; flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.2rem 1.5rem 1.5rem;
+}
+.aef-group { display: flex; flex-direction: column; gap: 0.35rem; }
+.aef-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.72rem; font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.aef-input {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.92rem;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.aef-input:focus {
+  border-color: rgba(255,122,0,0.5);
+  box-shadow: 0 0 0 3px rgba(255,122,0,0.08);
+}
+.aef-input::placeholder { color: rgba(255,255,255,0.2); }
+.aef-readonly { opacity: 0.5; cursor: default; }
+.aef-textarea { resize: none; font-family: 'Poppins', sans-serif; }
+
+.aef-actions { display: flex; gap: 0.75rem; margin-top: 0.25rem; }
+.aef-cancel {
+  flex: 1; background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.55);
+  font-family: 'Poppins', sans-serif; font-size: 0.85rem;
+  border-radius: 12px; padding: 0.75rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.aef-cancel:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.aef-save {
+  flex: 2; background: linear-gradient(135deg, #FF7A00, #E06000);
+  border: none; color: #fff;
+  font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.85rem;
+  border-radius: 12px; padding: 0.75rem;
+  cursor: pointer; transition: all 0.25s;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 18px rgba(255,122,0,0.25);
+}
+.aef-save:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 7px 24px rgba(255,122,0,0.4); }
+.aef-save:disabled { opacity: 0.5; cursor: not-allowed; }
+.aef-spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Actions list ── */
+.account-actions { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.account-action-btn {
+  display: flex; align-items: center; gap: 1rem;
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  cursor: pointer; transition: all 0.2s;
+  text-align: left;
+}
+.account-action-btn:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,122,0,0.2);
+  transform: translateX(3px);
+}
+.action-text {
+  flex: 1;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem; color: rgba(255,255,255,0.75);
+}
+.action-arrow {
+  font-size: 1rem; color: rgba(255,255,255,0.25);
+  transition: transform 0.2s, color 0.2s;
+}
+.account-action-btn:hover .action-arrow {
+  transform: translateX(3px);
+  color: #FF7A00;
+}
+.account-action-logout .action-text { color: rgba(255,107,107,0.7); }
+.account-action-logout:hover { border-color: rgba(255,107,107,0.25); }
+.account-action-logout:hover .action-text { color: #FF6B6B; }
+
+/* ── Logout confirm ── */
+.logout-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  z-index: 9998;
+}
+.logout-confirm {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: min(90vw, 360px);
+  background: #1A1A1A;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+}
+.logout-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 1.2rem;
+  color: #fff; margin: 0 0 0.5rem;
+}
+.logout-sub {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.84rem; color: rgba(255,255,255,0.4);
+  margin: 0 0 1.5rem;
+}
+.logout-btns { display: flex; gap: 0.75rem; }
+.logout-cancel {
+  flex: 1; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.6);
+  font-family: 'Poppins', sans-serif; font-size: 0.85rem;
+  border-radius: 12px; padding: 0.8rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.logout-cancel:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.logout-confirm-btn {
+  flex: 1; background: rgba(255,107,107,0.15);
+  border: 1px solid rgba(255,107,107,0.3);
+  color: #FF6B6B;
+  font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.85rem;
+  border-radius: 12px; padding: 0.8rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.logout-confirm-btn:hover {
+  background: rgba(255,107,107,0.25);
+  border-color: #FF6B6B;
+}
+
+@media (max-width: 480px) {
+  .account-inner { padding: 90px 1rem 3rem; }
+  .account-hero { gap: 0.85rem; }
+  .account-avatar { width: 52px; height: 52px; font-size: 1.1rem; }
+}

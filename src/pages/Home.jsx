@@ -372,37 +372,32 @@ export default function Home() {
               const features = [
                 {
                   icon: (
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF7A00" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="9" y1="3" x2="9" y2="6"/>
-                      <line x1="15" y1="2" x2="15" y2="5"/>
-                      <circle cx="9" cy="2.5" r="0.6" fill="#FF7A00" stroke="none"/>
-                      <circle cx="15" cy="1.5" r="0.6" fill="#FF7A00" stroke="none"/>
-                      <rect x="8" y="6" width="8" height="4" rx="0.5"/>
-                      <rect x="5" y="10" width="14" height="4" rx="0.5"/>
-                      <rect x="3" y="14" width="18" height="5" rx="0.5"/>
-                      <line x1="2" y1="19" x2="22" y2="19"/>
-                    </svg>
+                    <img 
+                      src="/images/cake-new.png" 
+                      alt="Cake Box" 
+                      width="32" 
+                      height="32" 
+                      style={{ 
+                        objectFit: 'contain',
+                        filter: 'invert(48%) sepia(85%) saturate(1500%) hue-rotate(360deg) brightness(100%) contrast(105%)' 
+                      }} 
+                    />
                   ),
                   title: 'Crafted Cakes',
                   desc: 'Made with quality ingredients',
                 },
                 {
                   icon: (
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF7A00" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-                      {/* Top bun — rounded dome */}
-                      <path d="M4 10 C4 5 20 5 20 10"/>
-                      <line x1="4" y1="10" x2="20" y2="10"/>
-                      {/* Sesame dots */}
-                      <circle cx="10.5" cy="7.2" r="0.55" fill="#FF7A00" stroke="none"/>
-                      <circle cx="14" cy="6.5" r="0.55" fill="#FF7A00" stroke="none"/>
-                      {/* Lettuce wavy layer */}
-                      <path d="M3 12.5 Q5.5 11 8 12.5 Q10.5 14 13 12.5 Q15.5 11 18 12.5 Q19.5 13.5 21 12.5"/>
-                      {/* Patty — thick solid bar */}
-                      <rect x="3" y="13.5" width="18" height="2.5" rx="1"/>
-                      {/* Bottom bun — flat with slight curve */}
-                      <path d="M4 16 L20 16"/>
-                      <path d="M5 16 Q12 20 19 16"/>
-                    </svg>
+                    <img 
+                      src="/images/pizza-new.png" 
+                      alt="Pizza Slice" 
+                      width="32" 
+                      height="32" 
+                      style={{ 
+                        objectFit: 'contain',
+                        filter: 'invert(48%) sepia(85%) saturate(1500%) hue-rotate(360deg) brightness(100%) contrast(105%)' 
+                      }} 
+                    />
                   ),
                   title: 'Favourite Bites',
                   desc: 'Burgers, wraps & more',

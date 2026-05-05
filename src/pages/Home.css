@@ -2117,6 +2117,11 @@ section {
     padding: 0 4px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .hfs-item:hover, .hfs-item-active {
+    transform: scale(1.05);
   }
 
   /* ── Icon wrapper ── */
