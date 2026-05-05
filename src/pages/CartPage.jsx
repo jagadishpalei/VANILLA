@@ -84,7 +84,7 @@ export default function CartPage() {
                     {/* Image */}
                     <div className="cart-item-img-wrap">
                       {item.image ? (
-                        <img src={item.image} alt={item.name} className="cart-item-img" />
+                        <img src={item.image} alt={item.name} className="cart-item-img" loading="lazy" />
                       ) : (
                         <div className="cart-item-img-placeholder">
                           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,122,0,0.4)" strokeWidth="1.2">

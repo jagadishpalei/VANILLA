@@ -129,7 +129,7 @@ export default function MenuSubCategory() {
                   <div className="editorial-img-col">
                     <div className="editorial-img-wrap">
                       <div className="editorial-img-inner">
-                        <img src={item.image} alt={item.name} className="editorial-img" />
+                        <img src={item.image} alt={item.name} className="editorial-img" loading="lazy" />
                         <div className="editorial-img-overlay" />
                       </div>
                     </div>

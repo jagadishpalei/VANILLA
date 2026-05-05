@@ -75,16 +75,23 @@ export function AuthProvider({ children }) {
 
   const clearCart = useCallback(() => setCart([]), []);
 
-  const cartCount = cart.reduce((sum, c) => sum + c.qty, 0);
-  const cartTotal = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
+  const cartCount = React.useMemo(() => cart.reduce((sum, c) => sum + c.qty, 0), [cart]);
+  const cartTotal = React.useMemo(() => cart.reduce((sum, c) => sum + c.price * c.qty, 0), [cart]);
+
+  const value = React.useMemo(() => ({
+    user, login, logout, updateProfile,
+    cart, addToCart, removeFromCart, updateQty, clearCart,
+    cartCount, cartTotal,
+    authModalOpen, authModalMode, openAuthModal, closeAuthModal,
+  }), [
+    user, login, logout, updateProfile,
+    cart, addToCart, removeFromCart, updateQty, clearCart,
+    cartCount, cartTotal,
+    authModalOpen, authModalMode, openAuthModal, closeAuthModal
+  ]);
 
   return (
-    <AuthContext.Provider value={{
-      user, login, logout, updateProfile,
-      cart, addToCart, removeFromCart, updateQty, clearCart,
-      cartCount, cartTotal,
-      authModalOpen, authModalMode, openAuthModal, closeAuthModal,
-    }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

@@ -149,7 +149,7 @@
   height: 100%;
   object-fit: cover;
   border-radius: 16px;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
   filter: blur(2.2px) contrast(1.1);
   opacity: 0.6;
 }
@@ -468,7 +468,6 @@ section {
   align-items: center;
   justify-content: center;
   z-index: 10;
-  backdrop-filter: blur(10px);
 }
 
 .orbital-logo {
@@ -520,7 +519,7 @@ section {
 
 .why-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--orange-border);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--orange-border);
   border-color: var(--orange-border);
 }
 
@@ -746,7 +745,7 @@ section {
 .review-card:hover {
   transform: translateY(-6px);
   border-color: var(--orange-border);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
 .review-stars {
@@ -995,9 +994,7 @@ section {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: rgba(20, 20, 20, 0.65);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(20, 20, 20, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: #fff;
     display: flex;
@@ -1111,8 +1108,7 @@ section {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: rgba(20, 20, 20, 0.65);
-    backdrop-filter: blur(8px);
+    background: rgba(20, 20, 20, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: #fff;
     display: flex;
@@ -1280,12 +1276,10 @@ section {
     display: flex;
     align-items: center;
     gap: 14px;
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(25, 25, 25, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 24px;
     padding: 6px 18px 3px 8px;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
   }
 
   .msc-swipe-arrow {

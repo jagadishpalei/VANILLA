@@ -14,29 +14,7 @@ export default function Gallery() {
   const [modalImage, setModalImage] = useState(null);
   const galleryRef = useRef(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setFocusedIndex(Number(entry.target.dataset.index));
-          }
-        });
-      },
-      {
-        root: galleryRef.current,
-        rootMargin: '0px -49% 0px -49%',
-        threshold: 0
-      }
-    );
-
-    const children = galleryRef.current?.querySelectorAll('.gallery-card');
-    if (children) {
-      children.forEach(child => observer.observe(child));
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  // Removed IntersectionObserver logic for performance; focus state on scroll causes too many re-renders.
 
   return (
     <section className="section-gallery" id="gallery">
@@ -79,7 +57,7 @@ export default function Gallery() {
               onClick={() => setModalImage(img.src)}
             >
               <div className="gallery-image-wrapper">
-                <img src={img.src} alt={img.alt} className="gallery-img" />
+                <img src={img.src} alt={img.alt} className="gallery-img" loading="lazy" />
                 <div className="gallery-overlay"></div>
               </div>
             </div>

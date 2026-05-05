@@ -247,11 +247,10 @@ body {
 .cart-summary-col { position: sticky; top: 100px; }
 
 .cart-summary-card {
-  background: rgba(255,255,255,0.03);
+  background: rgba(25, 25, 25, 0.95);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 20px;
   padding: 1.5rem;
-  backdrop-filter: blur(10px);
 }
 .summary-title {
   font-family: 'Montserrat', sans-serif;
