@@ -12,10 +12,13 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
 
   // Already logged in
-  if (adminUser?.role === 'admin') {
-    navigate('/admin/dashboard', { replace: true });
-    return null;
-  }
+  React.useEffect(() => {
+    if (adminUser?.role === 'admin') {
+      navigate('/admin/dashboard', { replace: true });
+    }
+  }, [adminUser, navigate]);
+
+  if (adminUser?.role === 'admin') return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();

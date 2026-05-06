@@ -11,7 +11,13 @@ export default function DeliveryLogin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  if (rider) { navigate('/delivery/dashboard', { replace: true }); return null; }
+  React.useEffect(() => {
+    if (rider) {
+      navigate('/delivery/dashboard', { replace: true });
+    }
+  }, [rider, navigate]);
+
+  if (rider) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
