@@ -380,6 +380,41 @@ All item images stored in `/public/images/<category-name>/`
 - **Interaction**: Items use a dual-state `AddToCartButton` (`ADD` transforms into `- Qty +`).
 - **Cart Page**: A dedicated page for order review, clearing items, and final checkout initiation.
 
+---
+
+## 🛠️ Operational Panels
+
+### 1. Admin Dashboard (`/admin`)
+- **Routing & Auth**: Protected route (`/admin/*`) guarded by `AdminRoute`. Separate login at `/admin-login` with `AdminContext` managing auth state (`vanilla_admin` in `localStorage`).
+- **Dashboard Layout**: Side navigation (`AdminSidebar`), topbar (`AdminTopbar`), and content area. Styled independently with `admin.css` and `admin2.css`.
+- **Modules**:
+  - **Dashboard (`/admin/dashboard`)**: Metric cards, active order preview, and top items.
+  - **Orders (`/admin/orders`)**: Interactive Kanban board tracking orders across "New", "Preparing", "Out for Delivery", and "Delivered". Features quick action buttons.
+  - **Menu Management (`/admin/menu`)**: CRUD interface for menu items. Displays item details, images, price, veg/non-veg status, and availability toggles. Includes a slide-out drawer for adding/editing items.
+  - **Customers (`/admin/customers`)**: Table view of user base, sortable by order count and total spending.
+  - **Delivery (`/admin/delivery`)**: Management interface displaying online/offline riders, active deliveries, delivery history, and a map placeholder for live GPS tracking.
+  - **Analytics (`/admin/analytics`)**: Custom SVG bar charts for 7-day revenue, along with key performance indicators.
+  - **Settings (`/admin/settings`)**: Form to update restaurant details, contact numbers, and delivery configurations.
+
+### 2. Delivery Executive Panel (`/delivery`)
+- **Routing & Auth**: Mobile-first protected routes (`/delivery/*`) guarded by `DeliveryRoute`. Separate login at `/delivery-login`.
+- **Architecture**: A distinct UI shell with a bottom navigation bar (`BottomNav`) replacing the sidebar for optimal mobile usage. Styled with `delivery.css`.
+- **State Management**: `DeliveryContext` handles rider authentication, online/offline status, active orders, incoming requests, and earning metrics.
+- **Features**:
+  - **Dashboard (`/delivery/dashboard`)**: Toggle online status. Displays live earnings, today's deliveries, and a popup overlay for incoming order requests (Accept/Decline).
+  - **Orders (`/delivery/orders`)**: Views for active assignments and new requests.
+  - **Active Order (`/delivery/active`)**: The core operational screen. Features a map placeholder, a 4-step progress stepper (Accepted → Picked Up → On The Way → Delivered), customer/restaurant details, order summary, and one-tap call buttons.
+  - **History & Profile**: Earned metrics overview and rider details.
+
+### 3. Customer Order Tracking (`/track-order`)
+- **Integration**: Connects the customer portal to the operational lifecycle.
+- **Features**: Live status stepper reflecting the exact state from the Admin/Delivery system, Estimated Time of Arrival (ETA), an assigned rider profile card with a direct call action, and a live map tracking placeholder.
+
+### 4. Code & Architecture Isolation
+- **App Routing (`App.jsx`)**: Separated into three distinct React sub-trees (`CustomerShell`, `AdminSection`, and `DeliverySection`) to prevent CSS/UI bleed and optimize loading.
+- **CSS Strategy**: Operational CSS (`admin.css`, `admin2.css`, `delivery.css`) loaded explicitly and scoped to avoid conflicting with the "Quiet Luxury" customer aesthetic.
+- **React Rendering Fixes**: Replaced direct state-mutating navigation with `useEffect` redirects in auth login pages to resolve `Cannot update a component while rendering a different component` warnings.
+
 ------
 
 ## 🚀 Deployment
