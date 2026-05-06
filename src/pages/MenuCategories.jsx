@@ -55,7 +55,7 @@ export default function MenuCategories() {
           <Link to={`/menu/${heroCategory.id}`} className={`hero-category-card lux-cat-${heroCategory.id}`}>
             <div className="lux-frame-ornament"></div>
             <div className="hero-image-wrapper">
-              <img src={heroCategory.image} alt={heroCategory.title} className="hero-image" loading="lazy" />
+              <img src={heroCategory.image} alt={heroCategory.title} className="hero-image" />
               <div className="hero-gradient"></div>
             </div>
             <div className="hero-content">
@@ -86,7 +86,7 @@ export default function MenuCategories() {
                 <Link to={`/menu/${cat.id}`} className="lux-card-inner">
                   <div className="lux-frame-ornament"></div>
                   <div className="lux-image-wrapper">
-                    <img src={cat.image} alt={cat.title} className="lux-image" loading="lazy" />
+                    <img src={cat.image} alt={cat.title} className="lux-image" />
                     <div className="lux-overlay"></div>
                   </div>
                   <div className="lux-content">

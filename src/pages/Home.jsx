@@ -184,7 +184,7 @@ function MobileCardStack() {
           >
             {/* Background image */}
             <div className="msc-img-wrap">
-              <img src={cat.image} alt={cat.title} className={`msc-img${isOpen ? ' msc-img-dimmed' : ''}`} loading="lazy" />
+              <img src={cat.image} alt={cat.title} className={`msc-img${isOpen ? ' msc-img-dimmed' : ''}`} />
               <div className="msc-img-overlay" />
             </div>
 
@@ -402,7 +402,6 @@ export default function Home() {
                       alt="Cake Box" 
                       width="32" 
                       height="32" 
-                      loading="lazy"
                       style={{ 
                         objectFit: 'contain',
                         filter: 'invert(48%) sepia(85%) saturate(1500%) hue-rotate(360deg) brightness(100%) contrast(105%)' 
@@ -419,7 +418,6 @@ export default function Home() {
                       alt="Pizza Slice" 
                       width="32" 
                       height="32" 
-                      loading="lazy"
                       style={{ 
                         objectFit: 'contain',
                         filter: 'invert(48%) sepia(85%) saturate(1500%) hue-rotate(360deg) brightness(100%) contrast(105%)' 
@@ -515,7 +513,7 @@ export default function Home() {
               <div className="hero-category-wrapper">
                 <Link to={`/menu/${menuCategories[0].id}`} className="hero-category-card">
                   <div className="hero-image-wrapper">
-                    <img src={menuCategories[0].image} alt={menuCategories[0].title} className="hero-image" loading="lazy" />
+                    <img src={menuCategories[0].image} alt={menuCategories[0].title} className="hero-image" />
                     <div className="hero-gradient"></div>
                   </div>
                   <div className="hero-content">
@@ -542,7 +540,7 @@ export default function Home() {
                     <div className={`lux-category-card ${gridClass} lux-cat-${cat.id}`} style={{ height: '100%' }}>
                       <Link to={`/menu/${cat.id}`} className="lux-card-inner">
                         <div className="lux-image-wrapper">
-                          <img src={cat.image} alt={cat.title} className="lux-image" loading="lazy" />
+                          <img src={cat.image} alt={cat.title} className="lux-image" />
                           <div className="lux-overlay"></div>
                         </div>
                         <div className="lux-content">

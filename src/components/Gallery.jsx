@@ -57,7 +57,7 @@ export default function Gallery() {
               onClick={() => setModalImage(img.src)}
             >
               <div className="gallery-image-wrapper">
-                <img src={img.src} alt={img.alt} className="gallery-img" loading="lazy" />
+                <img src={img.src} alt={img.alt} className="gallery-img" />
                 <div className="gallery-overlay"></div>
               </div>
             </div>

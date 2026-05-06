@@ -359,7 +359,7 @@ All item images stored in `/public/images/<category-name>/`
 - [x] **Performance - CSS Rendering**: Replaced extremely heavy `backdrop-filter` blurs with performant high-opacity backgrounds across the Navbar, AuthModal, Cart, and Gallery. Scaled down massive `box-shadow` blur radii site-wide.
 - [x] **Performance - Animations**: Removed aggressive scroll-triggered state updates (blur/scale) in the Gallery to eliminate scroll stutter. Added `will-change: transform` hints for GPU acceleration.
 - [x] **Performance - React**: Memoized Cart totals and state context in `AuthContext` to prevent unnecessary re-renders during interactions.
-- [x] **Performance - Assets**: Implemented native `loading="lazy"` across all non-hero images (Menu, Gallery, Cart).
+- [x] **Performance - Assets**: Removed `loading="lazy"` across all non-hero images (Menu, Gallery, Cart) as requested.
 - [x] **Reviews UX**: Built a "Read More / Show Less" expandable text feature for review cards, truncating at 130 characters with smooth `framer-motion` layout transitions.
 
 ---
