@@ -1,124 +1,153 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
+import { Link, useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { CheckCircle, Clock, Package, MapPin, Phone, Bike } from 'lucide-react';
-import '../App.css';
+import Navbar from '../components/Navbar';
+import { Phone, MessageCircle } from 'lucide-react';
+import './checkout-flow.css';
 
-const STATUS_FLOW = [
-  { key: 'confirmed',      label: 'Order Confirmed',  icon: CheckCircle, color: '#22c55e' },
-  { key: 'preparing',      label: 'Preparing',         icon: Package,     color: '#f59e0b' },
-  { key: 'rider_assigned', label: 'Rider Assigned',    icon: Bike,        color: '#3b82f6' },
-  { key: 'picked_up',      label: 'Picked Up',         icon: Package,     color: '#FF7A00' },
-  { key: 'on_the_way',     label: 'On The Way',        icon: MapPin,      color: '#FF7A00' },
-  { key: 'delivered',      label: 'Delivered',         icon: CheckCircle, color: '#22c55e' },
+const STAGES = [
+  { id: 'confirmed',  icon: '✅', label: 'Order Confirmed',  desc: 'We received your order'     },
+  { id: 'preparing',  icon: '🍳', label: 'Preparing',        desc: 'Kitchen is at work'         },
+  { id: 'ready',      icon: '📦', label: 'Ready for Pickup', desc: 'Ready to dispatch'          },
+  { id: 'on_the_way', icon: '🛵', label: 'Out for Delivery', desc: 'Your rider is on the way'  },
+  { id: 'delivered',  icon: '🎉', label: 'Delivered',         desc: 'Enjoy your meal!'          },
 ];
 
-/* Simulated live order for demo */
-const DEMO_ORDER = {
-  id: 'ORD-0001',
-  status: 'on_the_way',
-  rider: { name: 'Ravi Kumar', phone: '9876500001', vehicle: 'Bike · OD-01A-1234' },
-  restaurant: 'Vanilla Food Court',
-  items: [{ name: 'Chicken Jumbo Burger', qty: 2, price: 169 }, { name: 'French Fries', qty: 1, price: 79 }],
-  total: 417,
-  eta: '8 min',
-  placedAt: new Date(Date.now() - 25 * 60000).toISOString(),
-};
-
-function TrackingStep({ step, done, current }) {
-  const Icon = step.icon;
-  return (
-    <div className={`trk-step${done ? ' trk-done' : ''}${current ? ' trk-current' : ''}`}>
-      <div className="trk-step-dot" style={done || current ? { background: step.color, borderColor: step.color } : {}}>
-        {done ? <CheckCircle size={14} color="#fff" /> : <Icon size={14} color={current ? '#fff' : '#4b5563'} />}
-      </div>
-      <span className="trk-step-label">{step.label}</span>
-    </div>
-  );
-}
+const DEMO_RIDER = { name: 'Ravi Kumar', vehicle: 'Bike · OD-01A-1234', phone: '+919876500001' };
 
 export default function OrderTracking() {
-  const { user } = useAuth();
-  const [currentStatus] = useState(DEMO_ORDER.status);
-  const currentIdx = STATUS_FLOW.findIndex(s => s.key === currentStatus);
+  const [params] = useSearchParams();
+  const orderId = params.get('orderId') || 'VNL000000';
+  const { orders } = useAuth();
+  const order = orders.find(o => o.id === orderId) || orders[0];
+  const currentStage = 1; // "Preparing" for demo
 
   return (
-    <div className="trk-page">
+    <div className="vco-page">
       <Navbar />
-      <div className="trk-container">
-        <div className="trk-header">
-          <h1 className="trk-title">Track Your Order</h1>
-          <p className="trk-order-id">{DEMO_ORDER.id}</p>
+      <div className="vco-page-inner">
+
+        {/* Header */}
+        <div className="vco-page-header" style={{ marginBottom: 0 }}>
+          <Link to="/" className="vco-back" style={{ textDecoration: 'none', color: 'inherit' }}>←</Link>
+          <h1 className="vco-page-title">Track Order</h1>
+        </div>
+
+        {/* Order info */}
+        <div className="vtr-order-bar">
+          <div>
+            <p className="vtr-label">Order ID</p>
+            <p className="vtr-order-id">#{orderId}</p>
+          </div>
+          <div className="vtr-status-pill">
+            <span className="vso-status-dot" />
+            {STAGES[currentStage].label}
+          </div>
         </div>
 
         {/* ETA card */}
-        <div className="trk-eta-card">
-          <div className="trk-eta-left">
-            <p className="trk-eta-label">Estimated Arrival</p>
-            <p className="trk-eta-val">{DEMO_ORDER.eta}</p>
-            <p className="trk-eta-status">{STATUS_FLOW[currentIdx]?.label}</p>
+        <div className="vtr-eta-card">
+          <div>
+            <p className="vtr-label">Estimated Delivery</p>
+            <p className="vtr-eta-val">🛵 {order?.deliveryPref === 'express' ? '15–20 min' : '30–40 min'}</p>
           </div>
-          <div className="trk-eta-icon">🚴</div>
+          <div className="vtr-eta-right">
+            <p className="vtr-label">ETA</p>
+            <p className="vtr-eta-time">~25 min</p>
+          </div>
         </div>
 
         {/* Map placeholder */}
-        <div className="trk-map-placeholder">
-          <div className="trk-map-inner">
-            <div className="trk-map-grid-bg" />
-            <div className="trk-map-pin-rest">🏪<span>Vanilla</span></div>
-            <div className="trk-map-pin-home">📍<span>You</span></div>
-            <div className="trk-map-rider-dot">🚴</div>
-          </div>
-          <div className="trk-map-label">Live tracking · coming soon</div>
+        <div className="vtr-map">
+          <div className="vtr-map-grid" />
+          <div className="vtr-map-pin vtr-pin-rest">🏪<span>Vanilla</span></div>
+          <div className="vtr-map-pin vtr-pin-home">📍<span>You</span></div>
+          <motion.div className="vtr-rider-dot"
+            animate={{ x: [0, 30, 60, 90], y: [0, -10, 5, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}>
+            🛵
+          </motion.div>
+          <div className="vtr-map-label">Live tracking · coming soon</div>
         </div>
 
-        {/* Progress stepper */}
-        <div className="trk-stepper-card">
-          <h3 className="trk-card-title">Order Progress</h3>
-          <div className="trk-stepper">
-            {STATUS_FLOW.map((step, i) => (
-              <TrackingStep key={step.key} step={step} done={i < currentIdx} current={i === currentIdx} />
-            ))}
+        {/* Timeline */}
+        <div className="vtr-card">
+          <p className="vtr-card-label">Order Progress</p>
+          <div className="vtr-timeline">
+            {STAGES.map((s, i) => {
+              const done = i < currentStage;
+              const active = i === currentStage;
+              return (
+                <div key={s.id} className="vtr-stage">
+                  <div className="vtr-stage-left">
+                    <motion.div className={`vtr-dot ${done ? 'done' : ''} ${active ? 'active' : ''}`}
+                      animate={active ? { scale: [1, 1.15, 1] } : {}}
+                      transition={{ duration: 1.5, repeat: Infinity }}>
+                      {done ? '✓' : s.icon}
+                    </motion.div>
+                    {i < STAGES.length - 1 && <div className={`vtr-line ${done ? 'done' : active ? 'half' : ''}`} />}
+                  </div>
+                  <div className={`vtr-stage-body ${active ? 'active' : ''} ${done ? 'done' : ''}`}>
+                    <p className="vtr-stage-label">{s.label}</p>
+                    <p className="vtr-stage-desc">{active ? '⏳ ' : done ? '✅ ' : ''}{s.desc}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Rider info */}
-        {currentIdx >= 2 && (
-          <div className="trk-rider-card">
-            <div className="trk-rider-avatar">{DEMO_ORDER.rider.name[0]}</div>
-            <div className="trk-rider-info">
-              <p className="trk-rider-name">{DEMO_ORDER.rider.name}</p>
-              <p className="trk-rider-vehicle">{DEMO_ORDER.rider.vehicle}</p>
+        {/* Rider card */}
+        {currentStage >= 2 && (
+          <div className="vtr-card vtr-rider-card">
+            <div className="vtr-rider-avatar">{DEMO_RIDER.name[0]}</div>
+            <div className="vtr-rider-info">
+              <p className="vtr-rider-name">{DEMO_RIDER.name}</p>
+              <p className="vtr-rider-vehicle">{DEMO_RIDER.vehicle}</p>
             </div>
-            <a href={`tel:${DEMO_ORDER.rider.phone}`} className="trk-call-btn">
-              <Phone size={16} />
-            </a>
+            <div className="vtr-rider-btns">
+              <a href={`tel:${DEMO_RIDER.phone}`} className="vtr-rider-btn"><Phone size={14} /></a>
+              <a href="#" className="vtr-rider-btn"><MessageCircle size={14} /></a>
+            </div>
           </div>
         )}
 
+        {/* OTP */}
+        <div className="vtr-otp-card">
+          <p className="vtr-otp-label">Delivery OTP</p>
+          <p className="vtr-otp-val">••••</p>
+          <p className="vtr-otp-hint">Share with delivery partner on arrival</p>
+        </div>
+
         {/* Order summary */}
-        <div className="trk-order-card">
-          <h3 className="trk-card-title">Order Summary</h3>
-          {DEMO_ORDER.items.map((item, i) => (
-            <div key={i} className="trk-item-row">
-              <span className="trk-item-name">{item.name}</span>
-              <span className="trk-item-qty">×{item.qty}</span>
-              <span className="trk-item-price">₹{item.price * item.qty}</span>
+        {order?.items?.length > 0 && (
+          <div className="vtr-card">
+            <p className="vtr-card-label">Order Summary</p>
+            {order.items.map((item, i) => (
+              <div key={i} className="vtr-item-row">
+                <span>🍽️</span>
+                <span className="vtr-item-name">{item.name} × {item.qty}</span>
+                <span className="vtr-item-price">₹{(item.price * item.qty).toFixed(0)}</span>
+              </div>
+            ))}
+            <div className="vtr-item-total">
+              <span>Total</span><span>₹{order?.total?.toFixed(0)}</span>
             </div>
-          ))}
-          <div className="trk-total-row">
-            <span>Total</span><span className="trk-total-amt">₹{DEMO_ORDER.total}</span>
+          </div>
+        )}
+
+        {/* Support */}
+        <div className="vtr-support">
+          <p className="vtr-support-title">Need Help?</p>
+          <div className="vtr-support-btns">
+            <a href="tel:+911800000000" className="vtr-support-btn">📞 Call Support</a>
+            <a href="#" className="vtr-support-btn">💬 Live Chat</a>
           </div>
         </div>
 
-        {/* Restaurant */}
-        <div className="trk-rest-card">
-          <MapPin size={14} color="#FF7A00" />
-          <div>
-            <p className="trk-rest-name">{DEMO_ORDER.restaurant}</p>
-            <p className="trk-rest-label">Preparing your food</p>
-          </div>
-        </div>
+        <Link to="/menu" className="vtr-shop-link">Order Again →</Link>
+        <div style={{ height: 40 }} />
       </div>
     </div>
   );

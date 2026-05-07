@@ -7,6 +7,8 @@ import MenuSubCategory from './pages/MenuSubCategory';
 import WhyUs from './pages/WhyUs';
 import Contact from './pages/Contact';
 import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import OrderSuccess from './pages/OrderSuccess';
 import AccountPage from './pages/AccountPage';
 import OrderTracking from './pages/OrderTracking';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
@@ -41,7 +43,10 @@ const ActiveOrder       = lazy(() => import('./pages/delivery/ActiveOrder'));
 const DeliveryHistory   = lazy(() => import('./pages/delivery/DeliveryHistory'));
 const DeliveryProfile   = lazy(() => import('./pages/delivery/DeliveryProfile'));
 
-const OPERATIONAL_PREFIXES = ['/admin', '/delivery'];
+/* ── Lazy cakes section ── */
+const CakesApp = lazy(() => import('./pages/cakes/CakesApp'));
+
+const OPERATIONAL_PREFIXES = ['/admin', '/delivery', '/cakes'];
 
 function CustomerShell({ splashDone, onSplashDone }) {
   const location = useLocation();
@@ -60,6 +65,8 @@ function CustomerShell({ splashDone, onSplashDone }) {
           <Route path="/why-us"           element={<WhyUs />} />
           <Route path="/contact"          element={<Contact />} />
           <Route path="/cart"             element={<CartPage />} />
+          <Route path="/checkout"         element={<CheckoutPage />} />
+          <Route path="/order-success"    element={<OrderSuccess />} />
           <Route path="/account"          element={<AccountPage />} />
           <Route path="/track-order"      element={<OrderTracking />} />
         </Routes>
@@ -105,6 +112,17 @@ function DeliverySection() {
   );
 }
 
+function CakesSection() {
+  return (
+    <Suspense fallback={<div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', fontFamily:'Poppins,sans-serif', color:'#8A8A8A', fontSize:'.9rem' }}>Loading…</div>}>
+      <Routes>
+        <Route path="/cakes/*" element={<CakesApp />} />
+        <Route path="*" element={null} />
+      </Routes>
+    </Suspense>
+  );
+}
+
 function App() {
   const [splashDone, setSplashDone] = useState(false);
   return (
@@ -114,6 +132,7 @@ function App() {
           <Router>
             <AdminSection />
             <DeliverySection />
+            <CakesSection />
             <CustomerShell splashDone={splashDone} onSplashDone={() => setSplashDone(true)} />
           </Router>
         </AuthProvider>

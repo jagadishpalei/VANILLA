@@ -1,0 +1,9 @@
+feat: Admin Dashboard + Delivery Executive Panel + Customer Order Tracking
+
+Admin Panel: Login, Dashboard, Orders (Kanban), Menu CRUD, Customers, Analytics, Delivery Management, Settings
+Delivery Panel: Login, Dashboard with online toggle, Orders, Active Delivery with map placeholder and stepper, History, Profile
+Customer: Order Tracking page with ETA, progress stepper, rider info, map placeholder
+Routing: Isolated /admin/* /delivery/* /track-order sections in App.jsx
+State: AdminContext + DeliveryContext via Context API
+CSS: admin.css, admin2.css, delivery.css - dark luxury operational theme
+Misc: Removed loading=lazy sitewide, frontend prepared for WebSocket + Maps integration

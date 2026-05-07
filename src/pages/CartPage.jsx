@@ -1,188 +1,210 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
+import { Trash2, Plus, Minus, Tag, X, ArrowRight, Clock, Zap, ShoppingBag } from 'lucide-react';
 import './CartPage.css';
+import './checkout-flow.css';
 
-function EmptyCart({ onBrowse }) {
-  return (
-    <motion.div
-      className="cart-empty"
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="cart-empty-icon">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,122,0,0.4)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-        </svg>
-      </div>
-      <h2 className="cart-empty-title">Your cart is empty</h2>
-      <p className="cart-empty-sub">Add some delicious items from our menu</p>
-      <button className="cart-browse-btn" onClick={onBrowse}>Browse Menu →</button>
-    </motion.div>
-  );
-}
+const SUGGESTED_COUPONS = [
+  { code: 'FIRST10',      disc: '10% off', desc: 'First order discount'  },
+  { code: 'SAVE20',       disc: '20% off', desc: 'Weekend special'       },
+  { code: 'FREEDELIVERY', disc: 'FREE DEL',desc: 'Free delivery'          },
+];
+
+const DELIVERY_OPTIONS = [
+  { id: 'standard', label: 'Standard',   icon: '🛵', eta: '30-40 min', fee: 29  },
+  { id: 'express',  label: 'Express',    icon: '⚡', eta: '15-20 min', fee: 59  },
+  { id: 'schedule', label: 'Scheduled',  icon: '🕐', eta: 'Choose time', fee: 29 },
+];
 
 export default function CartPage() {
-  const { cart, removeFromCart, updateQty, clearCart, cartTotal, user, openAuthModal } = useAuth();
   const navigate = useNavigate();
+  const {
+    cart, removeFromCart, updateQty, clearCart,
+    cartTotal, cartCount,
+    coupon, applyCoupon, removeCoupon, couponDisc,
+    deliveryPref, setDeliveryPref,
+    packingFee, deliveryFee, gst, grandTotal,
+    user, openAuthModal,
+  } = useAuth();
 
-  const handleCheckout = () => {
-    if (!user) {
-      openAuthModal('login');
-    } else {
-      alert('Order placed! Thank you for ordering from Vanilla 🎉');
-      clearCart();
-      navigate('/');
-    }
+  const [couponInput, setCouponInput] = useState('');
+  const [couponErr, setCouponErr]     = useState('');
+  const [couponOk, setCouponOk]       = useState(false);
+
+  const handleApplyCoupon = () => {
+    if (!couponInput.trim()) return;
+    const result = applyCoupon(couponInput);
+    if (result.ok) { setCouponOk(true); setCouponErr(''); }
+    else { setCouponErr('Invalid code. Try: FIRST10, SAVE20, HUNGRY30'); setCouponOk(false); }
+    setCouponInput('');
   };
 
-  return (
-    <motion.div
-      className="cart-page"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <Navbar />
+  const handleCheckout = () => {
+    if (!user) { openAuthModal('login'); return; }
+    navigate('/checkout');
+  };
 
-      <div className="cart-page-inner">
-        <div className="cart-header-section">
-          <button className="cart-back-btn" onClick={() => navigate(-1)}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
-            Back
-          </button>
-          <h1 className="cart-page-title">Your Cart</h1>
-          {cart.length > 0 && (
-            <button className="cart-clear-btn" onClick={clearCart}>Clear All</button>
-          )}
+  if (cart.length === 0) return (
+    <motion.div className="vnl-cart-page" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <Navbar />
+      <div className="vnl-cart-empty">
+        <div className="vnl-cart-empty-icon">🛒</div>
+        <h2 className="vnl-cart-empty-title">Your cart is empty</h2>
+        <p className="vnl-cart-empty-sub">Looks like you haven't added anything yet</p>
+        <Link to="/menu" className="vnl-cart-browse-btn"><ShoppingBag size={15} /> Browse Menu</Link>
+      </div>
+    </motion.div>
+  );
+
+  return (
+    <motion.div className="vnl-cart-page" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <Navbar />
+      <div className="vnl-cart-inner">
+        <div className="vnl-cart-header">
+          <button className="vnl-cart-back" onClick={() => navigate(-1)}>← Back</button>
+          <h1 className="vnl-cart-title">Your Cart</h1>
+          <button className="vnl-cart-clear" onClick={clearCart}>Clear All</button>
         </div>
 
-        {cart.length === 0 ? (
-          <EmptyCart onBrowse={() => navigate('/menu')} />
-        ) : (
-          <div className="cart-layout">
-            {/* ── ITEMS LIST ── */}
-            <div className="cart-items-col">
+        <div className="vnl-cart-layout">
+          {/* ── Left: Items ── */}
+          <div className="vnl-cart-col-main">
+
+            {/* Items */}
+            <div className="vnl-cart-section">
               <AnimatePresence>
-                {cart.map((item) => (
-                  <motion.div
-                    key={item.id}
-                    className="cart-item-card"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20, height: 0, marginBottom: 0, padding: 0 }}
-                    transition={{ duration: 0.3 }}
-                    layout
-                  >
-                    {/* Image */}
-                    <div className="cart-item-img-wrap">
-                      {item.image ? (
-                        <img src={item.image} alt={item.name} className="cart-item-img" />
-                      ) : (
-                        <div className="cart-item-img-placeholder">
-                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,122,0,0.4)" strokeWidth="1.2">
-                            <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
-                          </svg>
+                {cart.map(item => (
+                  <motion.div key={item.id} className="vnl-cart-item"
+                    layout initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -20 }}>
+                    <div className="vnl-cart-item-img">
+                      {item.image
+                        ? <img src={item.image} alt={item.name} />
+                        : <span className="vnl-cart-item-emoji">🍽️</span>}
+                    </div>
+                    <div className="vnl-cart-item-body">
+                      <p className="vnl-cart-item-name">{item.name}</p>
+                      {item.category && <p className="vnl-cart-item-cat">{item.category}</p>}
+                      <div className="vnl-cart-item-prep"><Clock size={10} /> ~15 min prep</div>
+                      <div className="vnl-cart-item-row">
+                        <span className="vnl-cart-item-price">₹{(item.price * item.qty).toFixed(0)}</span>
+                        <div className="vnl-qty-ctrl">
+                          <button onClick={() => item.qty === 1 ? removeFromCart(item.id) : updateQty(item.id, -1)}>
+                            {item.qty === 1 ? <Trash2 size={10} /> : <Minus size={10} />}
+                          </button>
+                          <span>{item.qty}</span>
+                          <button onClick={() => updateQty(item.id, 1)}><Plus size={10} /></button>
                         </div>
-                      )}
-                    </div>
-
-                    {/* Info */}
-                    <div className="cart-item-info">
-                      <h3 className="cart-item-name">{item.name}</h3>
-                      {item.category && <p className="cart-item-cat">{item.category}</p>}
-                      <p className="cart-item-price">₹{(item.price * item.qty).toFixed(0)}</p>
-                    </div>
-
-                    {/* Controls */}
-                    <div className="cart-item-controls">
-                      <div className="qty-selector">
-                        <button
-                          className="qty-btn"
-                          onClick={() => item.qty === 1 ? removeFromCart(item.id) : updateQty(item.id, -1)}
-                          aria-label="Decrease quantity"
-                        >
-                          {item.qty === 1 ? (
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                              <path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                            </svg>
-                          ) : '−'}
-                        </button>
-                        <span className="qty-value">{item.qty}</span>
-                        <button className="qty-btn" onClick={() => updateQty(item.id, 1)} aria-label="Increase quantity">+</button>
                       </div>
-                      <button className="cart-remove-btn" onClick={() => removeFromCart(item.id)} aria-label="Remove item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                        </svg>
-                      </button>
                     </div>
                   </motion.div>
                 ))}
               </AnimatePresence>
             </div>
 
-            {/* ── ORDER SUMMARY ── */}
-            <motion.div
-              className="cart-summary-col"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.4 }}
-            >
-              <div className="cart-summary-card">
-                <h3 className="summary-title">Order Summary</h3>
-
-                <div className="summary-rows">
-                  {cart.map(item => (
-                    <div key={item.id} className="summary-row">
-                      <span className="summary-item-name">{item.name} <span className="summary-item-qty">×{item.qty}</span></span>
-                      <span className="summary-item-price">₹{(item.price * item.qty).toFixed(0)}</span>
+            {/* Delivery preference */}
+            <div className="vnl-cart-section vnl-section-compact">
+              <p className="vnl-section-label"><Zap size={12} /> Delivery Type</p>
+              <div className="vnl-del-opts">
+                {DELIVERY_OPTIONS.map(opt => (
+                  <button key={opt.id}
+                    className={`vnl-del-opt ${deliveryPref === opt.id ? 'on' : ''}`}
+                    onClick={() => setDeliveryPref(opt.id)}>
+                    <span className="vnl-del-opt-icon">{opt.icon}</span>
+                    <div>
+                      <p className="vnl-del-opt-name">{opt.label}</p>
+                      <p className="vnl-del-opt-eta">{opt.eta}</p>
                     </div>
-                  ))}
-                </div>
-
-                <div className="summary-divider" />
-
-                <div className="summary-row summary-subtotal">
-                  <span>Subtotal</span>
-                  <span>₹{cartTotal.toFixed(0)}</span>
-                </div>
-                <div className="summary-row summary-tax">
-                  <span>GST (5%)</span>
-                  <span>₹{(cartTotal * 0.05).toFixed(0)}</span>
-                </div>
-
-                <div className="summary-divider" />
-
-                <div className="summary-row summary-total">
-                  <span>Total</span>
-                  <span>₹{(cartTotal * 1.05).toFixed(0)}</span>
-                </div>
-
-                <button className="cart-checkout-btn" onClick={handleCheckout}>
-                  {user ? 'Proceed to Checkout' : 'Login to Checkout'}
-                  <span className="checkout-arrow">→</span>
-                </button>
-
-                {!user && (
-                  <p className="cart-login-hint">
-                    <button className="inline-link" onClick={() => openAuthModal('login')}>Login</button> or{' '}
-                    <button className="inline-link" onClick={() => openAuthModal('register')}>Register</button> to place your order
-                  </p>
-                )}
+                    <span className="vnl-del-opt-fee">
+                      {cartTotal >= 499 ? <span className="vnl-free">FREE</span> : `₹${opt.fee}`}
+                    </span>
+                  </button>
+                ))}
               </div>
-            </motion.div>
+            </div>
+
+            {/* Coupon */}
+            <div className="vnl-cart-section vnl-section-compact">
+              <p className="vnl-section-label"><Tag size={12} /> Offers & Coupons</p>
+              {coupon ? (
+                <motion.div className="vnl-coupon-applied" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <div>
+                    <p className="vnl-coupon-code">🎉 {coupon.code} applied</p>
+                    <p className="vnl-coupon-saved">
+                      {coupon.discount > 0 ? `${coupon.discount}% discount` : 'Free delivery applied'}
+                    </p>
+                  </div>
+                  <button onClick={removeCoupon}><X size={14} /></button>
+                </motion.div>
+              ) : (
+                <>
+                  <div className="vnl-coupon-row">
+                    <input className="vnl-coupon-input" placeholder="Enter coupon code"
+                      value={couponInput} onChange={e => setCouponInput(e.target.value.toUpperCase())}
+                      onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()} />
+                    <button className="vnl-coupon-btn" onClick={handleApplyCoupon}>Apply</button>
+                  </div>
+                  {couponErr && <p className="vnl-coupon-err">{couponErr}</p>}
+                  <div className="vnl-coupon-chips">
+                    {SUGGESTED_COUPONS.map(c => (
+                      <button key={c.code} className="vnl-coupon-chip" onClick={() => applyCoupon(c.code)}>
+                        <span className="vnl-chip-code">{c.code}</span>
+                        <span className="vnl-chip-disc">{c.disc}</span>
+                        <span className="vnl-chip-desc">{c.desc}</span>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-        )}
+
+          {/* ── Right: Summary ── */}
+          <div className="vnl-cart-col-side">
+            <div className="vnl-summary-card">
+              <h3 className="vnl-summary-title">Order Summary</h3>
+              <div className="vnl-summary-rows">
+                {cart.map(item => (
+                  <div key={item.id} className="vnl-summary-row">
+                    <span>{item.name} <span className="vnl-qty-badge">×{item.qty}</span></span>
+                    <span>₹{(item.price * item.qty).toFixed(0)}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="vnl-summary-divider" />
+              <div className="vnl-summary-row"><span>Subtotal</span><span>₹{cartTotal.toFixed(0)}</span></div>
+              {couponDisc > 0 && (
+                <div className="vnl-summary-row vnl-summary-green">
+                  <span>Coupon ({coupon.code})</span><span>−₹{couponDisc}</span>
+                </div>
+              )}
+              <div className="vnl-summary-row">
+                <span>Delivery</span>
+                <span>{deliveryFee === 0 ? <span className="vnl-free">FREE</span> : `₹${deliveryFee}`}</span>
+              </div>
+              <div className="vnl-summary-row"><span>Packing</span><span>₹{packingFee}</span></div>
+              <div className="vnl-summary-row"><span>GST (5%)</span><span>₹{gst}</span></div>
+              <div className="vnl-summary-divider" />
+              <div className="vnl-summary-total">
+                <span>Total</span><span>₹{grandTotal.toFixed(0)}</span>
+              </div>
+              {cartTotal < 499 && (
+                <p className="vnl-free-hint">Add ₹{(499 - cartTotal).toFixed(0)} more for free delivery!</p>
+              )}
+              <button className="vnl-checkout-btn" onClick={handleCheckout}>
+                {user ? 'Proceed to Checkout' : 'Login to Checkout'} <ArrowRight size={15} />
+              </button>
+              <div className="vnl-trust-row">
+                <span>🔒 Secure</span><span>•</span>
+                <span>✅ Freshly made</span><span>•</span>
+                <span>⚡ Fast delivery</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </motion.div>
   );
