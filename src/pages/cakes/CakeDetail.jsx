@@ -155,7 +155,7 @@ export default function CakeDetail() {
         {/* Title block */}
         <div className="det-title-block">
           <div className="det-tags">
-            <span className={`det-egg${cake.egg === 'Eggless' ? ' eg' : ''}`}>{cake.egg}</span>
+
             <span className="det-flavor">🍰 {cake.flavor}</span>
             <span className="det-serves">Serves {cake.serves}</span>
           </div>

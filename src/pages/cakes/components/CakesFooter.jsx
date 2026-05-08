@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Camera, Share2, Play, Rss, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { OCCASIONS } from '../CakesData';
 import './footer.css';
 
 const LINKS = {
   categories: [
     { label: 'Birthday Cakes',    to: '/cakes/category/birthday' },
-    { label: 'Anniversary Cakes', to: '/cakes/category/anniversary' },
+    { label: 'Red Velvet Cakes', to: '/cakes/category/red-velvet' },
     { label: 'Chocolate Cakes',   to: '/cakes/category/chocolate' },
     { label: 'Designer Cakes',    to: '/cakes/category/designer' },
     { label: 'Kids Cakes',        to: '/cakes/category/kids' },
-    { label: 'Eggless Cakes',     to: '/cakes/category/eggless' },
+
   ],
   quick: [
     { label: 'About Us',         to: '/cakes/about' },
@@ -109,6 +110,14 @@ export default function CakesFooter() {
             ))}
           </div>
 
+          {/* Occasions */}
+          <div className="ck-ft-col">
+            <h4 className="ck-ft-col-head">Occasions</h4>
+            {OCCASIONS.map(l => (
+              <Link key={l.id} to={`/cakes/category/${l.id}`} className="ck-ft-link">{l.label} Cakes</Link>
+            ))}
+          </div>
+
           {/* Quick Links */}
           <div className="ck-ft-col">
             <h4 className="ck-ft-col-head">Quick Links</h4>
@@ -121,8 +130,8 @@ export default function CakesFooter() {
           <div className="ck-ft-col">
             <h4 className="ck-ft-col-head">Our Promise</h4>
             {[
-              { icon: '⚡', text: 'Delivered in 60 minutes' },
-              { icon: '🌙', text: 'Midnight delivery available' },
+              { icon: '⚡', text: 'Fast and secure delivery' },
+              { icon: '✨', text: 'Premium Quality Cakes' },
               { icon: '🎂', text: 'Freshly baked, always' },
               { icon: '❄️',  text: 'Temperature-safe packaging' },
               { icon: '📍', text: 'Live order tracking' },

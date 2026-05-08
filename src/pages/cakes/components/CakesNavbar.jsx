@@ -7,13 +7,14 @@ import {
   Menu, X, ChevronDown, Package, ChevronRight
 } from 'lucide-react';
 
+import { OCCASIONS } from '../CakesData';
+
 const CATEGORIES = [
   { label: 'Birthday Cakes',    slug: 'birthday' },
-  { label: 'Anniversary Cakes', slug: 'anniversary' },
+  { label: 'Red Velvet Cakes', slug: 'red-velvet' },
   { label: 'Chocolate Cakes',   slug: 'chocolate' },
   { label: 'Designer Cakes',    slug: 'designer' },
   { label: 'Kids Cakes',        slug: 'kids' },
-  { label: 'Eggless Cakes',     slug: 'eggless' },
   { label: 'Wedding Cakes',     slug: 'wedding' },
   { label: 'Cupcakes',          slug: 'cupcakes' },
 ];
@@ -144,6 +145,14 @@ export default function CakesNavbar() {
                           {c.label} <ChevronRight size={12} />
                         </Link>
                       ))}
+                      <div style={{ height: 1, background: 'var(--mh-border)', margin: '4px 0' }} />
+                      <p className="ck-nb-dd-label" style={{ padding: '4px 12px', fontSize: '0.75rem', color: 'var(--mh-text-gray)' }}>Shop by Occasion</p>
+                      {OCCASIONS.map(c => (
+                        <Link key={c.id} to={`/cakes/category/${c.id}`}
+                          className="ck-nb-dd-item" onClick={() => setCatOpen(false)}>
+                          {c.emoji} {c.label} <ChevronRight size={12} />
+                        </Link>
+                      ))}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -215,6 +224,16 @@ export default function CakesNavbar() {
                   {c.label}
                 </Link>
               ))}
+
+              <p className="ck-mob-section-label" style={{ marginTop: '1rem' }}>Shop by Occasion</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', padding: '0 1rem' }}>
+                {OCCASIONS.map(c => (
+                  <Link key={c.id} to={`/cakes/category/${c.id}`} className="ck-mob-link" style={{ padding: '8px 4px', fontSize: '0.85rem' }}
+                    onClick={() => setMobileOpen(false)}>
+                    {c.emoji} {c.label}
+                  </Link>
+                ))}
+              </div>
 
               <p className="ck-mob-section-label">Account</p>
               <Link to="/cakes/track" className="ck-mob-link" onClick={() => setMobileOpen(false)}>

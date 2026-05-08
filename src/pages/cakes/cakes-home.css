@@ -148,22 +148,33 @@
   border-radius: 2px;
 }
 
-/* Divider */
-.mh-hero-divider {
+/* Premium Hero Image */
+.mh-hero-image-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 400px;
+  margin: 18px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(60, 42, 33, 0.08);
+  transform: translateY(0);
+  animation: mh-float-img 4s ease-in-out infinite;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 14px;
+  justify-content: center;
+  background: #FFF8F2;
 }
-.mh-divider-line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #EAD9C4);
+.mh-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
 }
-.mh-divider-line:last-child {
-  background: linear-gradient(90deg, #EAD9C4, transparent);
+@keyframes mh-float-img {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
 }
-.mh-divider-icon { font-size: 1rem; }
 
 /* Subheadline */
 .mh-hero-sub {
@@ -785,4 +796,41 @@
   color: #1A1A1A;
   text-align: center;
   line-height: 1.2;
+}
+
+/* ── CAKE IMAGE DISPLAY ─────────────────────────────────── */
+.mh-cake-tile { position: relative; }
+.mh-cake-img-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.mh-cake-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .35s ease;
+  display: block;
+}
+.mh-cake-img.ready { opacity: 1; }
+.mh-img-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #F5EDE0 25%, #EAD9C4 50%, #F5EDE0 75%);
+  background-size: 200% 100%;
+  animation: mh-shimmer 1.4s infinite linear;
+  z-index: 1;
+}
+@keyframes mh-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.mh-cake-emoji-fb {
+  font-size: 3rem;
+  line-height: 1;
+  z-index: 2;
 }

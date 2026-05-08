@@ -13,7 +13,6 @@ const AVAILABLE_COUPONS = [
   { code: 'BDAY20',   desc: '20% off Birthday Cakes',  disc: '20%' },
   { code: 'FEST30',   desc: '30% off Designer Cakes',  disc: '30%' },
   { code: 'BOGO',     desc: '10% off any order',       disc: '10%' },
-  { code: 'MIDNIGHT', desc: 'Free midnight delivery',  disc: 'FREE' },
 ];
 
 export default function CakesCartPage() {
@@ -71,7 +70,7 @@ export default function CakesCartPage() {
                 <div className="co-item-tile">{item.emoji}</div>
                 <div className="co-item-info">
                   <p className="co-item-name">{item.name}</p>
-                  <p className="co-item-meta">{item.weight} · {item.egg}</p>
+                  <p className="co-item-meta">{item.weight}</p>
                   <div className="co-item-del">
                     <span>⚡ {item.deliveryTime}</span>
                   </div>
@@ -123,7 +122,7 @@ export default function CakesCartPage() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="co-coupon-applied">
               <div>
                 <p className="co-coupon-code">🎉 {coupon.code}</p>
-                <p className="co-coupon-saved">{coupon.discount > 0 ? `${coupon.discount}% off applied` : 'Free midnight delivery'}</p>
+                <p className="co-coupon-saved">{coupon.discount}% off applied</p>
               </div>
               <button onClick={removeCoupon}><X size={14} /></button>
             </motion.div>

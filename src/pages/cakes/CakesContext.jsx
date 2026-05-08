@@ -51,11 +51,11 @@ export function CakesProvider({ children }) {
   }, []);
 
   const applyCoupon = useCallback((code) => {
-    const COUPONS = { BDAY20: 20, FEST30: 30, MIDNIGHT: 0, BOGO: 10 };
+    const COUPONS = { BDAY20: 20, FEST30: 30, BOGO: 10 };
     const disc = COUPONS[code.toUpperCase()];
     if (disc !== undefined) {
       setCoupon({ code: code.toUpperCase(), discount: disc });
-      showToast(`Coupon "${code.toUpperCase()}" applied! ${disc > 0 ? disc + '% off' : 'Free midnight delivery'} 🎉`);
+      showToast(`Coupon "${code.toUpperCase()}" applied! ${disc}% off 🎉`);
       return true;
     }
     showToast('Invalid coupon code', 'error');

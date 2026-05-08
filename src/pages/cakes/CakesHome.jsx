@@ -6,7 +6,7 @@ import { useCakes } from './CakesContext';
 import {
   Clock, Zap, ShieldCheck, Heart, ShoppingBag,
   ArrowRight, Gift, Moon, ChevronRight,
-  Truck, Leaf, MapPin,
+  Truck, Leaf, MapPin, Star
 } from 'lucide-react';
 import './cakes-home.css';
 
@@ -46,11 +46,14 @@ function Hero() {
           Every <em>Celebration</em>
         </motion.h1>
 
-        {/* Decorative divider */}
-        <motion.div {...reveal(0.12)} className="mh-hero-divider">
-          <span className="mh-divider-line" />
-          <span className="mh-divider-icon">🎂</span>
-          <span className="mh-divider-line" />
+        {/* Premium Hero Image */}
+        <motion.div {...reveal(0.12)} className="mh-hero-image-wrap">
+          <img 
+            src="/cake-images/hero/hero-promo.png" 
+            alt="Premium Vanilla Crafted Cake Collection" 
+            className="mh-hero-image" 
+            loading="eager"
+          />
         </motion.div>
 
         {/* Subheadline */}
@@ -62,8 +65,8 @@ function Hero() {
         <motion.div {...reveal(0.19)} className="mh-trust-row">
           {[
             { icon: '⭐', val: '4.9', sub: '50K+ reviews' },
-            { icon: '⚡', val: '60 min', sub: 'delivery' },
-            { icon: '🌙', val: '24/7', sub: 'midnight orders' },
+            { icon: '⚡', val: 'Fast', sub: 'delivery' },
+            { icon: '⭐', val: '4.9/5', sub: 'average rating' },
           ].map(t => (
             <div key={t.val} className="mh-trust-pill">
               <span className="mh-trust-icon">{t.icon}</span>
@@ -89,8 +92,7 @@ function Hero() {
         <motion.div {...reveal(0.27)} className="mh-promise-strip">
           <span><Truck size={11} /> Free delivery above ₹999</span>
           <span className="mh-dot-sep">·</span>
-          <span><Leaf size={11} /> Eggless options</span>
-          <span className="mh-dot-sep">·</span>
+
           <span><ShieldCheck size={11} /> Freshly baked</span>
         </motion.div>
       </div>
@@ -127,6 +129,26 @@ function Categories() {
 /* ═══════════════════════════════════════════════
    CAKE CARD (reused in featured + trending)
    ═══════════════════════════════════════════════ */
+function CakeImage({ src, emoji, alt }) {
+  const [status, setStatus] = useState(src ? 'loading' : 'error');
+  return (
+    <div className="mh-cake-img-wrap">
+      {status === 'loading' && <div className="mh-img-skeleton" />}
+      {src && (
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          className={`mh-cake-img${status === 'ready' ? ' ready' : ''}`}
+          onLoad={() => setStatus('ready')}
+          onError={() => setStatus('error')}
+        />
+      )}
+      {status === 'error' && <span className="mh-cake-emoji-fb">{emoji}</span>}
+    </div>
+  );
+}
+
 function CakeCard({ cake, compact = false }) {
   const { addToCart, toggleWishlist, wishlist } = useCakes();
   const [weight, setWeight] = useState(cake.weights[0]);
@@ -137,9 +159,9 @@ function CakeCard({ cake, compact = false }) {
       className={`mh-cake-card${compact ? ' mh-cake-card--compact' : ''}`}
       whileTap={{ scale: .98 }}
     >
-      {/* Top: emoji tile */}
+      {/* Image tile */}
       <div className="mh-cake-tile">
-        <span className="mh-cake-emoji">{cake.emoji}</span>
+        <CakeImage src={cake.image} emoji={cake.emoji} alt={cake.name} />
         {cake.discount > 0 && <span className="mh-disc-tag">-{cake.discount}%</span>}
         <button
           className={`mh-wish-btn${isWished ? ' active' : ''}`}
@@ -152,7 +174,7 @@ function CakeCard({ cake, compact = false }) {
       {/* Body */}
       <div className="mh-cake-body">
         <div className="mh-cake-tags">
-          <span className={`mh-egg-tag${cake.egg === 'Eggless' ? ' eggless' : ''}`}>{cake.egg}</span>
+
           {cake.tag && <span className="mh-label-tag">{cake.tag}</span>}
         </div>
 
@@ -194,58 +216,7 @@ function CakeCard({ cake, compact = false }) {
   );
 }
 
-/* ═══════════════════════════════════════════════
-   3. FEATURED CAKES
-   ═══════════════════════════════════════════════ */
-function Featured() {
-  const TABS = [
-    { id: 'all', label: 'All' },
-    { id: 'chocolate', label: 'Chocolate' },
-    { id: 'birthday', label: 'Birthday' },
-    { id: 'anniversary', label: 'Anniversary' },
-    { id: 'designer', label: 'Designer' },
-    { id: 'eggless', label: 'Eggless' },
-  ];
-  const [tab, setTab] = useState('all');
-  const filtered = tab === 'all' ? CAKES : CAKES.filter(c => c.category === tab);
 
-  return (
-    <section className="mh-section mh-section-alt">
-      <div className="mh-section-head">
-        <p className="mh-eyebrow">Our Menu</p>
-        <h2 className="mh-h2">Featured Cakes</h2>
-      </div>
-
-      {/* Filter tabs */}
-      <div className="mh-hscroll mh-tab-row">
-        {TABS.map(t => (
-          <button
-            key={t.id}
-            className={`mh-tab${tab === t.id ? ' active' : ''}`}
-            onClick={() => setTab(t.id)}
-          >{t.label}</button>
-        ))}
-      </div>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={tab}
-          className="mh-cakes-grid"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          transition={{ duration: .2 }}
-        >
-          {filtered.map(c => <CakeCard key={c.id} cake={c} />)}
-        </motion.div>
-      </AnimatePresence>
-
-      <div className="mh-view-all-wrap">
-        <Link to="/cakes/category/all" className="mh-view-all">
-          View All Cakes <ChevronRight size={14} />
-        </Link>
-      </div>
-    </section>
-  );
-}
 
 /* ═══════════════════════════════════════════════
    4. DELIVERY BANNER
@@ -262,8 +233,8 @@ function DeliveryBanner() {
         </Link>
         <div className="mh-db-features">
           {[
-            { icon: <Zap size={14} />, text: '60-min delivery' },
-            { icon: <Moon size={14} />, text: 'Midnight orders' },
+            { icon: <Zap size={14} />, text: 'Fast delivery' },
+            { icon: <Star size={14} />, text: 'Bestselling recipes' },
             { icon: <Gift size={14} />, text: 'Gift packaging' },
             { icon: <ShieldCheck size={14} />, text: 'Fresh guarantee' },
           ].map(f => (
@@ -291,7 +262,15 @@ function Trending() {
       <div className="mh-hscroll mh-trending-row">
         {trending.map((cake, i) => (
           <motion.div key={cake.id} {...reveal(i * 0.05)} className="mh-trend-card">
-            <div className="mh-trend-tile">{cake.emoji}</div>
+            <Link to={`/cakes/${cake.id}`} style={{textDecoration: 'none'}}>
+              <div className="mh-trend-img-wrap">
+                {cake.image ? (
+                  <img src={cake.image} alt={cake.name} className="mh-trend-img ready" loading="lazy" />
+                ) : (
+                  <span className="mh-trend-tile" style={{fontSize: '2rem', padding: 0, margin: 0, background: 'none'}}>{cake.emoji}</span>
+                )}
+              </div>
+            </Link>
             <p className="mh-trend-name">{cake.name}</p>
             <div className="mh-trend-meta">
               <span className="mh-stars">{'★'.repeat(Math.floor(cake.rating))}</span>
@@ -314,11 +293,11 @@ function Trending() {
 function WhyUs() {
   const FEATURES = [
     { icon: '🎂', title: 'Freshly Baked',       sub: 'Baked to order daily' },
-    { icon: '⚡', title: 'Same Day Delivery',    sub: 'In 60 minutes' },
+    { icon: '⚡', title: 'Same Day Delivery',    sub: 'Fast and reliable' },
     { icon: '🌿', title: 'Premium Ingredients',  sub: 'No preservatives' },
     { icon: '📍', title: 'Live Tracking',         sub: 'Real-time updates' },
     { icon: '🔒', title: 'Secure Payments',       sub: 'UPI, Cards, COD' },
-    { icon: '🌙', title: 'Midnight Delivery',     sub: 'Available 24/7' },
+    { icon: '🌟', title: 'Premium Quality',     sub: 'Top ingredients' },
   ];
   return (
     <section className="mh-section mh-section-alt">
@@ -391,12 +370,12 @@ function Reviews() {
    ═══════════════════════════════════════════════ */
 function Gallery() {
   const ITEMS = [
-    { emoji: '🎂', label: 'Designer Cakes' },
-    { emoji: '🍫', label: 'Chocolate' },
-    { emoji: '❤️', label: 'Anniversary' },
-    { emoji: '🦄', label: 'Kids Cakes' },
-    { emoji: '👰', label: 'Wedding' },
-    { emoji: '🎁', label: 'Bento Cakes' },
+    { emoji: '🎂', label: 'Designer Cakes', slug: 'designer' },
+    { emoji: '🍫', label: 'Chocolate',      slug: 'chocolate' },
+    { emoji: '❤️', label: 'Red Velvet',     slug: 'red-velvet' },
+    { emoji: '🥭', label: 'Mango Cakes',    slug: 'mango' },
+    { emoji: '🍍', label: 'Pineapple',      slug: 'pineapple' },
+    { emoji: '✨', label: 'Truffle Cakes',  slug: 'truffle' },
   ];
   return (
     <section className="mh-section mh-section-alt">
@@ -407,7 +386,7 @@ function Gallery() {
       <div className="mh-gallery-grid">
         {ITEMS.map((item, i) => (
           <motion.div key={item.label} {...reveal(i * 0.05)}>
-            <Link to={`/cakes/category/${item.label.toLowerCase().split(' ')[0]}`} className="mh-gallery-cell">
+            <Link to={`/cakes/category/${item.slug}`} className="mh-gallery-cell">
               <span className="mh-gallery-emoji">{item.emoji}</span>
               <p className="mh-gallery-label">{item.label}</p>
             </Link>
@@ -425,7 +404,7 @@ function Offers() {
   const [idx, setIdx] = useState(0);
   const ITEMS = [
     '🎉 Use code BDAY20 — 20% off Birthday Cakes',
-    '🌙 Free Midnight Delivery above ₹999',
+    '⭐ Rated 4.9 by 10,000+ customers',
     '🎁 Buy 1 Get 1 on Cupcake Boxes',
     '✨ 30% off all Designer Cakes — FEST30',
   ];
@@ -460,7 +439,6 @@ export default function CakesHome() {
       <Offers />
       <Hero />
       <Categories />
-      <Featured />
       <DeliveryBanner />
       <Trending />
       <WhyUs />

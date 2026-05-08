@@ -73,7 +73,7 @@ export default function CakesCart() {
                       </div>
                       <div className="ck-cart-item-info">
                         <p className="ck-cart-item-name">{item.name}</p>
-                        <p className="ck-small">{item.weight} · {item.egg}</p>
+                        <p className="ck-small">{item.weight}</p>
                         <div className="ck-cart-item-row">
                           <span className="ck-cart-item-price">₹{(item.price * item.qty).toLocaleString()}</span>
                           <div className="ck-qty-control">

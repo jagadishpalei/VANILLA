@@ -422,3 +422,70 @@
   cursor: pointer;
 }
 .cat-apply-btn:active { background: #B45309; }
+
+/* ── CAKE IMAGE DISPLAY ─────────────────────────── */
+.cat-img-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cat-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .35s ease;
+  display: block;
+}
+.cat-img.ready { opacity: 1; }
+.cat-img-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #F5EDE0 25%, #EAD9C4 50%, #F5EDE0 75%);
+  background-size: 200% 100%;
+  animation: cat-shimmer 1.4s infinite linear;
+  z-index: 1;
+}
+@keyframes cat-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.cat-emoji-fb {
+  font-size: 3rem;
+  line-height: 1;
+  z-index: 2;
+}
+
+/* ── OCCASION BANNER ───────────────────────────── */
+.cat-occasion-banner {
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5EDE0 100%);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid #EAD9C4;
+}
+.cat-occ-emoji {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+.cat-occ-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: #3C2A21;
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+}
+.cat-occ-sub {
+  font-family: 'Montserrat', sans-serif;
+  color: #9A8070;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}

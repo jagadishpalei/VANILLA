@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CATEGORIES, CAKES } from './CakesData';
+import { CATEGORIES, CAKES, OCCASIONS } from './CakesData';
 import { useCakes } from './CakesContext';
 import { Heart, ShoppingBag, Clock, SlidersHorizontal, X, ChevronLeft, Search } from 'lucide-react';
 import './category.css';
@@ -11,6 +11,24 @@ const reveal = (d = 0) => ({
   animate: { opacity: 1, y: 0 },
   transition: { duration: .35, delay: d, ease: [.4,0,.2,1] },
 });
+
+function CakeImage({ src, emoji, alt }) {
+  const [status, setStatus] = React.useState(src ? 'loading' : 'error');
+  return (
+    <div className="cat-img-wrap">
+      {status === 'loading' && <div className="cat-img-skeleton" />}
+      {src && (
+        <img
+          src={src} alt={alt} loading="lazy"
+          className={`cat-img${status === 'ready' ? ' ready' : ''}`}
+          onLoad={() => setStatus('ready')}
+          onError={() => setStatus('error')}
+        />
+      )}
+      {status === 'error' && <span className="cat-emoji-fb">{emoji}</span>}
+    </div>
+  );
+}
 
 /* ── Compact cake card ──────────────────────────── */
 function ListCard({ cake }) {
@@ -22,7 +40,7 @@ function ListCard({ cake }) {
     <motion.div className="cat-card" layout {...reveal(0)}>
       {/* Image tile */}
       <Link to={`/cakes/${cake.id}`} className="cat-card-tile">
-        <span className="cat-card-emoji">{cake.emoji}</span>
+        <CakeImage src={cake.image} emoji={cake.emoji} alt={cake.name} />
         {cake.discount > 0 && <span className="cat-disc">-{cake.discount}%</span>}
         <button className={`cat-wish${isWished ? ' on' : ''}`}
           onClick={e => { e.preventDefault(); toggleWishlist(cake.id); }}>
@@ -33,7 +51,7 @@ function ListCard({ cake }) {
       {/* Info */}
       <Link to={`/cakes/${cake.id}`} className="cat-card-body">
         <div className="cat-card-tags">
-          <span className={`cat-egg${cake.egg === 'Eggless' ? ' eg' : ''}`}>{cake.egg}</span>
+
           {cake.tag && <span className="cat-tag">{cake.tag}</span>}
         </div>
         <p className="cat-name">{cake.name}</p>
@@ -78,7 +96,6 @@ function FilterSheet({ open, onClose, filters, setFilters }) {
     { id: '800to1200', label: '₹800–₹1200' },
     { id: 'above1200', label: 'Above ₹1200' },
   ];
-  const EGG_OPTS = ['All', 'Egg', 'Eggless'];
   const SORT_OPTS = [
     { id: 'popular', label: 'Most Popular' },
     { id: 'low', label: 'Price: Low → High' },
@@ -87,7 +104,7 @@ function FilterSheet({ open, onClose, filters, setFilters }) {
   ];
 
   const apply = () => { setFilters(local); onClose(); };
-  const reset = () => setLocal({ price: 'all', egg: 'All', sort: 'popular' });
+  const reset = () => setLocal({ price: 'all', sort: 'popular' });
 
   return (
     <AnimatePresence>
@@ -121,13 +138,7 @@ function FilterSheet({ open, onClose, filters, setFilters }) {
                 ))}
               </div>
 
-              <p className="cat-filter-label">Egg / Eggless</p>
-              <div className="cat-filter-row">
-                {EGG_OPTS.map(e => (
-                  <button key={e} className={`cat-fpill${local.egg === e ? ' on' : ''}`}
-                    onClick={() => setLocal(f => ({ ...f, egg: e }))}>{e}</button>
-                ))}
-              </div>
+
             </div>
 
             <div className="cat-sheet-foot">
@@ -147,7 +158,7 @@ export default function CakeCategory() {
   const navigate = useNavigate();
   const [activeSlug, setActiveSlug] = useState(slug || 'all');
   const [filterOpen, setFilterOpen] = useState(false);
-  const [filters, setFilters] = useState({ price: 'all', egg: 'All', sort: 'popular' });
+  const [filters, setFilters] = useState({ price: 'all', sort: 'popular' });
   const [search, setSearch] = useState('');
 
   const handleCatChange = (id) => {
@@ -155,12 +166,21 @@ export default function CakeCategory() {
     navigate(`/cakes/category/${id}`, { replace: true });
   };
 
-  const CAT_TABS = [{ id: 'all', label: 'All 🎂' }, ...CATEGORIES.slice(0, 8).map(c => ({ id: c.id, label: `${c.emoji} ${c.label}` }))];
+  const CAT_TABS = [
+    { id: 'all',         label: 'All 🎂' },
+    { id: 'chocolate',   label: '🍫 Chocolate' },
+    { id: 'truffle',     label: '🎂 Truffle' },
+    { id: 'red-velvet',  label: '❤️ Red Velvet' },
+    { id: 'designer',    label: '✨ Designer' },
+    { id: 'mango',       label: '🥭 Mango' },
+    { id: 'pineapple',   label: '🍍 Pineapple' },
+  ];
+
 
   const filtered = useMemo(() => {
-    let list = activeSlug === 'all' ? CAKES : CAKES.filter(c => c.category === activeSlug);
+    let list = activeSlug === 'all' ? CAKES : CAKES.filter(c => c.category === activeSlug || (c.occasions && c.occasions.includes(activeSlug)));
     if (search.trim()) list = list.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
-    if (filters.egg !== 'All') list = list.filter(c => c.egg === filters.egg);
+
     if (filters.price === 'under800') list = list.filter(c => c.price < 800);
     else if (filters.price === '800to1200') list = list.filter(c => c.price >= 800 && c.price <= 1200);
     else if (filters.price === 'above1200') list = list.filter(c => c.price > 1200);
@@ -171,18 +191,29 @@ export default function CakeCategory() {
     return list;
   }, [activeSlug, filters, search]);
 
-  const activeLabel = CAT_TABS.find(t => t.id === activeSlug)?.label || 'All Cakes';
+  const activeOccasion = OCCASIONS.find(o => o.id === activeSlug);
+  const activeLabel = CAT_TABS.find(t => t.id === activeSlug)?.label || (activeOccasion ? `${activeOccasion.emoji} ${activeOccasion.label}` : 'All Cakes');
 
   return (
     <main className="ck-page cat-root">
+      {/* ── Occasion Banner ── */}
+      {activeOccasion && (
+        <div className="cat-occasion-banner">
+          <span className="cat-occ-emoji">{activeOccasion.emoji}</span>
+          <h1 className="cat-occ-title">{activeOccasion.label} Collection</h1>
+          <p className="cat-occ-sub">{activeOccasion.subtitle}</p>
+        </div>
+      )}
+
       {/* ── Header ── */}
-      <div className="cat-header">
+      <div className="cat-header" style={activeOccasion ? { paddingTop: 0 } : {}}>
         <div className="cat-header-top">
           <button className="cat-back" onClick={() => navigate('/cakes')}><ChevronLeft size={18} /></button>
-          <h1 className="cat-title">{activeLabel}</h1>
+          {!activeOccasion && <h1 className="cat-title">{activeLabel}</h1>}
+          {activeOccasion && <div style={{flex:1}} />}
           <button className="cat-filter-btn" onClick={() => setFilterOpen(true)}>
             <SlidersHorizontal size={15} />
-            {(filters.price !== 'all' || filters.egg !== 'All') && <span className="cat-filter-dot" />}
+            {(filters.price !== 'all') && <span className="cat-filter-dot" />}
           </button>
         </div>
 
@@ -217,7 +248,7 @@ export default function CakeCategory() {
           <p className="cat-empty-icon">🎂</p>
           <p className="cat-empty-title">No cakes found</p>
           <p className="cat-empty-sub">Try changing your filters</p>
-          <button className="cat-reset-link" onClick={() => { setFilters({ price: 'all', egg: 'All', sort: 'popular' }); setSearch(''); }}>
+          <button className="cat-reset-link" onClick={() => { setFilters({ price: 'all', sort: 'popular' }); setSearch(''); }}>
             Clear Filters
           </button>
         </div>
