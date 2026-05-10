@@ -1,196 +1,331 @@
-/* ═══════════════════════════════════════════
-   VANILLA CRAFTED CAKES — FOOTER (v3)
-   Matches main Vanilla restaurant footer style
-   Dark bg · Uppercase accordions · Bottom icons
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   VANILLA CRAFTED CAKES — PREMIUM FOOTER
+   Mobile-first (324px), clean & elegant
+═══════════════════════════════════════ */
 
-.vft-root {
-  background: #141414;
+.ck-ft2 {
+  background: #1A1008;
   color: rgba(255,255,255,.75);
   font-family: 'Poppins', sans-serif;
-  position: relative;         /* for FAB positioning context */
-  padding-bottom: 0;
-}
-
-/* ── Top copyright strip ── */
-.vft-top-copy {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  padding: 28px 20px 22px;
-  font-size: .75rem;
-  color: rgba(255,255,255,.3);
-  letter-spacing: .01em;
-  line-height: 1.6;
-  text-align: center;
-}
-
-/* ── Amber accent line ── */
-.vft-amber-line {
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, #D97706 40%, #D97706 60%, transparent 100%);
-  margin: 0 20px;
-  opacity: .85;
-}
-
-/* ═══════════════════════════════════════════
-   ACCORDION SECTIONS
-═══════════════════════════════════════════ */
-.vft-section {
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-
-.vft-section-head {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 20px 22px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: .78rem;
-  font-weight: 800;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.9);
-  text-align: left;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  transition: color .15s;
-}
-
-.vft-section-head:hover { color: #D97706; }
-.vft-section-head svg  { color: rgba(255,255,255,.45); flex-shrink: 0; }
-
-/* Accordion body */
-.vft-acc-body {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 4px 22px 20px;
-}
-
-.vft-acc-body a,
-.vft-acc-body span {
-  font-size: .84rem;
-  color: rgba(255,255,255,.5);
-  text-decoration: none;
-  line-height: 1.5;
-  transition: color .15s;
-}
-
-.vft-acc-body a:hover { color: #D97706; }
-
-.vft-acc-body p {
-  font-size: .83rem;
-  color: rgba(255,255,255,.45);
-  line-height: 1.7;
-  margin: 0;
-}
-
-/* ═══════════════════════════════════════════
-   BOTTOM BAR
-═══════════════════════════════════════════ */
-.vft-bottom {
-  padding: 22px 22px 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
   border-top: 1px solid rgba(255,255,255,.06);
 }
 
-.vft-bottom-copy {
-  font-size: .78rem;
-  color: rgba(255,255,255,.35);
-  margin: 0;
-  letter-spacing: .01em;
+.ck-ft2-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 36px 20px 24px;
 }
 
-.vft-v {
-  color: #D97706;
+/* ── Divider ── */
+.ck-ft2-divider {
+  height: 1px;
+  background: rgba(255,255,255,.07);
+  margin: 28px 0;
+}
+
+/* ══════════════════════
+   BRAND BLOCK
+══════════════════════ */
+.ck-ft2-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.ck-ft2-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.ck-ft2-logo img {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+.ck-ft2-logo span {
+  font-family: 'Montserrat', sans-serif;
+  font-size: .92rem;
   font-weight: 800;
+  color: #fff;
+  letter-spacing: -.01em;
 }
 
-.vft-bottom-icons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-}
-
-.vft-bottom-icons a {
+.ck-ft2-tagline {
+  font-size: .8rem;
   color: rgba(255,255,255,.5);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Social icons ── */
+.ck-ft2-social {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ck-ft2-social-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color .18s, transform .18s;
-  -webkit-tap-highlight-color: transparent;
+  color: rgba(255,255,255,.65);
+  text-decoration: none;
+  transition: background .18s, color .18s, border-color .18s, transform .18s;
 }
 
-.vft-bottom-icons a:hover {
+.ck-ft2-social-btn:hover {
+  background: rgba(217,119,6,.18);
+  border-color: rgba(217,119,6,.4);
   color: #D97706;
   transform: translateY(-2px);
 }
 
-/* ═══════════════════════════════════════════
-   WHATSAPP FLOATING BUTTON
-═══════════════════════════════════════════ */
-.vft-wa-fab {
-  position: fixed;
-  bottom: 80px;   /* above mobile nav bar */
-  right: 18px;
-  width: 52px;
-  height: 52px;
-  background: #25D366;
-  border-radius: 50%;
+/* ══════════════════════
+   LINK COLUMNS
+══════════════════════ */
+.ck-ft2-cols {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Desktop column — hidden on mobile */
+.ck-ft2-col-desktop { display: none; }
+
+/* Mobile accordion — shown on mobile */
+.ck-ft2-col-mobile  { display: block; }
+
+.ck-ft2-col-head {
+  font-family: 'Montserrat', sans-serif;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.4);
+  margin-bottom: 12px;
+}
+
+.ck-ft2-link {
+  display: block;
+  font-size: .8rem;
+  color: rgba(255,255,255,.6);
+  text-decoration: none;
+  padding: 5px 0;
+  line-height: 1.4;
+  transition: color .15s, padding-left .15s;
+}
+
+.ck-ft2-link:hover {
+  color: #D97706;
+  padding-left: 4px;
+}
+
+/* ── Accordion (mobile) ── */
+.ck-ft2-accordion {
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.ck-ft2-acc-head {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 14px 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: .8rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.75);
+  letter-spacing: .02em;
+}
+
+.ck-ft2-acc-head svg {
+  color: rgba(255,255,255,.4);
+  flex-shrink: 0;
+}
+
+.ck-ft2-acc-body {
+  padding: 0 0 12px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ══════════════════════
+   NEWSLETTER
+══════════════════════ */
+.ck-ft2-news {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ck-ft2-news-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ck-ft2-news-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #D97706;
+}
+
+.ck-ft2-news-sub {
+  font-size: .8rem;
+  color: rgba(255,255,255,.55);
+}
+
+.ck-ft2-news-form {
+  display: flex;
+  gap: 8px;
+}
+
+.ck-ft2-news-input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  padding: 10px 13px;
+  font-family: 'Poppins', sans-serif;
+  font-size: .8rem;
+  color: #fff;
+  outline: none;
+  transition: border-color .18s;
+}
+
+.ck-ft2-news-input::placeholder { color: rgba(255,255,255,.3); }
+.ck-ft2-news-input:focus { border-color: rgba(217,119,6,.5); }
+
+.ck-ft2-news-btn {
+  background: #D97706;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .18s, transform .18s;
+  flex-shrink: 0;
+}
+
+.ck-ft2-news-btn:hover { background: #B45309; transform: translateY(-1px); }
+
+.ck-ft2-news-done {
+  font-size: .82rem;
+  color: #6EE7B7;
+  font-weight: 600;
+  padding: 10px 0;
+}
+
+/* ══════════════════════
+   BOTTOM BAR
+══════════════════════ */
+.ck-ft2-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.ck-ft2-copy {
+  font-size: .72rem;
+  color: rgba(255,255,255,.3);
+}
+
+.ck-ft2-bottom-right {
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 18px rgba(37,211,102,.45);
-  z-index: 600;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ck-ft2-pay-chip {
+  font-size: .64rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.45);
+  letter-spacing: .02em;
+}
+
+.ck-ft2-legal-sep {
+  color: rgba(255,255,255,.2);
+  font-size: .72rem;
+  margin: 0 2px;
+}
+
+.ck-ft2-legal-link {
+  font-size: .72rem;
+  color: rgba(255,255,255,.35);
   text-decoration: none;
-  transition: transform .2s, box-shadow .2s;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+  transition: color .15s;
 }
 
-.vft-wa-fab:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 24px rgba(37,211,102,.55);
-}
+.ck-ft2-legal-link:hover { color: #D97706; }
 
-/* ═══════════════════════════════════════════
-   DESKTOP (≥768px) — flat columns layout
-═══════════════════════════════════════════ */
+/* ══════════════════════
+   DESKTOP (> 768px)
+══════════════════════ */
 @media (min-width: 768px) {
-  .vft-top-copy { display: none; }
+  .ck-ft2-inner { padding: 48px 32px 28px; }
 
-  .vft-amber-line { display: none; }
-
-  /* Show as horizontal columns — hide accordions */
-  .vft-section {
-    border-bottom: none;
-    flex: 1;
+  .ck-ft2-brand {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
   }
 
-  /* Unwrap: make sections into a row */
-  .vft-root > .vft-section {
-    display: none;  /* hide mobile accordions on desktop */
-  }
+  .ck-ft2-brand > div:first-child,
+  .ck-ft2-brand { flex-wrap: wrap; }
 
-  .vft-bottom {
+  /* Show desktop columns, hide accordions */
+  .ck-ft2-col-desktop { display: flex; flex-direction: column; }
+  .ck-ft2-col-mobile  { display: none; }
+
+  .ck-ft2-cols {
     flex-direction: row;
     justify-content: space-between;
-    padding: 28px 40px;
-    max-width: 1100px;
-    margin: 0 auto;
-    border-top: 1px solid rgba(255,255,255,.08);
+    gap: 24px;
   }
 
-  .vft-wa-fab { bottom: 28px; }
+  .ck-ft2-cols > div { flex: 1; }
+
+  .ck-ft2-news {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .ck-ft2-news-form { flex-shrink: 0; width: 340px; }
+
+  .ck-ft2-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
