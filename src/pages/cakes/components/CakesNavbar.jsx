@@ -123,21 +123,7 @@ export default function CakesNavbar() {
               </div>
             </div>
 
-            {/* ── Centre: Search ─────────────────────────── */}
-            <form className="ck-nb-search ck-desktop-only" onSubmit={handleSearch} ref={searchRef}>
-              <Search size={16} className="ck-nb-search-icon" />
-              <input
-                value={searchVal}
-                onChange={e => setSearchVal(e.target.value)}
-                placeholder="Search cakes, flavours, occasions…"
-                className="ck-nb-search-input"
-              />
-              {searchVal && (
-                <button type="button" className="ck-nb-search-clear" onClick={() => setSearchVal('')}>
-                  <X size={14} />
-                </button>
-              )}
-            </form>
+
 
             {/* ── Right: Actions ─────────────────────────── */}
             <div className="ck-nb-right">
