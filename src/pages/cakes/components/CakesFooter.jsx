@@ -3,82 +3,95 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import './footer.css';
 
-/* ── Social SVG icons (no lucide for social — proper brand icons) ── */
-const InstagramIcon = () => (
-  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+/* ── Social SVGs ── */
+const IgIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5"/>
     <circle cx="12" cy="12" r="4"/>
     <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
   </svg>
 );
-const FacebookIcon = () => (
-  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+const FbIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
   </svg>
 );
-const YouTubeIcon = () => (
-  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
-    <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/>
+const LiIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+    <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
   </svg>
 );
-const WhatsAppIcon = () => (
-  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+const MsgIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
   </svg>
 );
-
-const SOCIAL = [
-  { Icon: InstagramIcon, href: 'https://instagram.com',           label: 'Instagram' },
-  { Icon: FacebookIcon,  href: 'https://facebook.com',            label: 'Facebook'  },
-  { Icon: YouTubeIcon,   href: 'https://youtube.com',             label: 'YouTube'   },
-  { Icon: WhatsAppIcon,  href: 'https://wa.me/919999999999',       label: 'WhatsApp'  },
-];
+const WaIcon = () => (
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+  </svg>
+);
+const ChevronDown = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <polyline points="6 9 12 15 18 9"/>
+  </svg>
+);
 
 const SECTIONS = [
   {
-    title: 'Categories',
-    links: [
-      { label: 'Birthday Cakes',     to: '/cakes/category/birthday'   },
-      { label: 'Anniversary Cakes',  to: '/cakes/category/anniversary' },
-      { label: 'Designer Cakes',     to: '/cakes/category/designer'   },
-      { label: 'Chocolate Cakes',    to: '/cakes/category/chocolate'  },
-      { label: 'Wedding Cakes',      to: '/cakes/category/wedding'    },
-    ],
+    title: 'ABOUT',
+    content: (
+      <div className="vft-acc-body">
+        <p>Vanilla Crafted Cakes is a premium bakery delivering handcrafted luxury cakes for every celebration — birthdays, anniversaries, weddings, and more.</p>
+      </div>
+    ),
   },
   {
-    title: 'Quick Links',
-    links: [
-      { label: 'About Us',           to: '/cakes' },
-      { label: 'Offers & Deals',     to: '/cakes' },
-      { label: 'Custom Cake Orders', to: '/cakes' },
-      { label: 'Bulk & Corporate',   to: '/cakes' },
-    ],
+    title: 'QUICK LINKS',
+    content: (
+      <div className="vft-acc-body">
+        <Link to="/cakes/category/birthday">Birthday Cakes</Link>
+        <Link to="/cakes/category/anniversary">Anniversary Cakes</Link>
+        <Link to="/cakes/category/designer">Designer Cakes</Link>
+        <Link to="/cakes/category/chocolate">Chocolate Cakes</Link>
+        <Link to="/cakes/category/wedding">Wedding Cakes</Link>
+        <Link to="/cakes">Offers &amp; Deals</Link>
+      </div>
+    ),
   },
   {
-    title: 'Support',
-    links: [
-      { label: 'Contact Us',         to: '/cakes/account/help' },
-      { label: 'Delivery Info',      to: '/cakes/account/help' },
-      { label: 'FAQ',                to: '/cakes/account/help' },
-      { label: 'My Orders',          to: '/cakes/account/orders' },
-    ],
+    title: 'FOLLOW US',
+    content: (
+      <div className="vft-acc-body vft-social-col">
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      </div>
+    ),
+  },
+  {
+    title: 'CONTACT',
+    content: (
+      <div className="vft-acc-body">
+        <span>📞 +91 99999 99999</span>
+        <span>✉️ hello@vanillacrafted.in</span>
+        <span>📍 Delhi, India</span>
+      </div>
+    ),
   },
 ];
 
-/* ── Accordion section for mobile ── */
-function AccordionSection({ title, links }) {
+function AccSection({ title, content }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="ck-ft2-accordion">
-      <button className="ck-ft2-acc-head" onClick={() => setOpen(o => !o)} aria-expanded={open}>
+    <div className="vft-section">
+      <button className="vft-section-head" onClick={() => setOpen(o => !o)} aria-expanded={open}>
         <span>{title}</span>
-        <svg
-          width="14" height="14" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
-          style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .25s' }}>
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
+        <span style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .24s', display: 'flex' }}>
+          <ChevronDown />
+        </span>
       </button>
       <AnimatePresence initial={false}>
         {open && (
@@ -86,13 +99,9 @@ function AccordionSection({ title, links }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: .25, ease: 'easeInOut' }}
+            transition={{ duration: .24, ease: 'easeInOut' }}
             style={{ overflow: 'hidden' }}>
-            <div className="ck-ft2-acc-body">
-              {links.map(l => (
-                <Link key={l.to + l.label} to={l.to} className="ck-ft2-link">{l.label}</Link>
-              ))}
-            </div>
+            {content}
           </motion.div>
         )}
       </AnimatePresence>
@@ -101,98 +110,46 @@ function AccordionSection({ title, links }) {
 }
 
 export default function CakesFooter() {
-  const [email, setEmail]   = useState('');
-  const [subDone, setSubDone] = useState(false);
-
-  const handleSub = e => {
-    e.preventDefault();
-    if (email.trim()) { setSubDone(true); setEmail(''); }
-  };
-
   return (
-    <footer className="ck-ft2">
-      <div className="ck-ft2-inner">
+    <footer className="vft-root">
 
-        {/* ── Brand + Social ── */}
-        <div className="ck-ft2-brand">
-          <Link to="/cakes" className="ck-ft2-logo">
-            <img src="/logo3.png" alt="Vanilla Crafted Cakes"
-              onError={e => e.target.style.display = 'none'} />
-            <span>Vanilla Crafted</span>
-          </Link>
-          <p className="ck-ft2-tagline">
-            Handcrafted luxury cakes<br />for every celebration.
-          </p>
-          <div className="ck-ft2-social">
-            {SOCIAL.map(({ Icon, href, label }) => (
-              <a key={label} href={href} className="ck-ft2-social-btn"
-                aria-label={label} target="_blank" rel="noopener noreferrer">
-                <Icon />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div className="ck-ft2-divider" />
-
-        {/* ── Accordion columns (mobile) / Columns (desktop) ── */}
-        <div className="ck-ft2-cols">
-          {SECTIONS.map(s => (
-            <div key={s.title}>
-              {/* Desktop column */}
-              <div className="ck-ft2-col-desktop">
-                <h4 className="ck-ft2-col-head">{s.title}</h4>
-                {s.links.map(l => (
-                  <Link key={l.to + l.label} to={l.to} className="ck-ft2-link">{l.label}</Link>
-                ))}
-              </div>
-              {/* Mobile accordion */}
-              <div className="ck-ft2-col-mobile">
-                <AccordionSection title={s.title} links={s.links} />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="ck-ft2-divider" />
-
-        {/* ── Newsletter ── */}
-        <div className="ck-ft2-news">
-          <div className="ck-ft2-news-text">
-            <span className="ck-ft2-news-label">Stay Sweet</span>
-            <span className="ck-ft2-news-sub">Exclusive offers & new arrivals</span>
-          </div>
-          {subDone ? (
-            <div className="ck-ft2-news-done">You're subscribed!</div>
-          ) : (
-            <form className="ck-ft2-news-form" onSubmit={handleSub}>
-              <input
-                type="email" value={email} required
-                onChange={e => setEmail(e.target.value)}
-                placeholder="Your email address"
-                className="ck-ft2-news-input"
-              />
-              <button type="submit" className="ck-ft2-news-btn">Subscribe</button>
-            </form>
-          )}
-        </div>
-
-        <div className="ck-ft2-divider" />
-
-        {/* ── Bottom bar ── */}
-        <div className="ck-ft2-bottom">
-          <span className="ck-ft2-copy">© {new Date().getFullYear()} Vanilla Crafted Cakes. All rights reserved.</span>
-          <div className="ck-ft2-bottom-right">
-            {['UPI', 'Visa', 'Mastercard', 'RuPay', 'COD'].map(p => (
-              <span key={p} className="ck-ft2-pay-chip">{p}</span>
-            ))}
-            <span className="ck-ft2-legal-sep">·</span>
-            <Link to="/cakes" className="ck-ft2-legal-link">Privacy</Link>
-            <Link to="/cakes" className="ck-ft2-legal-link">Terms</Link>
-          </div>
-        </div>
-
+      {/* Top copyright */}
+      <div className="vft-top-copy">
+        <span>© {new Date().getFullYear()} Vanilla Crafted Cakes.</span>
+        <span>All rights reserved.</span>
       </div>
+
+      {/* Amber divider line */}
+      <div className="vft-amber-line" />
+
+      {/* Accordion sections */}
+      {SECTIONS.map(s => (
+        <AccSection key={s.title} title={s.title} content={s.content} />
+      ))}
+
+      {/* Bottom bar */}
+      <div className="vft-bottom">
+        <p className="vft-bottom-copy">
+          © {new Date().getFullYear()} <span className="vft-v">V</span>anilla. All rights reserved.
+        </p>
+        <div className="vft-bottom-icons">
+          <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><IgIcon /></a>
+          <a href="https://facebook.com"  aria-label="Facebook"  target="_blank" rel="noopener noreferrer"><FbIcon /></a>
+          <a href="https://linkedin.com"  aria-label="LinkedIn"  target="_blank" rel="noopener noreferrer"><LiIcon /></a>
+          <a href="/cakes/account/help"   aria-label="Contact"><MsgIcon /></a>
+        </div>
+      </div>
+
+      {/* WhatsApp floating button */}
+      <a
+        href="https://wa.me/919999999999"
+        className="vft-wa-fab"
+        aria-label="WhatsApp"
+        target="_blank"
+        rel="noopener noreferrer">
+        <WaIcon />
+      </a>
+
     </footer>
   );
 }
