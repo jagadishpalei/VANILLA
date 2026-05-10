@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useCakes } from '../CakesContext';
 import { Search, X, Clock, TrendingUp } from 'lucide-react';
-import { CAKES_CURATED } from '../CakesData';
+import { ALL_CAKES } from '../CakesData';
 
 const TRENDING = ['Birthday Cake', 'Chocolate Truffle', 'Red Velvet', 'Designer Cake', 'Black Forest'];
 const MAX_RECENT = 6;
@@ -51,7 +51,7 @@ export default function CakesSearchOverlay() {
   const results = useMemo(() => {
     if (!query.trim()) return [];
     const q = query.toLowerCase().trim();
-    return CAKES_CURATED.filter(c =>
+    return ALL_CAKES.filter(c =>
       c.name?.toLowerCase().includes(q) ||
       c.category?.toLowerCase().includes(q) ||
       c.flavor?.toLowerCase().includes(q) ||
