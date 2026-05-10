@@ -22,7 +22,7 @@
 
 /* Empty state */
 .co-empty { text-align: center; padding: 60px 20px; }
-.co-empty-icon { font-size: 3.5rem; display: block; margin-bottom: 12px; }
+.co-empty-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
 .co-empty-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.1rem; color: #1A1A1A; }
 .co-empty-sub { font-family: 'Poppins', sans-serif; font-size: .8rem; color: #9A8070; margin-bottom: 20px; }
 .co-cta-btn {
@@ -45,9 +45,12 @@
   display: flex; gap: 12px; border-bottom: 1px solid #EAD9C4; padding-bottom: 16px; margin-bottom: 16px;
 }
 .co-item:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-.co-item-tile {
-  width: 70px; height: 70px; background: linear-gradient(135deg, #FFF8F2, #FAF6F0);
-  border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem;
+.co-item-img-wrap {
+  width: 70px; height: 70px; flex-shrink: 0; border-radius: 12px; overflow: hidden;
+  background: #FAF6F0;
+}
+.co-item-img {
+  width: 100%; height: 100%; object-fit: cover;
 }
 .co-item-info { flex: 1; }
 .co-item-name { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .8rem; color: #1A1A1A; }
@@ -76,6 +79,7 @@
   display: flex; align-items: center; gap: 10px; border: 1px solid #EAD9C4;
   border-radius: 10px; padding: 10px; background: #FAF6F0;
 }
+.co-del-img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
 .co-del-quick-name { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: .75rem; color: #1A1A1A; }
 .co-del-quick-sub { font-family: 'Poppins', sans-serif; font-size: .65rem; color: #9A8070; }
 .co-del-quick-price { margin-left: auto; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .75rem; color: #1A1A1A; }
@@ -194,7 +198,7 @@
   background: #FFFDF9; border: 1.5px solid #EAD9C4; border-radius: 12px; padding: 16px; cursor: pointer;
 }
 .ch-del-card.on { border-color: #D97706; background: #FFF8F2; }
-.ch-del-icon { font-size: 1.5rem; }
+.ch-del-img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
 .ch-del-info { flex: 1; }
 .ch-del-name { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .85rem; color: #1A1A1A; }
 .ch-del-time { font-family: 'Poppins', sans-serif; font-size: .7rem; color: #6B4F3A; }
@@ -227,9 +231,11 @@
 .ch-review-sub { font-family: 'Poppins', sans-serif; font-size: .7rem; color: #6B4F3A; }
 .ch-review-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .ch-review-item:last-child { margin-bottom: 0; }
-.ch-review-emoji { font-size: 1.5rem; background: #FAF6F0; padding: 8px; border-radius: 8px; }
+.ch-review-img-wrap { width: 44px; height: 44px; flex-shrink: 0; border-radius: 8px; overflow: hidden; background: #FAF6F0; }
+.ch-review-img { width: 100%; height: 100%; object-fit: cover; }
 .ch-review-item div { flex: 1; }
 .ch-review-price { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .85rem; color: #1A1A1A; }
+.ch-review-del-img { width: 16px; height: 16px; object-fit: cover; border-radius: 4px; vertical-align: middle; margin-right: 4px; }
 .ch-review-row-2 { display: flex; gap: 12px; margin-bottom: 12px; }
 .ch-review-row-2 > div { flex: 1; margin-bottom: 0; }
 
@@ -282,7 +288,8 @@
 .cs-items-card { background: #FFFDF9; border: 1px solid #EAD9C4; border-radius: 16px; padding: 16px; text-align: left; margin-bottom: 16px; }
 .cs-items-label { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .75rem; color: #9A8070; text-transform: uppercase; margin-bottom: 12px; }
 .cs-item-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.cs-item-emoji { font-size: 1.5rem; background: #FAF6F0; padding: 8px; border-radius: 8px; }
+.cs-item-img-wrap { width: 44px; height: 44px; flex-shrink: 0; border-radius: 8px; overflow: hidden; background: #FAF6F0; }
+.cs-item-img { width: 100%; height: 100%; object-fit: cover; }
 .cs-item-row div { flex: 1; }
 .cs-item-name { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .8rem; color: #1A1A1A; }
 .cs-item-meta { font-size: .65rem; color: #9A8070; }

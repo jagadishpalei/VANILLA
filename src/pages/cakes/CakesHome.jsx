@@ -9,6 +9,7 @@ import {
   Truck, Leaf, MapPin, Star
 } from 'lucide-react';
 import './cakes-home.css';
+import CategoryShowcase from './CategoryShowcase';
 
 const reveal = (d = 0) => ({
   initial: { opacity: 0, y: 18 },
@@ -64,12 +65,12 @@ function Hero() {
         {/* Trust strip */}
         <motion.div {...reveal(0.19)} className="mh-trust-row">
           {[
-            { icon: '⭐', val: '4.9', sub: '50K+ reviews' },
-            { icon: '⚡', val: 'Fast', sub: 'delivery' },
-            { icon: '⭐', val: '4.9/5', sub: 'average rating' },
+            { img: '/cake-images/trust/rating.png',        val: '4.9★', sub: '50K+ reviews' },
+            { img: '/cake-images/trust/fast-delivery.png',  val: 'Fast',  sub: 'delivery' },
+            { img: '/cake-images/trust/rating.png',         val: '4.9/5', sub: 'avg rating' },
           ].map(t => (
             <div key={t.val} className="mh-trust-pill">
-              <span className="mh-trust-icon">{t.icon}</span>
+              <img src={t.img} alt={t.val} className="mh-trust-img" loading="lazy" />
               <div>
                 <p className="mh-trust-val">{t.val}</p>
                 <p className="mh-trust-sub">{t.sub}</p>
@@ -292,12 +293,36 @@ function Trending() {
    ═══════════════════════════════════════════════ */
 function WhyUs() {
   const FEATURES = [
-    { icon: '🎂', title: 'Freshly Baked',       sub: 'Baked to order daily' },
-    { icon: '⚡', title: 'Same Day Delivery',    sub: 'Fast and reliable' },
-    { icon: '🌿', title: 'Premium Ingredients',  sub: 'No preservatives' },
-    { icon: '📍', title: 'Live Tracking',         sub: 'Real-time updates' },
-    { icon: '🔒', title: 'Secure Payments',       sub: 'UPI, Cards, COD' },
-    { icon: '🌟', title: 'Premium Quality',     sub: 'Top ingredients' },
+    {
+      img: '/cake-images/why/freshly-baked.png',
+      title: 'Freshly Baked',
+      sub: 'Baked to order daily',
+      alt: 'Freshly baked cake',
+    },
+    {
+      img: '/cake-images/why/delivery.png',
+      title: 'Same Day Delivery',
+      sub: 'Fast and reliable',
+      alt: 'Premium cake delivery',
+    },
+    {
+      img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
+      title: 'Premium Ingredients',
+      sub: 'No preservatives',
+      alt: 'Premium baking ingredients',
+    },
+    {
+      img: '/cake-images/why/payment.png',
+      title: 'Secure Payments',
+      sub: 'UPI, Cards, COD',
+      alt: 'Secure payment',
+    },
+    {
+      img: '/cake-images/why/quality.png',
+      title: 'Premium Quality',
+      sub: 'Top ingredients',
+      alt: 'Premium cake quality',
+    },
   ];
   return (
     <section className="mh-section mh-section-alt">
@@ -308,7 +333,10 @@ function WhyUs() {
       <div className="mh-why-grid">
         {FEATURES.map((f, i) => (
           <motion.div key={f.title} {...reveal(i * 0.05)} className="mh-why-card">
-            <span className="mh-why-icon">{f.icon}</span>
+            <div className="mh-why-img-wrap">
+              <img src={f.img} alt={f.alt} className="mh-why-img" loading="lazy" />
+              <div className="mh-why-img-shine" />
+            </div>
             <p className="mh-why-title">{f.title}</p>
             <p className="mh-why-sub">{f.sub}</p>
           </motion.div>
@@ -370,12 +398,12 @@ function Reviews() {
    ═══════════════════════════════════════════════ */
 function Gallery() {
   const ITEMS = [
-    { emoji: '🎂', label: 'Designer Cakes', slug: 'designer' },
-    { emoji: '🍫', label: 'Chocolate',      slug: 'chocolate' },
-    { emoji: '❤️', label: 'Red Velvet',     slug: 'red-velvet' },
-    { emoji: '🥭', label: 'Mango Cakes',    slug: 'mango' },
-    { emoji: '🍍', label: 'Pineapple',      slug: 'pineapple' },
-    { emoji: '✨', label: 'Truffle Cakes',  slug: 'truffle' },
+    { img: '/cake-images/gallery/designer.png',                                            label: 'Designer Cakes', slug: 'designer'   },
+    { img: '/cake-images/chocolate/p-chocolate-truffle-cream-cake-361113-m.avif',          label: 'Chocolate',      slug: 'chocolate'  },
+    { img: '/cake-images/red velvet/p-classic-red-velvet-cake-109230-m.avif',              label: 'Red Velvet',     slug: 'red-velvet' },
+    { img: '/cake-images/mango/p-premium-mango-cake-135608-m.avif',                        label: 'Mango Cakes',    slug: 'mango'      },
+    { img: '/cake-images/pineapple/p-exotic-pineapple-cake-403845-m.avif',                 label: 'Pineapple',      slug: 'pineapple'  },
+    { img: '/cake-images/gallery/truffle.png',                                             label: 'Truffle Cakes',  slug: 'truffle'    },
   ];
   return (
     <section className="mh-section mh-section-alt">
@@ -387,8 +415,15 @@ function Gallery() {
         {ITEMS.map((item, i) => (
           <motion.div key={item.label} {...reveal(i * 0.05)}>
             <Link to={`/cakes/category/${item.slug}`} className="mh-gallery-cell">
-              <span className="mh-gallery-emoji">{item.emoji}</span>
-              <p className="mh-gallery-label">{item.label}</p>
+              <img
+                src={item.img}
+                alt={item.label}
+                className="mh-gallery-img"
+                loading="lazy"
+              />
+              <div className="mh-gallery-overlay">
+                <p className="mh-gallery-label">{item.label}</p>
+              </div>
             </Link>
           </motion.div>
         ))}
@@ -438,7 +473,7 @@ export default function CakesHome() {
     <main className="ck-page mh-root">
       <Offers />
       <Hero />
-      <Categories />
+      <CategoryShowcase />
       <DeliveryBanner />
       <Trending />
       <WhyUs />

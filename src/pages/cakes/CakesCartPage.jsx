@@ -41,7 +41,7 @@ export default function CakesCartPage() {
         <h1 className="co-title">My Cart</h1>
       </div>
       <div className="co-empty">
-        <span className="co-empty-icon">🛒</span>
+        <img src="/cake-images/why/freshly-baked.png" className="co-empty-img" alt="Empty Cart" loading="lazy" />
         <p className="co-empty-title">Your cart is empty</p>
         <p className="co-empty-sub">Add delicious cakes to get started</p>
         <Link to="/cakes/category/birthday" className="co-cta-btn">
@@ -67,7 +67,9 @@ export default function CakesCartPage() {
               <motion.div key={item.key} className="co-item"
                 layout initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -20 }}>
-                <div className="co-item-tile">{item.emoji}</div>
+                <div className="co-item-img-wrap">
+                  <img src={item.image} alt={item.name} className="co-item-img" loading="lazy" />
+                </div>
                 <div className="co-item-info">
                   <p className="co-item-name">{item.name}</p>
                   <p className="co-item-meta">{item.weight}</p>
@@ -102,7 +104,7 @@ export default function CakesCartPage() {
           <div className="co-del-quick">
             {DELIVERY_SLOTS.slice(0, 3).map(s => (
               <div key={s.id} className="co-del-quick-item">
-                <span>{s.icon}</span>
+                <img src={s.image} alt={s.label} className="co-del-img" loading="lazy" />
                 <div>
                   <p className="co-del-quick-name">{s.label}</p>
                   <p className="co-del-quick-sub">{s.time}</p>
@@ -121,7 +123,7 @@ export default function CakesCartPage() {
           {coupon ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="co-coupon-applied">
               <div>
-                <p className="co-coupon-code">🎉 {coupon.code}</p>
+                <p className="co-coupon-code"><Tag size={11} style={{marginRight: 4}} /> {coupon.code}</p>
                 <p className="co-coupon-saved">{coupon.discount}% off applied</p>
               </div>
               <button onClick={removeCoupon}><X size={14} /></button>
@@ -174,9 +176,9 @@ export default function CakesCartPage() {
 
         {/* ── Trust ── */}
         <div className="co-trust-strip">
-          <span>🔒 SSL Secured</span>
-          <span>🎂 Fresh Guaranteed</span>
-          <span>📦 Premium Packing</span>
+          <span><Shield size={12} style={{marginRight:3, verticalAlign:'middle'}}/> SSL Secured</span>
+          <span><Heart size={12} style={{marginRight:3, verticalAlign:'middle'}}/> Fresh Guaranteed</span>
+          <span><Gift size={12} style={{marginRight:3, verticalAlign:'middle'}}/> Premium Packing</span>
         </div>
 
         <div style={{ height: 80 }} />

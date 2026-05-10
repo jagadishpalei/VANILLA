@@ -96,18 +96,27 @@
 }
 .cat-tabs-wrap::-webkit-scrollbar { display: none; }
 .cat-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-family: 'Poppins', sans-serif;
   font-size: .7rem;
   font-weight: 500;
-  padding: 6px 13px;
+  padding: 4px 14px 4px 4px;
   border: 1.5px solid #EAD9C4;
   border-radius: 999px;
   background: #FFFDF9;
-  color: #9A8070;
+  color: #6B4F3A;
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
   transition: all .18s;
+}
+.cat-tab-img {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 .cat-tab.on {
   background: #D97706;
@@ -304,6 +313,7 @@
   align-items: center;
   gap: 8px;
 }
+.cat-empty-img { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
 .cat-empty-icon { font-size: 3rem; }
 .cat-empty-title {
   font-family: 'Montserrat', sans-serif;
@@ -461,31 +471,43 @@
 
 /* ── OCCASION BANNER ───────────────────────────── */
 .cat-occasion-banner {
-  background: linear-gradient(135deg, #FDFBF7 0%, #F5EDE0 100%);
-  padding: 2.5rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  background: #FAF6F0;
+  padding: 3rem 1.5rem;
   text-align: center;
   border-bottom: 1px solid #EAD9C4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-.cat-occ-emoji {
-  font-size: 2.5rem;
-  display: block;
-  margin-bottom: 0.5rem;
-  animation: float 3s ease-in-out infinite;
+.cat-occ-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cat-occ-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(26,10,3,.8), rgba(26,10,3,.5));
+}
+.cat-occ-content {
+  position: relative;
+  z-index: 1;
 }
 .cat-occ-title {
   font-family: 'Playfair Display', serif;
   font-size: 2rem;
-  color: #3C2A21;
+  color: #fff;
   margin-bottom: 0.25rem;
   font-weight: 700;
 }
 .cat-occ-sub {
   font-family: 'Montserrat', sans-serif;
-  color: #9A8070;
+  color: rgba(255,255,255,.85);
   font-size: 0.95rem;
   font-weight: 500;
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
 }

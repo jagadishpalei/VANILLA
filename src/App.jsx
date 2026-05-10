@@ -10,11 +10,12 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderSuccess from './pages/OrderSuccess';
 import AccountPage from './pages/AccountPage';
-import OrderTracking from './pages/OrderTracking';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import SplashScreen from './components/SplashScreen';
+import HoldingScreen from './components/HoldingScreen';
 import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
+import DevAccess from './pages/DevAccess';
 import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
 import { DeliveryProvider } from './context/DeliveryContext';
@@ -24,6 +25,9 @@ import './App.css';
 import './admin.css';
 import './admin2.css';
 import './delivery.css';
+
+/* ── Private mode: set via /dev-access?key=vanilla2024 ── */
+const isDevMode = () => localStorage.getItem('vanilla_dev_mode') === '1';
 
 /* ── Lazy admin pages ── */
 const AdminLogin     = lazy(() => import('./pages/admin/AdminLogin'));
@@ -46,12 +50,16 @@ const DeliveryProfile   = lazy(() => import('./pages/delivery/DeliveryProfile'))
 /* ── Lazy cakes section ── */
 const CakesApp = lazy(() => import('./pages/cakes/CakesApp'));
 
-const OPERATIONAL_PREFIXES = ['/admin', '/delivery', '/cakes'];
+const OPERATIONAL_PREFIXES = ['/admin', '/delivery', '/cakes', '/dev-access'];
 
 function CustomerShell({ splashDone, onSplashDone }) {
   const location = useLocation();
   const isOps = OPERATIONAL_PREFIXES.some(p => location.pathname.startsWith(p));
   if (isOps) return null;
+
+  /* ── Private mode: show holding screen unless dev bypass is active ── */
+  if (!isDevMode()) return <HoldingScreen />;
+
   return (
     <>
       <AnimatePresence>
@@ -68,7 +76,6 @@ function CustomerShell({ splashDone, onSplashDone }) {
           <Route path="/checkout"         element={<CheckoutPage />} />
           <Route path="/order-success"    element={<OrderSuccess />} />
           <Route path="/account"          element={<AccountPage />} />
-          <Route path="/track-order"      element={<OrderTracking />} />
         </Routes>
       </AnimatePresence>
       <FloatingWhatsApp />
@@ -130,6 +137,8 @@ function App() {
       <AdminProvider>
         <AuthProvider>
           <Router>
+            {/* Developer bypass route — always accessible */}
+            <Routes><Route path="/dev-access" element={<DevAccess />} /></Routes>
             <AdminSection />
             <DeliverySection />
             <CakesSection />

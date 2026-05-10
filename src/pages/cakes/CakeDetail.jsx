@@ -44,7 +44,7 @@ function AddonCard({ addon, selected, onToggle }) {
       whileTap={{ scale: .97 }}
       onClick={onToggle}
     >
-      <span className="det-addon-icon">{addon.icon}</span>
+      <img src={addon.image} alt={addon.label} className="det-addon-img" loading="lazy" />
       <div className="det-addon-info">
         <p className="det-addon-name">{addon.label}</p>
         <p className="det-addon-desc">{addon.desc}</p>
@@ -123,8 +123,8 @@ export default function CakeDetail() {
 
       {/* ── Gallery area ── */}
       <div className="det-gallery">
-        <div className="det-gallery-img">
-          <span className="det-gallery-emoji">{cake.emoji}</span>
+        <div className="det-gallery-img-wrap">
+          <img src={cake.image} alt={cake.name} className="det-gallery-main-img" />
           {cake.discount > 0 && <span className="det-disc">-{cake.discount}% OFF</span>}
           {cake.tag && <span className="det-label">{cake.tag}</span>}
         </div>
@@ -258,7 +258,7 @@ export default function CakeDetail() {
                 className={`det-del-slot${delivery === slot.id ? ' on' : ''}`}
                 onClick={() => setDelivery(slot.id)}
               >
-                <span className="det-del-icon">{slot.icon}</span>
+                <img src={slot.image} alt={slot.label} className="det-del-img" loading="lazy" />
                 <div className="det-del-info">
                   <p className="det-del-name">{slot.label}</p>
                   <p className="det-del-time-txt">{slot.time}</p>
@@ -324,7 +324,9 @@ export default function CakeDetail() {
             <div className="det-related-scroll">
               {related.map(rc => (
                 <Link key={rc.id} to={`/cakes/${rc.id}`} className="det-rel-card">
-                  <div className="det-rel-tile">{rc.emoji}</div>
+                  <div className="det-rel-img-wrap">
+                    <img src={rc.image} alt={rc.name} className="det-rel-img" loading="lazy" />
+                  </div>
                   <p className="det-rel-name">{rc.name}</p>
                   <p className="det-rel-price">₹{rc.price}</p>
                 </Link>

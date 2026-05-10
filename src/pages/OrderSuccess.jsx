@@ -108,9 +108,6 @@ export default function OrderSuccess() {
 
           {/* CTAs */}
           <div className="vso-ctas">
-            <Link to={`/track-order?orderId=${orderId}`} className="vso-track-btn">
-              📍 Track My Order
-            </Link>
             <Link to="/menu" className="vso-shop-btn">
               Order More
             </Link>

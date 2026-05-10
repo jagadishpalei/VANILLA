@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCakes } from './CakesContext';
 import { DELIVERY_SLOTS } from './CakesData';
+import { Check, ChefHat, ShieldCheck, Truck, Gift } from 'lucide-react';
 import './checkout.css';
 
 export default function CakesOrderSuccess() {
@@ -25,7 +26,7 @@ export default function CakesOrderSuccess() {
         <motion.div className="cs-icon-wrap"
           initial={{ scale: 0 }} animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 220, damping: 15, delay: .1 }}>
-          <span className="cs-success-icon">🎂</span>
+          <Check size={40} color="#fff" strokeWidth={3} />
         </motion.div>
       </div>
 
@@ -51,7 +52,7 @@ export default function CakesOrderSuccess() {
           </div>
           <div className="cs-order-divider" />
           <div className="cs-order-delivery">
-            <span className="cs-del-icon">{slot.icon}</span>
+            <img src={slot.image} alt="delivery" className="cs-del-img" loading="lazy" />
             <div>
               <p className="cs-del-label">Estimated Delivery</p>
               <p className="cs-del-val">{slot.label} · {slot.time}</p>
@@ -65,7 +66,9 @@ export default function CakesOrderSuccess() {
             <p className="cs-items-label">Your Order</p>
             {order.items.map(item => (
               <div key={item.key} className="cs-item-row">
-                <span className="cs-item-emoji">{item.emoji}</span>
+                <div className="cs-item-img-wrap">
+                  <img src={item.image} alt={item.name} className="cs-item-img" loading="lazy" />
+                </div>
                 <div>
                   <p className="cs-item-name">{item.name} × {item.qty}</p>
                   <p className="cs-item-meta">{item.weight}</p>
@@ -84,11 +87,11 @@ export default function CakesOrderSuccess() {
         <div className="cs-steps-card">
           <p className="cs-steps-label">What happens next?</p>
           {[
-            { icon: '✅', step: 'Order Confirmed',   done: true  },
-            { icon: '🎂', step: 'Cake Preparation',  done: false },
-            { icon: '🔍', step: 'Quality Check',     done: false },
-            { icon: '🚗', step: 'Out for Delivery',  done: false },
-            { icon: '🎉', step: 'Delivered!',         done: false },
+            { icon: <Check size={14} />,       step: 'Order Confirmed',   done: true  },
+            { icon: <ChefHat size={14} />,     step: 'Cake Preparation',  done: false },
+            { icon: <ShieldCheck size={14} />, step: 'Quality Check',     done: false },
+            { icon: <Truck size={14} />,       step: 'Out for Delivery',  done: false },
+            { icon: <Gift size={14} />,        step: 'Delivered!',         done: false },
           ].map((s, i) => (
             <div key={s.step} className={`cs-timeline-item ${s.done ? 'done' : ''} ${i === 0 ? 'active' : ''}`}>
               <div className="cs-tl-dot">{s.icon}</div>
@@ -100,9 +103,6 @@ export default function CakesOrderSuccess() {
 
         {/* CTAs */}
         <div className="cs-ctas">
-          <Link to={`/cakes/track-order?orderId=${orderId}`} className="cs-track-btn">
-            📍 Track My Order
-          </Link>
           <Link to="/cakes" className="cs-shop-btn">
             Continue Shopping
           </Link>

@@ -1,26 +1,26 @@
 import { buildImportedCakes } from './CakeImageData';
 
 export const CATEGORIES = [
-  { id: 'chocolate',   label: 'Chocolate',     emoji: '🍫', count: 90 },
-  { id: 'truffle',     label: 'Truffle',       emoji: '🎂', count: 36 },
-  { id: 'red-velvet', label: 'Red Velvet',   emoji: '❤️', count: 59 },
-  { id: 'designer',    label: 'Designer',      emoji: '✨', count: 95 },
-  { id: 'fruit',       label: 'Fruit Cakes',   emoji: '🍓', count: 19 },
-  { id: 'mango',       label: 'Mango',         emoji: '🥭', count: 11 },
-  { id: 'pineapple',   label: 'Pineapple',     emoji: '🍍', count: 8  },
+  { id: 'chocolate',   label: 'Chocolate',     emoji: '🍫', image: '/cake-images/chocolate/p-chocolate-truffle-cream-cake-361113-m.avif', count: 90 },
+  { id: 'truffle',     label: 'Truffle',       emoji: '🎂', image: '/cake-images/gallery/truffle.png', count: 36 },
+  { id: 'red-velvet', label: 'Red Velvet',   emoji: '❤️', image: '/cake-images/red velvet/p-classic-red-velvet-cake-109230-m.avif', count: 59 },
+  { id: 'designer',    label: 'Designer',      emoji: '✨', image: '/cake-images/desiner/p-3-tier-rosette-fondant-cake-8-kg--112712-m.avif', count: 95 },
+  { id: 'fruit',       label: 'Fruit Cakes',   emoji: '🍓', image: '/cake-images/pineapple/p-exotic-pineapple-cake-403845-m.avif', count: 19 },
+  { id: 'mango',       label: 'Mango',         emoji: '🥭', image: '/cake-images/mango/p-premium-mango-cake-135608-m.avif', count: 11 },
+  { id: 'pineapple',   label: 'Pineapple',     emoji: '🍍', image: '/cake-images/pineapple/p-exotic-pineapple-cake-403845-m.avif', count: 8  },
 ];
 
 export const OCCASIONS = [
-  { id: 'birthday',        label: 'Birthday',        emoji: '🎂', subtitle: 'Make their day unforgettable' },
-  { id: 'anniversary',     label: 'Anniversary',     emoji: '💍', subtitle: 'Celebrate years of love' },
-  { id: 'wedding',         label: 'Wedding',         emoji: '👰', subtitle: 'For your perfect day' },
-  { id: 'engagement',      label: 'Engagement',      emoji: '💍', subtitle: 'A sweet new beginning' },
-  { id: 'graduation',      label: 'Graduation',      emoji: '🎓', subtitle: 'Cheers to success' },
-  { id: 'baby-shower',     label: 'Baby Shower',     emoji: '🍼', subtitle: 'Welcome the little one' },
-  { id: 'romantic',        label: 'Romantic',        emoji: '❤️', subtitle: 'Express your deep love' },
-  { id: 'congratulations', label: 'Congratulations', emoji: '🎉', subtitle: 'Celebrate the big news' },
-  { id: 'farewell',        label: 'Farewell',        emoji: '👋', subtitle: 'A sweet goodbye' },
-  { id: 'festival',        label: 'Festivals',       emoji: '🎆', subtitle: 'Festive joyous treats' },
+  { id: 'birthday',        label: 'Birthday',        emoji: '🎂', image: '/cake-images/categories/birthday.png', subtitle: 'Make their day unforgettable' },
+  { id: 'anniversary',     label: 'Anniversary',     emoji: '💍', image: '/cake-images/categories/anniversary.png', subtitle: 'Celebrate years of love' },
+  { id: 'wedding',         label: 'Wedding',         emoji: '👰', image: '/cake-images/categories/wedding.png', subtitle: 'For your perfect day' },
+  { id: 'engagement',      label: 'Engagement',      emoji: '💍', image: '/cake-images/categories/engagement.png', subtitle: 'A sweet new beginning' },
+  { id: 'graduation',      label: 'Graduation',      emoji: '🎓', image: '/cake-images/categories/graduation.png', subtitle: 'Cheers to success' },
+  { id: 'baby-shower',     label: 'Baby Shower',     emoji: '🍼', image: '/cake-images/categories/baby-shower.png', subtitle: 'Welcome the little one' },
+  { id: 'romantic',        label: 'Romantic',        emoji: '❤️', image: '/cake-images/categories/romantic.png', subtitle: 'Express your deep love' },
+  { id: 'congratulations', label: 'Congratulations', emoji: '🎉', image: '/cake-images/desiner/p-sparkling-celebration-cream-cake-271465-m.avif', subtitle: 'Celebrate the big news' },
+  { id: 'farewell',        label: 'Farewell',        emoji: '👋', image: '/cake-images/desiner/p-cloud-and-rainbow-cake-1kg--424297-m.avif', subtitle: 'A sweet goodbye' },
+  { id: 'festival',        label: 'Festivals',       emoji: '🎆', image: '/cake-images/desiner/p-floral-garden-fondant-cake-6-kg--112709-m.avif', subtitle: 'Festive joyous treats' },
 ];
 
 const CAKES_CURATED = [
@@ -52,19 +52,19 @@ export const ALL_CAKES = [...CAKES_CURATED, ..._newOnly];
 export { ALL_CAKES as CAKES };
 
 export const ADDONS = [
-  { id: 'message',  label: 'Message on Cake', icon: '✍️', price: 0,   desc: 'Custom text piped on cake' },
-  { id: 'candle',   label: 'Candles',          icon: '🕯️', price: 49,  desc: 'Set of 6 premium candles' },
-  { id: 'knife',    label: 'Cake Knife',        icon: '🔪', price: 29,  desc: 'Elegant silver knife' },
-  { id: 'flower',   label: 'Fresh Flowers',     icon: '💐', price: 149, desc: 'Seasonal fresh flowers' },
-  { id: 'card',     label: 'Greeting Card',     icon: '💌', price: 49,  desc: 'Handwritten premium card' },
-  { id: 'balloon',  label: 'Balloon Bouquet',   icon: '🎈', price: 99,  desc: '5 helium balloons' },
-  { id: 'choco',    label: 'Chocolate Box',     icon: '🍫', price: 199, desc: '12-piece assorted box' },
+  { id: 'message',  label: 'Message on Cake', image: '/cake-images/desiner/p-tiny-petals-lilac-cake-361100-m.avif', price: 0,   desc: 'Custom text piped on cake' },
+  { id: 'candle',   label: 'Candles',          image: '/cake-images/desiner/p-sparkling-celebration-cream-cake-271465-m.avif', price: 49,  desc: 'Set of 6 premium candles' },
+  { id: 'knife',    label: 'Cake Knife',        image: '/cake-images/why/quality.png', price: 29,  desc: 'Elegant silver knife' },
+  { id: 'flower',   label: 'Fresh Flowers',     image: '/cake-images/desiner/p-floral-garden-fondant-cake-6-kg--112709-m.avif', price: 149, desc: 'Seasonal fresh flowers' },
+  { id: 'card',     label: 'Greeting Card',     image: '/cake-images/trust/rating.png', price: 49,  desc: 'Handwritten premium card' },
+  { id: 'balloon',  label: 'Balloon Bouquet',   image: '/cake-images/categories/kids.png', price: 99,  desc: '5 helium balloons' },
+  { id: 'choco',    label: 'Chocolate Box',     image: '/cake-images/chocolate/p-decadent-dark-chocolate-cake-269995-m.avif', price: 199, desc: '12-piece assorted box' },
 ];
 
 export const DELIVERY_SLOTS = [
-  { id: 'std',      label: 'Standard',     time: '4–6 hours',  price: 49,  icon: '📦' },
-  { id: 'sameday',  label: 'Same Day',     time: 'By 9 PM',    price: 0,   icon: '🚀' },
-  { id: 'fixed',    label: 'Fixed Time',   time: 'You choose', price: 79,  icon: '🕐' },
+  { id: 'std',      label: 'Standard',     time: '4–6 hours',  price: 49,  image: '/cake-images/why/delivery.png' },
+  { id: 'sameday',  label: 'Same Day',     time: 'By 9 PM',    price: 0,   image: '/cake-images/trust/fast-delivery.png' },
+  { id: 'fixed',    label: 'Fixed Time',   time: 'You choose', price: 79,  image: '/cake-images/why/delivery.png' },
 ];
 
 export const OFFERS = [

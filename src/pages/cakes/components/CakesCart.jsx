@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useCakes } from '../CakesContext';
 import { X, ShoppingBag, Plus, Minus, Trash2, Tag, ArrowRight, Truck } from 'lucide-react';
 import './cart.css';
 
 export default function CakesCart() {
+  const navigate = useNavigate();
   const {
     cart, cartOpen, setCartOpen,
     updateQty, removeFromCart,
@@ -14,6 +16,13 @@ export default function CakesCart() {
 
   const total = cartTotal + deliveryFee;
 
+  /* ── Fix: reliable checkout handler ── */
+  const handleCheckout = useCallback(() => {
+    setCartOpen(false);
+    // Small delay so the drawer close animation doesn't race with navigation
+    setTimeout(() => navigate('/cakes/checkout'), 80);
+  }, [navigate, setCartOpen]);
+
   return (
     <AnimatePresence>
       {cartOpen && (
@@ -21,6 +30,7 @@ export default function CakesCart() {
           {/* Backdrop */}
           <motion.div
             className="ck-overlay"
+            style={{ zIndex: 750 }}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setCartOpen(false)}
           />
@@ -28,6 +38,7 @@ export default function CakesCart() {
           {/* Drawer */}
           <motion.div
             className="ck-drawer"
+            style={{ zIndex: 800 }}
             initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
             transition={{ type: 'tween', duration: .3 }}
           >
@@ -59,35 +70,37 @@ export default function CakesCart() {
                 </div>
               ) : (
                 <div className="ck-cart-items">
-                  {cart.map(item => (
-                    <motion.div
-                      key={item.key}
-                      className="ck-cart-item"
-                      layout
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                    >
-                      <div className="ck-cart-item-img">
-                        <span>{item.emoji}</span>
-                      </div>
-                      <div className="ck-cart-item-info">
-                        <p className="ck-cart-item-name">{item.name}</p>
-                        <p className="ck-small">{item.weight}</p>
-                        <div className="ck-cart-item-row">
-                          <span className="ck-cart-item-price">₹{(item.price * item.qty).toLocaleString()}</span>
-                          <div className="ck-qty-control">
-                            <button onClick={() => updateQty(item.key, -1)}><Minus size={12} /></button>
-                            <span>{item.qty}</span>
-                            <button onClick={() => updateQty(item.key, 1)}><Plus size={12} /></button>
-                          </div>
-                          <button className="ck-cart-delete" onClick={() => removeFromCart(item.key)}>
-                            <Trash2 size={13} />
-                          </button>
+                  <AnimatePresence initial={false}>
+                    {cart.map(item => (
+                      <motion.div
+                        key={item.key}
+                        className="ck-cart-item"
+                        layout
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                      >
+                        <div className="ck-cart-item-img">
+                          <span>{item.emoji}</span>
                         </div>
-                      </div>
-                    </motion.div>
-                  ))}
+                        <div className="ck-cart-item-info">
+                          <p className="ck-cart-item-name">{item.name}</p>
+                          <p className="ck-small">{item.weight}</p>
+                          <div className="ck-cart-item-row">
+                            <span className="ck-cart-item-price">₹{(item.price * item.qty).toLocaleString()}</span>
+                            <div className="ck-qty-control">
+                              <button onClick={() => updateQty(item.key, -1)}><Minus size={12} /></button>
+                              <span>{item.qty}</span>
+                              <button onClick={() => updateQty(item.key, 1)}><Plus size={12} /></button>
+                            </div>
+                            <button className="ck-cart-delete" onClick={() => removeFromCart(item.key)}>
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
                 </div>
               )}
 
@@ -126,7 +139,17 @@ export default function CakesCart() {
                   </div>
                 </div>
 
-                <button className="ck-btn ck-btn-primary ck-btn-full ck-btn-lg">
+                {/* ── FIXED: Checkout button with proper handler ── */}
+                <button
+                  className="ck-btn ck-btn-primary ck-btn-full ck-btn-lg"
+                  onClick={handleCheckout}
+                  style={{
+                    cursor: 'pointer',
+                    touchAction: 'manipulation',  /* fix iOS double-tap delay */
+                    WebkitTapHighlightColor: 'transparent',
+                    paddingBottom: 'calc(14px + env(safe-area-inset-bottom, 0px))',
+                  }}
+                >
                   Proceed to Checkout <ArrowRight size={16} />
                 </button>
                 <p className="ck-small ck-text-center" style={{ marginTop: 8, color: 'var(--ck-text-3)' }}>

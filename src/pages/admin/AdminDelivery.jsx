@@ -45,20 +45,7 @@ export default function AdminDelivery() {
         </div>
       </div>
 
-      {/* Live map placeholder */}
-      <div className="adm-dash-card" style={{ marginBottom: '1.5rem' }}>
-        <div className="adm-card-header"><h3>Live Delivery Map</h3><span style={{ fontSize: '0.72rem', color: '#6b7280' }}>Real-time tracking · coming soon</span></div>
-        <div className="adm-map-placeholder">
-          <div className="adm-map-grid-bg" />
-          {busy.map((r, i) => (
-            <div key={r.id} className="adm-map-rider-pin" style={{ left: `${20 + i * 25}%`, top: `${30 + i * 15}%` }}>
-              🚴<span>{r.name.split(' ')[0]}</span>
-            </div>
-          ))}
-          <div className="adm-map-store-pin" style={{ left: '50%', top: '50%' }}>🏪<span>Vanilla</span></div>
-          <div className="adm-map-overlay-label">GPS tracking will render here</div>
-        </div>
-      </div>
+
 
       {/* Rider table */}
       <div className="adm-dash-card">

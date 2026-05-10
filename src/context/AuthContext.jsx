@@ -2,18 +2,47 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 
 const AuthContext = createContext(null);
 
+/* ── helpers ── */
+function ls(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+  catch { return fallback; }
+}
+function persist(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+}
+
+const INITIAL_ADDRESSES = [
+  { id: 1, type: 'Home', line1: '42 MG Road', line2: 'Near Green Park', city: 'Delhi', pin: '110016', phone: '9876543210', default: true },
+];
+
+const INITIAL_NOTIFICATIONS = [
+  { id: 1, type: 'order', title: 'Order Confirmed!', body: 'Your Chocolate Truffle Cake is being baked.', time: '2m ago', read: false },
+  { id: 2, type: 'offer', title: '🎉 Weekend Special', body: 'Get 20% off on all cheesecakes this weekend.', time: '1h ago', read: false },
+  { id: 3, type: 'reward', title: '✨ Points Added', body: 'You earned 120 reward points on your last order.', time: '3h ago', read: true },
+  { id: 4, type: 'delivery', title: 'Out for Delivery', body: 'Your order #VNL284901 is on the way!', time: 'Yesterday', read: true },
+];
+
 export function AuthProvider({ children }) {
   /* ── User ── */
-  const [user, setUser] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('vanilla_user')) || null; }
-    catch { return null; }
-  });
+  const [user, setUser] = useState(() => ls('vanilla_user', null));
 
   /* ── Cart ── */
-  const [cart, setCart] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('vanilla_cart')) || []; }
-    catch { return []; }
-  });
+  const [cart, setCart] = useState(() => ls('vanilla_cart', []));
+
+  /* ── Orders ── */
+  const [orders, setOrders] = useState(() => ls('vanilla_orders', []));
+
+  /* ── Saved Addresses ── */
+  const [savedAddresses, setSavedAddresses] = useState(() => ls('vanilla_addresses', INITIAL_ADDRESSES));
+
+  /* ── Wishlist ── */
+  const [wishlist, setWishlist] = useState(() => ls('vanilla_wishlist', []));
+
+  /* ── Rewards ── */
+  const [rewardPoints, setRewardPoints] = useState(() => ls('vanilla_points', 350));
+
+  /* ── Notifications ── */
+  const [notifications, setNotifications] = useState(() => ls('vanilla_notifications', INITIAL_NOTIFICATIONS));
 
   /* ── Modal ── */
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -24,39 +53,28 @@ export function AuthProvider({ children }) {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [deliveryPref, setDeliveryPref]       = useState('standard');
   const [paymentMethod, setPaymentMethod]     = useState('upi');
-  const [orders, setOrders]                   = useState(() => {
-    try { return JSON.parse(localStorage.getItem('vanilla_orders')) || []; }
-    catch { return []; }
-  });
-  const [savedAddresses, setSavedAddresses] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem('vanilla_addresses')) || [
-        { id: 1, type: 'Home', line1: '42 MG Road', line2: 'Near Green Park', city: 'Delhi', pin: '110016', phone: '9876543210', default: true },
-      ];
-    } catch { return []; }
-  });
 
   /* ── Persist ── */
-  useEffect(() => {
-    if (user) localStorage.setItem('vanilla_user', JSON.stringify(user));
-    else localStorage.removeItem('vanilla_user');
-  }, [user]);
-  useEffect(() => { localStorage.setItem('vanilla_cart', JSON.stringify(cart)); }, [cart]);
-  useEffect(() => { localStorage.setItem('vanilla_orders', JSON.stringify(orders)); }, [orders]);
-  useEffect(() => { localStorage.setItem('vanilla_addresses', JSON.stringify(savedAddresses)); }, [savedAddresses]);
+  useEffect(() => { user ? persist('vanilla_user', user) : localStorage.removeItem('vanilla_user'); }, [user]);
+  useEffect(() => { persist('vanilla_cart', cart); }, [cart]);
+  useEffect(() => { persist('vanilla_orders', orders); }, [orders]);
+  useEffect(() => { persist('vanilla_addresses', savedAddresses); }, [savedAddresses]);
+  useEffect(() => { persist('vanilla_wishlist', wishlist); }, [wishlist]);
+  useEffect(() => { persist('vanilla_points', rewardPoints); }, [rewardPoints]);
+  useEffect(() => { persist('vanilla_notifications', notifications); }, [notifications]);
 
   /* ── Auth helpers ── */
-  const login         = useCallback((d) => { setUser(d); setAuthModalOpen(false); }, []);
-  const logout        = useCallback(() => setUser(null), []);
+  const login  = useCallback((d) => { setUser(d); setAuthModalOpen(false); }, []);
+  const logout = useCallback(() => setUser(null), []);
   const updateProfile = useCallback((d) => setUser(p => ({ ...p, ...d })), []);
-  const openAuthModal = useCallback((mode = 'login') => { setAuthModalMode(mode); setAuthModalOpen(true); }, []);
+  const openAuthModal  = useCallback((mode = 'login') => { setAuthModalMode(mode); setAuthModalOpen(true); }, []);
   const closeAuthModal = useCallback(() => setAuthModalOpen(false), []);
 
   /* ── Cart helpers ── */
   const addToCart = useCallback((item) => {
     setCart(prev => {
-      const existing = prev.find(c => c.id === item.id);
-      if (existing) return prev.map(c => c.id === item.id ? { ...c, qty: c.qty + 1 } : c);
+      const ex = prev.find(c => c.id === item.id);
+      if (ex) return prev.map(c => c.id === item.id ? { ...c, qty: c.qty + 1 } : c);
       return [...prev, { ...item, qty: 1 }];
     });
   }, []);
@@ -82,6 +100,31 @@ export function AuthProvider({ children }) {
     setSelectedAddress(newAddr);
     return newAddr;
   }, []);
+  const updateAddress = useCallback((id, data) => {
+    setSavedAddresses(prev => prev.map(a => a.id === id ? { ...a, ...data } : a));
+  }, []);
+  const removeAddress = useCallback((id) => {
+    setSavedAddresses(prev => prev.filter(a => a.id !== id));
+  }, []);
+  const setDefaultAddress = useCallback((id) => {
+    setSavedAddresses(prev => prev.map(a => ({ ...a, default: a.id === id })));
+  }, []);
+
+  /* ── Wishlist helpers ── */
+  const addToWishlist    = useCallback((item) => setWishlist(prev => prev.find(w => w.id === item.id) ? prev : [...prev, item]), []);
+  const removeFromWishlist = useCallback((id) => setWishlist(prev => prev.filter(w => w.id !== id)), []);
+  const isInWishlist     = useCallback((id) => wishlist.some(w => w.id === id), [wishlist]);
+
+  /* ── Notification helpers ── */
+  const markNotificationRead = useCallback((id) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+  }, []);
+  const markAllRead = useCallback(() => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  }, []);
+
+  /* ── Rewards helpers ── */
+  const addRewardPoints = useCallback((pts) => setRewardPoints(p => p + pts), []);
 
   /* ── Order helpers ── */
   const placeOrder = useCallback((orderData) => {
@@ -89,8 +132,9 @@ export function AuthProvider({ children }) {
     setOrders(prev => [order, ...prev]);
     setCart([]);
     setCoupon(null);
+    addRewardPoints(Math.floor((orderData.total || 0) / 10));
     return order;
-  }, []);
+  }, [addRewardPoints]);
 
   /* ── Computed ── */
   const cartCount  = React.useMemo(() => cart.reduce((s, c) => s + c.qty, 0), [cart]);
@@ -103,26 +147,34 @@ export function AuthProvider({ children }) {
   }, [cartTotal, deliveryPref]);
   const gst        = Math.floor((cartTotal - couponDisc) * 0.05);
   const grandTotal = cartTotal - couponDisc + deliveryFee + packingFee + gst;
+  const unreadCount = React.useMemo(() => notifications.filter(n => !n.read).length, [notifications]);
 
   const value = React.useMemo(() => ({
     user, login, logout, updateProfile,
     cart, addToCart, removeFromCart, updateQty, clearCart,
     cartCount, cartTotal,
     coupon, applyCoupon, removeCoupon, couponDisc,
-    selectedAddress, setSelectedAddress, savedAddresses, addAddress,
+    selectedAddress, setSelectedAddress, savedAddresses, addAddress, updateAddress, removeAddress, setDefaultAddress,
     deliveryPref, setDeliveryPref,
     paymentMethod, setPaymentMethod,
     orders, placeOrder,
     packingFee, deliveryFee, gst, grandTotal,
     authModalOpen, authModalMode, openAuthModal, closeAuthModal,
+    wishlist, addToWishlist, removeFromWishlist, isInWishlist,
+    rewardPoints, addRewardPoints,
+    notifications, markNotificationRead, markAllRead, unreadCount,
   }), [
     user, cart, cartCount, cartTotal,
     coupon, couponDisc, selectedAddress, savedAddresses,
     deliveryPref, paymentMethod, orders,
     packingFee, deliveryFee, gst, grandTotal,
     authModalOpen, authModalMode,
+    wishlist, rewardPoints, notifications, unreadCount,
     login, logout, updateProfile, addToCart, removeFromCart, updateQty, clearCart,
-    applyCoupon, removeCoupon, addAddress, placeOrder, openAuthModal, closeAuthModal,
+    applyCoupon, removeCoupon, addAddress, updateAddress, removeAddress, setDefaultAddress, placeOrder,
+    openAuthModal, closeAuthModal,
+    addToWishlist, removeFromWishlist, isInWishlist,
+    addRewardPoints, markNotificationRead, markAllRead,
   ]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -167,13 +167,13 @@ export default function CakeCategory() {
   };
 
   const CAT_TABS = [
-    { id: 'all',         label: 'All 🎂' },
-    { id: 'chocolate',   label: '🍫 Chocolate' },
-    { id: 'truffle',     label: '🎂 Truffle' },
-    { id: 'red-velvet',  label: '❤️ Red Velvet' },
-    { id: 'designer',    label: '✨ Designer' },
-    { id: 'mango',       label: '🥭 Mango' },
-    { id: 'pineapple',   label: '🍍 Pineapple' },
+    { id: 'all',         label: 'All Cakes',  image: '/cake-images/categories/birthday.png' },
+    { id: 'chocolate',   label: 'Chocolate',  image: '/cake-images/chocolate/p-chocolate-truffle-cream-cake-361113-m.avif' },
+    { id: 'truffle',     label: 'Truffle',    image: '/cake-images/gallery/truffle.png' },
+    { id: 'red-velvet',  label: 'Red Velvet', image: '/cake-images/red velvet/p-classic-red-velvet-cake-109230-m.avif' },
+    { id: 'designer',    label: 'Designer',   image: '/cake-images/desiner/p-3-tier-rosette-fondant-cake-8-kg--112712-m.avif' },
+    { id: 'mango',       label: 'Mango',      image: '/cake-images/mango/p-premium-mango-cake-135608-m.avif' },
+    { id: 'pineapple',   label: 'Pineapple',  image: '/cake-images/pineapple/p-exotic-pineapple-cake-403845-m.avif' },
   ];
 
 
@@ -192,16 +192,19 @@ export default function CakeCategory() {
   }, [activeSlug, filters, search]);
 
   const activeOccasion = OCCASIONS.find(o => o.id === activeSlug);
-  const activeLabel = CAT_TABS.find(t => t.id === activeSlug)?.label || (activeOccasion ? `${activeOccasion.emoji} ${activeOccasion.label}` : 'All Cakes');
+  const activeLabel = CAT_TABS.find(t => t.id === activeSlug)?.label || (activeOccasion ? `${activeOccasion.label} Collection` : 'All Cakes');
 
   return (
     <main className="ck-page cat-root">
       {/* ── Occasion Banner ── */}
       {activeOccasion && (
         <div className="cat-occasion-banner">
-          <span className="cat-occ-emoji">{activeOccasion.emoji}</span>
-          <h1 className="cat-occ-title">{activeOccasion.label} Collection</h1>
-          <p className="cat-occ-sub">{activeOccasion.subtitle}</p>
+          <img src={activeOccasion.image} alt={activeOccasion.label} className="cat-occ-img" />
+          <div className="cat-occ-overlay" />
+          <div className="cat-occ-content">
+            <h1 className="cat-occ-title">{activeOccasion.label} Collection</h1>
+            <p className="cat-occ-sub">{activeOccasion.subtitle}</p>
+          </div>
         </div>
       )}
 
@@ -229,7 +232,10 @@ export default function CakeCategory() {
         <div className="cat-tabs-wrap">
           {CAT_TABS.map(t => (
             <button key={t.id} className={`cat-tab${activeSlug === t.id ? ' on' : ''}`}
-              onClick={() => handleCatChange(t.id)}>{t.label}</button>
+              onClick={() => handleCatChange(t.id)}>
+              <img src={t.image} alt={t.label} className="cat-tab-img" loading="lazy" />
+              {t.label}
+            </button>
           ))}
         </div>
       </div>
@@ -245,7 +251,7 @@ export default function CakeCategory() {
       {/* Cake grid */}
       {filtered.length === 0 ? (
         <div className="cat-empty">
-          <p className="cat-empty-icon">🎂</p>
+          <img src="/cake-images/why/freshly-baked.png" className="cat-empty-img" alt="No cakes" loading="lazy" />
           <p className="cat-empty-title">No cakes found</p>
           <p className="cat-empty-sub">Try changing your filters</p>
           <button className="cat-reset-link" onClick={() => { setFilters({ price: 'all', sort: 'popular' }); setSearch(''); }}>

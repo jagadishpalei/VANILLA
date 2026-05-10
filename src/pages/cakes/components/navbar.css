@@ -33,7 +33,17 @@
   gap: 8px;
   text-decoration: none;
 }
-.ck-nb-logo-icon { font-size: 1.5rem; line-height: 1; }
+.ck-nb-logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1.5px rgba(217,119,6,0.25);
+}
 .ck-nb-logo-text {
   font-family: var(--ck-font-head);
   font-weight: 800;

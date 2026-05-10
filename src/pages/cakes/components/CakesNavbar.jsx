@@ -76,7 +76,21 @@ export default function CakesNavbar() {
             {/* ── Left: Logo + Location ──────────────────── */}
             <div className="ck-nb-left">
               <Link to="/cakes" className="ck-nb-logo">
-                <span className="ck-nb-logo-icon">🎂</span>
+                <span className="ck-nb-logo-icon">
+                  <img
+                    src="/logo3.png"
+                    alt="Vanilla Crafted Cakes"
+                    style={{
+                      width: '30px',
+                      height: '30px',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '1.5px solid rgba(217,119,6,0.35)',
+                      display: 'block',
+                    }}
+                    onError={e => { e.target.style.display = 'none'; }}
+                  />
+                </span>
                 <span className="ck-nb-logo-text">
                   Vanilla<span className="ck-nb-logo-accent"> Crafted</span>
                 </span>
@@ -158,9 +172,7 @@ export default function CakesNavbar() {
                 </AnimatePresence>
               </div>
 
-              <Link to="/cakes/track" className="ck-nb-icon-btn ck-desktop-only" title="Track Order">
-                <Package size={18} />
-              </Link>
+
 
               <button className="ck-nb-icon-btn" onClick={() => setSearchOpen(true)} title="Search" aria-label="Search">
                 <Search size={18} className="ck-mobile-only" />
@@ -236,9 +248,6 @@ export default function CakesNavbar() {
               </div>
 
               <p className="ck-mob-section-label">Account</p>
-              <Link to="/cakes/track" className="ck-mob-link" onClick={() => setMobileOpen(false)}>
-                <Package size={15} /> Track Order
-              </Link>
               <button className="ck-mob-link" onClick={() => { setAuthOpen(true); setMobileOpen(false); }}>
                 <User size={15} /> Login / Register
               </button>

@@ -84,29 +84,225 @@ function AddressStep({ onNext }) {
   );
 }
 
+/* ── Delivery time slot engine ──────────────────────── */
+const ALL_SLOTS = [
+  { id: 's1', label: '9:00 AM',  h: 9,  m: 0  },
+  { id: 's2', label: '10:00 AM', h: 10, m: 0  },
+  { id: 's3', label: '11:00 AM', h: 11, m: 0  },
+  { id: 's4', label: '12:00 PM', h: 12, m: 0  },
+  { id: 's5', label: '2:00 PM',  h: 14, m: 0  },
+  { id: 's6', label: '4:00 PM',  h: 16, m: 0  },
+  { id: 's7', label: '6:00 PM',  h: 18, m: 0  },
+  { id: 's8', label: '7:00 PM',  h: 19, m: 0  },
+  { id: 's9', label: '8:00 PM',  h: 20, m: 0  },
+];
+const MAX_HOUR = 21; // 9 PM cutoff
+const PREP_HRS = 4;  // min preparation buffer
+
+function getAvailableDays() {
+  const now  = new Date();
+  const days = [];
+  for (let d = 0; d < 4; d++) {
+    const date = new Date(now);
+    date.setDate(now.getDate() + d);
+    days.push(date);
+  }
+  return days;
+}
+
+function getSlotsForDay(date) {
+  const now      = new Date();
+  const isToday  = date.toDateString() === now.toDateString();
+  const cutoffMs = now.getTime() + PREP_HRS * 3600_000;
+  return ALL_SLOTS.filter(s => {
+    const slotDate = new Date(date);
+    slotDate.setHours(s.h, s.m, 0, 0);
+    if (s.h >= MAX_HOUR) return false;          // after 9 PM
+    if (isToday && slotDate.getTime() <= cutoffMs) return false; // < 4h from now
+    return true;
+  });
+}
+
+function fmt(date) {
+  return date.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+
+function FixedTimeSelector({ selectedDay, setSelectedDay, selectedTime, setSelectedTime }) {
+  const days = getAvailableDays();
+
+  // Default: first day that has any slots
+  React.useEffect(() => {
+    if (!selectedDay) {
+      const first = days.find(d => getSlotsForDay(d).length > 0);
+      if (first) setSelectedDay(first.toDateString());
+    }
+  }, []);
+
+  const activeDayDate = days.find(d => d.toDateString() === selectedDay) || days[0];
+  const slots = activeDayDate ? getSlotsForDay(activeDayDate) : [];
+
+  // Reset time if it becomes invalid on day change
+  React.useEffect(() => {
+    if (selectedTime && !slots.find(s => s.id === selectedTime)) {
+      setSelectedTime(null);
+    }
+  }, [selectedDay]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+      transition={{ duration: .25 }}
+      style={{ overflow: 'hidden', marginTop: 14 }}
+    >
+      <div style={{ background: '#FFFAF4', border: '1.5px solid #F0DFC0', borderRadius: 14, padding: '16px 14px' }}>
+
+        {/* Day selector */}
+        <p style={{ fontSize: '.72rem', fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: '#9A8070', marginBottom: 10 }}>Select Date</p>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 18 }}>
+          {days.map(d => {
+            const daySlots = getSlotsForDay(d);
+            const active   = d.toDateString() === selectedDay;
+            const disabled = daySlots.length === 0;
+            return (
+              <button key={d.toDateString()}
+                disabled={disabled}
+                onClick={() => setSelectedDay(d.toDateString())}
+                style={{
+                  padding: '7px 14px', borderRadius: 99, border: '1.5px solid',
+                  borderColor: active ? '#D97706' : disabled ? '#E5D5C5' : '#E5D5C5',
+                  background:  active ? '#FFF1E0' : disabled ? '#F5EDE3' : '#fff',
+                  color:       active ? '#D97706' : disabled ? '#C9B9A8' : '#6B4F3A',
+                  fontFamily: 'var(--ck-font-body)', fontWeight: active ? 700 : 500,
+                  fontSize: '.8rem', cursor: disabled ? 'not-allowed' : 'pointer',
+                  transition: 'all .15s', flexShrink: 0,
+                }}>
+                {d.toDateString() === new Date().toDateString() ? 'Today' :
+                 d.toDateString() === new Date(Date.now()+86400000).toDateString() ? 'Tomorrow' :
+                 fmt(d)}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Time slots */}
+        <p style={{ fontSize: '.72rem', fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: '#9A8070', marginBottom: 10 }}>Select Time Slot</p>
+        {slots.length === 0 ? (
+          <div style={{ padding: '12px', textAlign: 'center', fontSize: '.82rem', color: '#9A8070' }}>
+            No slots available for this date
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+            {slots.map(s => {
+              const active = selectedTime === s.id;
+              return (
+                <button key={s.id}
+                  onClick={() => setSelectedTime(s.id)}
+                  style={{
+                    padding: '10px 8px', borderRadius: 10,
+                    border: `1.5px solid ${active ? '#D97706' : '#E5D5C5'}`,
+                    background: active ? '#FFF1E0' : '#fff',
+                    color: active ? '#D97706' : '#3D2B1F',
+                    fontFamily: 'var(--ck-font-head)', fontWeight: active ? 700 : 500,
+                    fontSize: '.82rem', cursor: 'pointer', transition: 'all .15s',
+                    textAlign: 'center', touchAction: 'manipulation',
+                    WebkitTapHighlightColor: 'transparent',
+                  }}>
+                  {s.label}
+                  {active && <span style={{ display: 'block', fontSize: '.65rem', marginTop: 3, color: '#D97706' }}>✓ Selected</span>}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Selection summary */}
+        {selectedTime && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            style={{ marginTop: 14, padding: '10px 12px', background: '#FFF1E0', borderRadius: 10, border: '1px solid rgba(217,119,6,.2)' }}>
+            <p style={{ fontSize: '.8rem', fontWeight: 700, color: '#D97706', margin: 0 }}>
+              🎂 Delivery scheduled: {slots.find(s => s.id === selectedTime)?.label} · {activeDayDate.toDateString() === new Date().toDateString() ? 'Today' : fmt(activeDayDate)}
+            </p>
+          </motion.div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
 function DeliveryStep({ onNext }) {
   const { deliverySlot, setDeliverySlot } = useCakes();
+  const [fixedDay,  setFixedDay]  = useState(null);
+  const [fixedTime, setFixedTime] = useState(null);
+
+  // When fixed is selected, update the deliverySlot label to include the chosen time
+  const handleSlotClick = (id) => {
+    setDeliverySlot(id);
+    if (id !== 'fixed') { setFixedDay(null); setFixedTime(null); }
+  };
+
+  const canProceed = deliverySlot && (deliverySlot !== 'fixed' || fixedTime);
+
+  const handleNext = () => {
+    if (deliverySlot === 'fixed' && fixedTime) {
+      const slots   = getSlotsForDay(new Date(fixedDay || new Date().toDateString()));
+      const slot    = slots.find(s => s.id === fixedTime);
+      const dayDate = new Date(fixedDay || new Date().toDateString());
+      const dayLabel = dayDate.toDateString() === new Date().toDateString() ? 'Today' : fmt(dayDate);
+      // Persist chosen time label in context for review screen
+      setDeliverySlot(`fixed:${slot?.label}:${dayLabel}`);
+    }
+    onNext();
+  };
+
   return (
     <div className="ch-step-content">
       <p className="ch-section-label"><Clock size={13} /> Choose Delivery Slot</p>
       <div className="ch-delivery-list">
-        {DELIVERY_SLOTS.map(slot => (
-          <button key={slot.id} className={`ch-del-card ${deliverySlot === slot.id ? 'on' : ''}`}
-            onClick={() => setDeliverySlot(slot.id)}>
-            <span className="ch-del-icon">{slot.icon}</span>
-            <div className="ch-del-info">
-              <p className="ch-del-name">{slot.label}</p>
-              <p className="ch-del-time">{slot.time}</p>
-            </div>
-            <div className="ch-del-right">
-              <span className="ch-del-price">{slot.price === 0 ? <span className="co-free">FREE</span> : `+₹${slot.price}`}</span>
-              {deliverySlot === slot.id && <div className="ch-del-check"><Check size={10} /></div>}
-            </div>
-          </button>
-        ))}
+        {DELIVERY_SLOTS.map(slot => {
+          const isActive = deliverySlot === slot.id || (slot.id === 'fixed' && deliverySlot?.startsWith('fixed:'));
+          return (
+            <button key={slot.id}
+              className={`ch-del-card ${isActive ? 'on' : ''}`}
+              onClick={() => handleSlotClick(slot.id)}>
+              <img src={slot.image} alt={slot.label} className="ch-del-img" loading="lazy" />
+              <div className="ch-del-info">
+                <p className="ch-del-name">{slot.label}</p>
+                <p className="ch-del-time">{slot.id === 'fixed' ? 'Pick date & time below' : slot.time}</p>
+              </div>
+              <div className="ch-del-right">
+                <span className="ch-del-price">
+                  {slot.price === 0 ? <span className="co-free">FREE</span> : `+₹${slot.price}`}
+                </span>
+                {isActive && <div className="ch-del-check"><Check size={10} /></div>}
+              </div>
+            </button>
+          );
+        })}
       </div>
+
+      {/* Fixed time picker — only when 'fixed' is selected */}
+      <AnimatePresence>
+        {(deliverySlot === 'fixed' || deliverySlot?.startsWith('fixed:')) && (
+          <FixedTimeSelector
+            selectedDay={fixedDay}
+            setSelectedDay={setFixedDay}
+            selectedTime={fixedTime}
+            setSelectedTime={setFixedTime}
+          />
+        )}
+      </AnimatePresence>
+
       <div className="ch-next-wrap">
-        <button className="ch-next-btn" onClick={onNext}>Continue to Payment <Check size={14} /></button>
+        <button
+          className="ch-next-btn"
+          onClick={handleNext}
+          disabled={!canProceed}
+          style={{ opacity: canProceed ? 1 : .5, cursor: canProceed ? 'pointer' : 'not-allowed' }}>
+          Continue to Payment <Check size={14} />
+        </button>
+        {deliverySlot === 'fixed' && !fixedTime && (
+          <p style={{ fontSize: '.76rem', color: '#9A8070', textAlign: 'center', marginTop: 8 }}>Please select a delivery time to continue</p>
+        )}
       </div>
     </div>
   );
@@ -190,7 +386,9 @@ function ReviewStep({ onPlace, placing }) {
         <div className="ch-review-card-head"><Gift size={13} /> Items</div>
         {cart.map(item => (
           <div key={item.key} className="ch-review-item">
-            <span className="ch-review-emoji">{item.emoji}</span>
+            <div className="ch-review-img-wrap">
+              <img src={item.image} alt={item.name} className="ch-review-img" loading="lazy" />
+            </div>
             <div>
               <p className="ch-review-val">{item.name} × {item.qty}</p>
               <p className="ch-review-sub">{item.weight}</p>
@@ -202,7 +400,7 @@ function ReviewStep({ onPlace, placing }) {
       <div className="ch-review-row-2">
         <div className="ch-review-card">
           <div className="ch-review-card-head"><Clock size={13} /> Delivery</div>
-          <p className="ch-review-val">{slot?.icon} {slot?.label}</p>
+          <p className="ch-review-val"><img src={slot?.image} alt={slot?.label} className="ch-review-del-img" /> {slot?.label}</p>
           <p className="ch-review-sub">{slot?.time}</p>
         </div>
         <div className="ch-review-card">
@@ -221,7 +419,7 @@ function ReviewStep({ onPlace, placing }) {
         </div>
       </div>
       <button className="ch-place-btn" onClick={onPlace} disabled={placing}>
-        {placing ? <><span className="ch-spinner" /> Processing…</> : <>🎂 Place Order — ₹{grandTotal.toLocaleString()}</>}
+        {placing ? <><span className="ch-spinner" /> Processing…</> : <>Place Order — ₹{grandTotal.toLocaleString()}</>}
       </button>
       <p className="ch-place-note">By placing order you agree to our Terms & Privacy Policy.</p>
     </div>

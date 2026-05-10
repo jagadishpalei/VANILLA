@@ -199,14 +199,23 @@
 .mh-trust-pill {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: #FFFDF9;
   border: 1px solid #EAD9C4;
-  border-radius: 10px;
-  padding: 8px 11px;
+  border-radius: 12px;
+  padding: 7px 12px;
   flex-shrink: 0;
+  transition: transform .15s, box-shadow .15s;
 }
-.mh-trust-icon { font-size: .95rem; }
+.mh-trust-pill:active { transform: scale(.96); }
+.mh-trust-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,.10);
+}
 .mh-trust-val {
   font-family: 'Montserrat', sans-serif;
   font-size: .72rem;
@@ -597,20 +606,50 @@
 .mh-trend-card {
   background: #FFFDF9;
   border: 1px solid #EAD9C4;
-  border-radius: 14px;
-  padding: 12px;
-  min-width: 130px;
+  border-radius: 16px;
+  padding: 0;
+  min-width: 134px;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(107,79,58,.05);
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(107,79,58,.07);
+  transition: transform .18s;
 }
+.mh-trend-card:active { transform: scale(.97); }
+/* Real image container */
+.mh-trend-img-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: linear-gradient(135deg, #FFF8F2, #FAF6F0);
+  position: relative;
+}
+.mh-trend-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+  opacity: 0;
+  transition: opacity .35s ease, transform .38s cubic-bezier(.34,1.56,.64,1);
+}
+.mh-trend-img.ready { opacity: 1; }
+.mh-trend-card:hover .mh-trend-img,
+.mh-trend-card:active .mh-trend-img { transform: scale(1.07); }
+/* Emoji fallback tile */
 .mh-trend-tile {
-  font-size: 2.4rem;
+  font-size: 2rem;
   line-height: 1;
-  margin-bottom: 10px;
   text-align: center;
+  padding: 16px 10px;
+  width: 100%;
   background: #FAF6F0;
-  border-radius: 10px;
-  padding: 10px;
+}
+/* Card body text — now needs internal padding since card itself has padding:0 */
+.mh-trend-card .mh-trend-name,
+.mh-trend-card .mh-trend-meta,
+.mh-trend-card .mh-trend-footer {
+  padding-left: 12px;
+  padding-right: 12px;
 }
 .mh-trend-name {
   font-family: 'Montserrat', sans-serif;
@@ -618,6 +657,7 @@
   font-weight: 700;
   color: #1A1A1A;
   margin-bottom: 4px;
+  margin-top: 10px;
   line-height: 1.2;
 }
 .mh-trend-meta {
@@ -632,6 +672,7 @@
   justify-content: space-between;
   gap: 6px;
   flex-wrap: wrap;
+  padding-bottom: 12px;
 }
 .mh-trend-badge {
   font-family: 'Montserrat', sans-serif;
@@ -653,23 +694,61 @@
 .mh-why-card {
   background: #FFFDF9;
   border: 1px solid #EAD9C4;
-  border-radius: 14px;
-  padding: 16px 12px;
+  border-radius: 16px;
+  padding: 0;
   text-align: center;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(107,79,58,.06);
+  transition: transform .2s;
 }
-.mh-why-icon { font-size: 1.5rem; display: block; margin-bottom: 8px; }
+.mh-why-card:active { transform: scale(.97); }
+
+/* Image area */
+.mh-why-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #FAF6F0;
+}
+.mh-why-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform .38s cubic-bezier(.34,1.56,.64,1);
+}
+.mh-why-card:hover .mh-why-img,
+.mh-why-card:active .mh-why-img { transform: scale(1.07); }
+.mh-why-img-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,.18) 0%,
+    rgba(255,255,255,.04) 40%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* Text area below image */
 .mh-why-title {
   font-family: 'Montserrat', sans-serif;
   font-size: .72rem;
   font-weight: 700;
   color: #1A1A1A;
-  margin-bottom: 3px;
+  padding: 9px 10px 2px;
+  margin: 0;
 }
 .mh-why-sub {
   font-family: 'Poppins', sans-serif;
-  font-size: .62rem;
+  font-size: .6rem;
   color: #9A8070;
   line-height: 1.4;
+  padding: 0 10px 10px;
+  margin: 0;
 }
 
 /* ── REVIEWS ────────────────────────────────────────────── */
@@ -774,28 +853,50 @@
   gap: 8px;
 }
 .mh-gallery-cell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  background: #FFFDF9;
-  border: 1px solid #EAD9C4;
+  position: relative;
+  display: block;
   border-radius: 14px;
-  padding: 16px 8px;
+  overflow: hidden;
   text-decoration: none;
   aspect-ratio: 1;
-  transition: all .18s;
+  background: #FAF6F0;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+  transition: transform .2s;
 }
-.mh-gallery-cell:active { background: #FFF8F2; transform: scale(.96); }
-.mh-gallery-emoji { font-size: 1.7rem; line-height: 1; }
+.mh-gallery-cell:active { transform: scale(.96); }
+
+.mh-gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+.mh-gallery-cell:hover .mh-gallery-img,
+.mh-gallery-cell:active .mh-gallery-img { transform: scale(1.09); }
+
+.mh-gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(26,10,3,.68) 0%,
+    rgba(26,10,3,.20) 48%,
+    transparent 70%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: 8px;
+}
 .mh-gallery-label {
   font-family: 'Montserrat', sans-serif;
   font-size: .58rem;
   font-weight: 700;
-  color: #1A1A1A;
-  text-align: center;
+  color: #fff;
+  text-align: left;
   line-height: 1.2;
+  text-shadow: 0 1px 4px rgba(0,0,0,.5);
 }
 
 /* ── CAKE IMAGE DISPLAY ─────────────────────────────────── */
