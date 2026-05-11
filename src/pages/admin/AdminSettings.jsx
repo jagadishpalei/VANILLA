@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { useAdmin } from '../../context/AdminContext';
-import { Save, Check } from 'lucide-react';
+import { useMaintenance } from '../../context/MaintenanceContext';
+import { Save, Check, Power } from 'lucide-react';
 
 function SettingField({ label, name, value, onChange, type = 'text', hint }) {
   return (
@@ -21,6 +22,7 @@ function SettingField({ label, name, value, onChange, type = 'text', hint }) {
 
 export default function AdminSettings() {
   const { settings, updateSettings } = useAdmin();
+  const { isMaintenanceMode, setMaintenanceMode } = useMaintenance();
   const [form, setForm] = useState({ ...settings });
   const [saved, setSaved] = useState(false);
 
@@ -36,8 +38,57 @@ export default function AdminSettings() {
     setTimeout(() => setSaved(false), 2500);
   };
 
+  const isOnline = !isMaintenanceMode;
+
   return (
     <AdminLayout title="Settings">
+
+      {/* ── Website Service Status ── */}
+      <div className="adm-settings-section" style={{ marginBottom: 24 }}>
+        <h3 className="adm-settings-section-title">Website Service Status</h3>
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          background: isOnline ? 'rgba(34,197,94,0.06)' : 'rgba(239,68,68,0.06)',
+          border: `1px solid ${isOnline ? 'rgba(34,197,94,0.25)' : 'rgba(239,68,68,0.25)'}`,
+          borderRadius: 10, padding: '16px 20px',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{
+              width: 10, height: 10, borderRadius: '50%',
+              background: isOnline ? '#22c55e' : '#ef4444',
+              boxShadow: `0 0 8px ${isOnline ? '#22c55e' : '#ef4444'}`,
+              animation: 'adm-pulse 2s infinite',
+            }} />
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: isOnline ? '#22c55e' : '#ef4444' }}>
+                {isOnline ? '🟢 Website Online' : '🔴 Website Offline (Maintenance)'}
+              </div>
+              <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>
+                {isOnline
+                  ? 'Vanilla Crafted Cakes is live and accessible to all users.'
+                  : 'Public access is disabled. Only admins and owners can browse.'}
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setMaintenanceMode(!isMaintenanceMode)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '9px 18px', borderRadius: 8, border: 'none', cursor: 'pointer',
+              fontWeight: 700, fontSize: 13, fontFamily: 'inherit',
+              background: isOnline ? 'rgba(239,68,68,0.12)' : 'rgba(34,197,94,0.12)',
+              color: isOnline ? '#ef4444' : '#22c55e',
+              border: `1px solid ${isOnline ? 'rgba(239,68,68,0.3)' : 'rgba(34,197,94,0.3)'}`,
+              transition: 'all .15s',
+            }}
+          >
+            <Power size={14} />
+            {isOnline ? 'Enable Maintenance' : 'Bring Back Online'}
+          </button>
+        </div>
+      </div>
+
       <form className="adm-settings-form" onSubmit={handleSave}>
         <div className="adm-settings-section">
           <h3 className="adm-settings-section-title">Restaurant Info</h3>

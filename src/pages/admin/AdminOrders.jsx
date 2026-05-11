@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { useAdmin } from '../../context/AdminContext';
-import { Clock, Phone, MapPin, CreditCard, ChevronRight, X, CheckCircle } from 'lucide-react';
+import { Clock, Phone, MapPin, CreditCard, ChevronRight, X, CheckCircle, Navigation } from 'lucide-react';
+import MiniMapPreview from '../../components/MiniMapPreview';
 
 const COLUMNS = [
   { key: 'new',             label: 'New Orders',        color: '#FF7A00' },
@@ -55,6 +56,30 @@ function OrderCard({ order, onAdvance, onCancel }) {
             <MapPin size={11} />
             <span>{order.address}</span>
           </div>
+
+          {/* ── Live Location Map ── */}
+          <div style={{ margin: '10px 0 8px' }}>
+            <div style={{ fontSize: 11, color: '#888', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 5 }}>
+              <MapPin size={10} /> Customer Location
+              {order.lat
+                ? <span style={{ color: '#22c55e', fontWeight: 600 }}>● GPS Pinned</span>
+                : <span style={{ color: '#f59e0b', fontWeight: 600 }}>● Approximate</span>}
+            </div>
+            <MiniMapPreview
+              lat={order.lat}
+              lng={order.lng}
+              address={order.address}
+              label={order.customer}
+              height={160}
+              showNavBtn
+            />
+            {order.deliveryNote && (
+              <div style={{ marginTop: 6, padding: '7px 10px', background: 'rgba(249,115,22,0.08)', borderRadius: 7, fontSize: 12, color: '#ccc' }}>
+                📝 {order.deliveryNote}
+              </div>
+            )}
+          </div>
+
           <div className="adm-order-items">
             {order.items.map((item, i) => (
               <div key={i} className="adm-order-item-row">

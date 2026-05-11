@@ -8,6 +8,9 @@ import {
   Smartphone, Building2, Wallet, Banknote, Gift, Shield, Plus
 } from 'lucide-react';
 import './checkout.css';
+import AddressMapModal from '../../components/AddressMapModal';
+import LocationPermissionModal from '../../components/LocationPermissionModal';
+import { useLocation as useLocCtx } from '../../context/LocationContext';
 
 const STEPS = ['Address', 'Delivery', 'Payment', 'Review'];
 
@@ -29,8 +32,25 @@ function StepBar({ step }) {
 
 function AddressStep({ onNext }) {
   const { savedAddresses, selectedAddress, setSelectedAddress, addAddress } = useCakes();
-  const [showForm, setShowForm] = useState(false);
+  const { activeAddress, permission } = useLocCtx();
+  const [showForm, setShowForm]         = useState(false);
+  const [showMapModal, setShowMapModal] = useState(false);
+  const [showPermModal, setShowPermModal] = useState(false);
   const [form, setForm] = useState({ name: '', line1: '', line2: '', city: '', pin: '', phone: '' });
+  const [gpsAddr, setGpsAddr] = useState(activeAddress || null);
+
+  const handleGpsSaved = (addr) => {
+    setGpsAddr(addr);
+    /* Also set as the checkout selected address */
+    setSelectedAddress({
+      id: addr.id, name: addr.label || 'GPS Address',
+      line1: [addr.flat, addr.landmark].filter(Boolean).join(', ') || addr.displayAddress?.slice(0,50),
+      line2: addr.displayAddress?.slice(0,60) || '',
+      city: 'Keonjhar', pin: addr.postcode || '',
+      phone: '', lat: addr.lat, lng: addr.lng,
+      deliveryNote: addr.note,
+    });
+  };
 
   const submit = (e) => {
     e.preventDefault();
@@ -40,7 +60,34 @@ function AddressStep({ onNext }) {
 
   return (
     <div className="ch-step-content">
-      <p className="ch-section-label"><MapPin size={13} /> Delivery Address</p>
+
+      {/* ── GPS Map Address ── */}
+      <p className="ch-section-label"><MapPin size={13} /> Pin Location on Map</p>
+      {gpsAddr ? (
+        <div style={{ background:'rgba(34,197,94,0.06)', border:'1px solid rgba(34,197,94,0.25)', borderRadius:12, padding:'13px 15px', marginBottom:12 }}>
+          <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:8 }}>
+            <div>
+              <div style={{ fontSize:12, fontWeight:700, color:'#22c55e', marginBottom:4 }}>📌 GPS Location Pinned</div>
+              <div style={{ fontSize:12, color:'#ccc', lineHeight:1.5 }}>
+                {[gpsAddr.flat, gpsAddr.landmark, gpsAddr.displayAddress].filter(Boolean).join(', ').slice(0,80)}
+              </div>
+              {gpsAddr.lat && <div style={{ fontSize:11, color:'#22c55e', marginTop:3 }}>{gpsAddr.lat.toFixed(5)}, {gpsAddr.lng.toFixed(5)}</div>}
+            </div>
+            <button onClick={() => permission === 'prompt' ? setShowPermModal(true) : setShowMapModal(true)}
+              style={{ background:'rgba(249,115,22,0.15)', border:'1px solid rgba(249,115,22,0.3)', borderRadius:8, padding:'5px 10px', color:'#f97316', fontSize:11, fontWeight:700, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0 }}>
+              Change
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button className="ch-add-addr-btn" style={{ marginBottom:12, background:'rgba(249,115,22,0.07)', border:'1px dashed rgba(249,115,22,0.35)', color:'#f97316' }}
+          onClick={() => permission === 'prompt' ? setShowPermModal(true) : setShowMapModal(true)}>
+          <MapPin size={14} /> Use Map to Pin Exact Location
+        </button>
+      )}
+
+      {/* ── Saved text addresses ── */}
+      <p className="ch-section-label" style={{ marginTop:8 }}><MapPin size={13} /> Delivery Address</p>
       {savedAddresses.map(addr => (
         <button key={addr.id} className={`ch-addr-card ${selectedAddress?.id === addr.id ? 'on' : ''}`}
           onClick={() => setSelectedAddress(addr)}>
@@ -55,7 +102,7 @@ function AddressStep({ onNext }) {
       ))}
 
       <button className="ch-add-addr-btn" onClick={() => setShowForm(v => !v)}>
-        <Plus size={14} /> Add New Address
+        <Plus size={14} /> Add Address Manually
       </button>
 
       <AnimatePresence>
@@ -76,10 +123,23 @@ function AddressStep({ onNext }) {
       </AnimatePresence>
 
       <div className="ch-next-wrap">
-        <button className="ch-next-btn" onClick={onNext} disabled={!selectedAddress}>
+        <button className="ch-next-btn" onClick={onNext} disabled={!selectedAddress && !gpsAddr}>
           Continue to Delivery <Check size={14} />
         </button>
       </div>
+
+      {showPermModal && (
+        <LocationPermissionModal
+          onGranted={() => { setShowPermModal(false); setShowMapModal(true); }}
+          onSkip={() => { setShowPermModal(false); setShowMapModal(true); }}
+        />
+      )}
+      {showMapModal && (
+        <AddressMapModal
+          onClose={() => setShowMapModal(false)}
+          onSaved={handleGpsSaved}
+        />
+      )}
     </div>
   );
 }

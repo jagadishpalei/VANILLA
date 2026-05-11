@@ -2,7 +2,8 @@ import React from 'react';
 import DeliveryLayout from '../../components/delivery/DeliveryLayout';
 import { useDelivery } from '../../context/DeliveryContext';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Phone, Navigation, CheckCircle, Package } from 'lucide-react';
+import { Phone, CheckCircle, Package } from 'lucide-react';
+import MiniMapPreview from '../../components/MiniMapPreview';
 
 const STATUS_STEPS = [
   { key: 'accepted',    label: 'Order Accepted',  icon: '✅' },
@@ -44,22 +45,37 @@ export default function ActiveOrder() {
     }
   };
 
+  /* Customer coords — use pinned GPS if available, else default to Keonjhar */
+  const custLat = activeOrder.customerLat || 21.4677;
+  const custLng = activeOrder.customerLng || 85.5835;
+  const hasPrecise = !!(activeOrder.customerLat && activeOrder.customerLng);
+
   return (
     <DeliveryLayout title="Active Delivery" noPad>
-      {/* Map placeholder */}
-      <div className="del-map-placeholder">
-        <div className="del-map-bg">
-          <div className="del-map-grid" />
-          <div className="del-map-pin del-map-pin-restaurant">🏪<span>Restaurant</span></div>
-          <div className="del-map-pin del-map-pin-customer">📍<span>Customer</span></div>
-          <div className="del-map-rider">🚴</div>
-          <div className="del-map-route" />
-        </div>
-        <div className="del-map-overlay">
-          <span className="del-map-eta">🕐 ETA: ~{activeOrder.estimatedTime}</span>
-          <button className="del-nav-btn">
-            <Navigation size={14} /> Navigate
-          </button>
+
+      {/* ── Live Navigation Map ── */}
+      <div style={{ position: 'relative', width: '100%', height: 240, flexShrink: 0 }}>
+        <MiniMapPreview
+          lat={custLat}
+          lng={custLng}
+          label={`${activeOrder.customer} — Drop Point`}
+          address={activeOrder.deliveryAddress}
+          height={240}
+          showNavBtn
+        />
+
+        {/* ETA overlay */}
+        <div style={{
+          position: 'absolute', top: 12, left: 12, zIndex: 1000,
+          background: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(6px)',
+          borderRadius: 10, padding: '7px 14px', display: 'flex', gap: 10, alignItems: 'center',
+        }}>
+          <span style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>
+            🕐 ETA: ~{activeOrder.estimatedTime}
+          </span>
+          {hasPrecise
+            ? <span style={{ fontSize: 11, color: '#22c55e', fontWeight: 600 }}>● GPS</span>
+            : <span style={{ fontSize: 11, color: '#f59e0b', fontWeight: 600 }}>● Approx</span>}
         </div>
       </div>
 
@@ -75,7 +91,7 @@ export default function ActiveOrder() {
           ))}
         </div>
 
-        {/* Restaurant */}
+        {/* Pickup */}
         <div className="del-info-block">
           <p className="del-info-block-label">📍 Pickup from</p>
           <p className="del-info-block-name">{activeOrder.restaurant}</p>
@@ -84,6 +100,13 @@ export default function ActiveOrder() {
             <Phone size={14} /> Call Restaurant
           </a>
         </div>
+
+        {/* Delivery note */}
+        {activeOrder.deliveryNote && (
+          <div style={{ margin: '0 0 12px', padding: '10px 14px', background: 'rgba(249,115,22,0.08)', borderRadius: 10, border: '1px solid rgba(249,115,22,0.18)', fontSize: 13, color: '#ddd' }}>
+            📝 <strong style={{ color: '#f97316' }}>Rider Note:</strong> {activeOrder.deliveryNote}
+          </div>
+        )}
 
         {/* Items */}
         <div className="del-items-block">
@@ -105,6 +128,9 @@ export default function ActiveOrder() {
           <p className="del-info-block-label">👤 Deliver to</p>
           <p className="del-info-block-name">{activeOrder.customer}</p>
           <p className="del-info-block-addr">{activeOrder.deliveryAddress}</p>
+          <p style={{ fontSize: 11, color: '#f97316', marginTop: 2, fontWeight: 600 }}>
+            {hasPrecise ? `📌 ${custLat.toFixed(5)}, ${custLng.toFixed(5)}` : '📌 Location approximate'}
+          </p>
           <a href={`tel:${activeOrder.phone}`} className="del-call-btn del-call-customer">
             <Phone size={14} /> Call Customer
           </a>

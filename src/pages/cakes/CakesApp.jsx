@@ -8,11 +8,12 @@ import CakesCart from './components/CakesCart';
 import CakesSearchOverlay from './components/CakesSearchOverlay';
 import { CakesToast, PageLoader } from './components/CakesUI';
 import CakesMobileNav from './components/CakesMobileNav';
+import CakesMaintenanceScreen from './CakesMaintenanceScreen';
+import { useMaintenance } from '../../context/MaintenanceContext';
 import './cakes.css';
 import './components/navbar.css';
 import './components/footer.css';
 
-/* ── Lazy cake pages ───────────────────────────────── */
 const CakesHome         = lazy(() => import('./CakesHome'));
 const CakeCategory      = lazy(() => import('./CakeCategory'));
 const CakeDetail        = lazy(() => import('./CakeDetail'));
@@ -20,8 +21,6 @@ const CakesCartPage     = lazy(() => import('./CakesCartPage'));
 const CakesCheckout     = lazy(() => import('./CakesCheckout'));
 const CakesOrderSuccess = lazy(() => import('./CakesOrderSuccess'));
 const CakesAdmin        = lazy(() => import('./admin/CakesAdmin'));
-
-/* ── Lazy account pages ─────────────────────────── */
 const LoginPage          = lazy(() => import('../account/LoginPage'));
 const RegisterPage       = lazy(() => import('../account/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('../account/ForgotPasswordPage'));
@@ -33,11 +32,19 @@ const RewardsPage        = lazy(() => import('../account/RewardsPage'));
 const NotificationsPage  = lazy(() => import('../account/NotificationsPage'));
 const HelpPage           = lazy(() => import('../account/HelpPage'));
 
-/* ── Account routes — no navbar/footer ─────────── */
 const ACCOUNT_PATHS = ['/cakes/login', '/cakes/register', '/cakes/forgot-password', '/cakes/account'];
 const ADMIN_PATH    = '/cakes/admin';
+const BYPASS_PATHS  = ['/cakes/admin', '/admin', '/owner', '/delivery', '/dev-access'];
 
-/* ── Page transition ────────────────────────────── */
+/* Check if logged-in user has privileged access (admin or owner) */
+const hasPrivilegedAccess = () => {
+  try {
+    const admin = JSON.parse(localStorage.getItem('vanilla_admin'));
+    const owner = JSON.parse(localStorage.getItem('vanilla_owner'));
+    return !!(admin?.role || owner?.role);
+  } catch { return false; }
+};
+
 function PT({ children }) {
   return (
     <motion.div
@@ -51,7 +58,6 @@ function PT({ children }) {
   );
 }
 
-/* ── 404 ────────────────────────────────────────── */
 function CakesNotFound() {
   return (
     <div className="ck-page" style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:'60vh', gap:16, textAlign:'center', padding:'0 24px' }}>
@@ -63,15 +69,21 @@ function CakesNotFound() {
   );
 }
 
-/* ── Main inner router ──────────────────────────── */
 function CakesInner() {
   const location = useLocation();
+  const { isMaintenanceMode } = useMaintenance();
+
   const isAccountRoute = ACCOUNT_PATHS.some(p => location.pathname.startsWith(p));
   const isAdminRoute   = location.pathname.startsWith(ADMIN_PATH);
+  const isBypassPath   = BYPASS_PATHS.some(p => location.pathname.startsWith(p));
+
+  /* ── Maintenance gate: public users only ── */
+  if (isMaintenanceMode && !isBypassPath && !hasPrivilegedAccess()) {
+    return <CakesMaintenanceScreen />;
+  }
 
   return (
     <div className="ck-root">
-      {/* Hide global nav on auth/account pages — they have their own topbars */}
       {!isAccountRoute && !isAdminRoute && <CakesNavbar />}
       <CakesToast />
       <CakesCart />
@@ -81,32 +93,24 @@ function CakesInner() {
       <Suspense fallback={<PageLoader />}>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            {/* ── Admin ── */}
-            <Route path="admin/*"         element={<PT><CakesAdmin /></PT>} />
-
-            {/* ── Cake store pages ── */}
-            <Route index element={<PT><CakesHome /></PT>} />
-            <Route path="category/:slug"  element={<PT><CakeCategory /></PT>} />
-            <Route path="cart"            element={<PT><CakesCartPage /></PT>} />
-            <Route path="checkout"        element={<PT><CakesCheckout /></PT>} />
-            <Route path="order-success"   element={<PT><CakesOrderSuccess /></PT>} />
-            <Route path=":id"             element={<PT><CakeDetail /></PT>} />
-
-            {/* ── Auth pages ── */}
-            <Route path="login"           element={<PT><LoginPage /></PT>} />
-            <Route path="register"        element={<PT><RegisterPage /></PT>} />
-            <Route path="forgot-password" element={<PT><ForgotPasswordPage /></PT>} />
-
-            {/* ── Account pages ── */}
-            <Route path="account"               element={<PT><AccountHomePage /></PT>} />
-            <Route path="account/orders"        element={<PT><OrdersPage /></PT>} />
-            <Route path="account/wishlist"      element={<PT><WishlistPage /></PT>} />
-            <Route path="account/addresses"     element={<PT><AddressesPage /></PT>} />
-            <Route path="account/rewards"       element={<PT><RewardsPage /></PT>} />
-            <Route path="account/notifications" element={<PT><NotificationsPage /></PT>} />
-            <Route path="account/help"          element={<PT><HelpPage /></PT>} />
-
-            <Route path="*" element={<PT><CakesNotFound /></PT>} />
+            <Route path="admin/*"               element={<PT><CakesAdmin /></PT>} />
+            <Route index                         element={<PT><CakesHome /></PT>} />
+            <Route path="category/:slug"         element={<PT><CakeCategory /></PT>} />
+            <Route path="cart"                   element={<PT><CakesCartPage /></PT>} />
+            <Route path="checkout"               element={<PT><CakesCheckout /></PT>} />
+            <Route path="order-success"          element={<PT><CakesOrderSuccess /></PT>} />
+            <Route path=":id"                    element={<PT><CakeDetail /></PT>} />
+            <Route path="login"                  element={<PT><LoginPage /></PT>} />
+            <Route path="register"               element={<PT><RegisterPage /></PT>} />
+            <Route path="forgot-password"        element={<PT><ForgotPasswordPage /></PT>} />
+            <Route path="account"                element={<PT><AccountHomePage /></PT>} />
+            <Route path="account/orders"         element={<PT><OrdersPage /></PT>} />
+            <Route path="account/wishlist"       element={<PT><WishlistPage /></PT>} />
+            <Route path="account/addresses"      element={<PT><AddressesPage /></PT>} />
+            <Route path="account/rewards"        element={<PT><RewardsPage /></PT>} />
+            <Route path="account/notifications"  element={<PT><NotificationsPage /></PT>} />
+            <Route path="account/help"           element={<PT><HelpPage /></PT>} />
+            <Route path="*"                      element={<PT><CakesNotFound /></PT>} />
           </Routes>
         </AnimatePresence>
       </Suspense>

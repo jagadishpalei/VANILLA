@@ -1,0 +1,299 @@
+/* ═══════════════════════════════════════════
+   MAP SYSTEM — VANILLA ECOSYSTEM (v2)
+   Premium Swiggy/Zomato-quality map UI
+   ═══════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ── Overlays ── */
+.vloc-overlay,
+.vmap-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,0.65);
+  display: flex; align-items: flex-end; justify-content: center;
+  animation: vloc-fadein .2s ease;
+  font-family: 'Inter', sans-serif;
+}
+@media (min-width: 640px) {
+  .vloc-overlay, .vmap-overlay { align-items: center; padding: 20px; }
+}
+
+/* ── Permission Sheet ── */
+.vloc-sheet {
+  background: #18191d;
+  width: 100%; max-width: 420px;
+  border-radius: 24px 24px 0 0;
+  padding: 10px 24px 40px;
+  border: 1px solid rgba(255,255,255,0.06);
+  animation: vloc-slideup .32s cubic-bezier(0.34,1.4,0.64,1);
+}
+@media (min-width: 640px) { .vloc-sheet { border-radius: 24px; } }
+
+.vloc-drag-handle {
+  width: 40px; height: 4px; border-radius: 99px;
+  background: rgba(255,255,255,0.15); margin: 10px auto 24px;
+}
+.vloc-sheet-icon {
+  width: 72px; height: 72px; border-radius: 20px;
+  margin: 0 auto 18px;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 12px 36px rgba(249,115,22,0.35);
+}
+.vloc-sheet-title {
+  font-size: 22px; font-weight: 800; color: #fff;
+  text-align: center; margin-bottom: 8px; letter-spacing: -0.02em;
+}
+.vloc-sheet-desc {
+  font-size: 14px; color: rgba(255,255,255,0.45);
+  text-align: center; line-height: 1.65; margin-bottom: 28px;
+}
+.vloc-benefits { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+.vloc-benefit-row {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px; padding: 13px 16px;
+}
+.vloc-benefit-icon { font-size: 20px; flex-shrink: 0; }
+.vloc-benefit-text { font-size: 13.5px; color: rgba(255,255,255,0.72); line-height: 1.4; }
+.vloc-btn-allow {
+  width: 100%; padding: 16px; background: #f97316; border: none;
+  border-radius: 16px; color: #fff; font-size: 16px; font-weight: 700;
+  cursor: pointer; font-family: 'Inter',sans-serif; margin-bottom: 10px;
+  transition: transform .15s, opacity .15s;
+  box-shadow: 0 8px 24px rgba(249,115,22,0.35);
+}
+.vloc-btn-allow:hover:not(:disabled) { transform: translateY(-1px); opacity: .92; }
+.vloc-btn-allow:disabled { opacity: .55; cursor: not-allowed; }
+.vloc-btn-skip {
+  width: 100%; padding: 14px; background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px;
+  color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer;
+  font-family: 'Inter',sans-serif; transition: all .15s;
+}
+.vloc-btn-skip:hover { border-color: rgba(255,255,255,0.22); color: rgba(255,255,255,0.6); }
+
+/* ── Map Picker Modal ── */
+.vmap-sheet {
+  background: #0e0f12;
+  width: 100%; max-width: 520px;
+  border-radius: 24px 24px 0 0;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  max-height: 96vh;
+  border: 1px solid rgba(255,255,255,0.07);
+  animation: vloc-slideup .3s cubic-bezier(0.34,1.2,0.64,1);
+}
+@media (min-width: 640px) { .vmap-sheet { border-radius: 24px; max-height: 88vh; } }
+
+.vmap-topbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 18px 14px; flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.vmap-back-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.07); border: none;
+  color: #fff; cursor: pointer; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background .15s;
+}
+.vmap-back-btn:hover { background: rgba(255,255,255,0.12); }
+.vmap-topbar-title { font-size: 15px; font-weight: 700; color: #fff; }
+.vmap-topbar-sub { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+/* Map container */
+.vmap-map-area {
+  position: relative; flex: 1; min-height: 300px; overflow: hidden;
+}
+.vmap-leaflet { width: 100%; height: 100%; min-height: 300px; }
+
+/* Fixed center pin (stays put while map moves underneath) */
+.vmap-center-pin {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -100%);
+  z-index: 999; pointer-events: none;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+  transition: transform .15s;
+}
+.vmap-center-pin.dragging { transform: translate(-50%, -115%) scale(1.1); }
+.vmap-center-pin svg { display: block; }
+.vmap-pin-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(0,0,0,0.25); margin: 0 auto;
+  filter: blur(2px);
+}
+
+/* GPS button */
+.vmap-gps-btn {
+  position: absolute; bottom: 16px; right: 16px; z-index: 1000;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: #fff; border: none; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; transition: transform .15s;
+}
+.vmap-gps-btn:hover { transform: scale(1.06); }
+.vmap-gps-btn:active { transform: scale(0.96); }
+
+/* "Move map" hint */
+.vmap-hint {
+  position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+  z-index: 1000; background: rgba(0,0,0,0.68); backdrop-filter: blur(8px);
+  color: #fff; padding: 7px 16px; border-radius: 100px;
+  font-size: 12px; font-weight: 500; white-space: nowrap;
+  pointer-events: none; transition: opacity .3s;
+}
+
+/* ── Address bottom card ── */
+.vmap-bottom-card {
+  background: #18191d;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 18px 20px 24px; flex-shrink: 0;
+}
+.vmap-addr-row {
+  display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;
+}
+.vmap-addr-pin-icon {
+  width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+  background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.2);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.vmap-addr-primary { font-size: 15px; font-weight: 700; color: #fff; line-height: 1.35; margin-bottom: 3px; }
+.vmap-addr-secondary { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+.vmap-addr-coords { font-size: 11px; color: rgba(249,115,22,0.6); font-family: monospace; margin-top: 3px; }
+.vmap-confirm-btn {
+  width: 100%; padding: 16px; background: #f97316; border: none;
+  border-radius: 14px; color: #fff; font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Inter',sans-serif;
+  box-shadow: 0 6px 20px rgba(249,115,22,0.35);
+  transition: transform .15s, opacity .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.vmap-confirm-btn:hover { transform: translateY(-1px); opacity: .92; }
+.vmap-confirm-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.vmap-geocoding-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.06); border-radius: 100px;
+  padding: 4px 10px; font-size: 11px; color: rgba(255,255,255,0.5);
+  margin-bottom: 14px;
+}
+.vmap-geocoding-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #f97316; animation: vmap-blink 1s infinite;
+}
+
+/* ── Address Form (step 2) ── */
+.vmap-form-sheet {
+  background: #0e0f12;
+  width: 100%; max-width: 520px;
+  border-radius: 24px 24px 0 0;
+  overflow: hidden; display: flex; flex-direction: column;
+  max-height: 94vh;
+  border: 1px solid rgba(255,255,255,0.07);
+  animation: vloc-slideup .28s cubic-bezier(0.34,1.2,0.64,1);
+}
+@media (min-width: 640px) { .vmap-form-sheet { border-radius: 24px; } }
+
+.vmap-form-header {
+  padding: 20px 20px 0; flex-shrink: 0;
+}
+.vmap-form-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.vmap-form-subtitle { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 16px; }
+
+/* Confirmed location strip */
+.vmap-loc-strip {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(34,197,94,0.08);
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 12px; padding: 11px 14px; margin-bottom: 20px;
+}
+.vmap-loc-strip-icon { font-size: 18px; flex-shrink: 0; }
+.vmap-loc-strip-text { flex: 1; font-size: 12.5px; color: rgba(255,255,255,0.7); line-height: 1.4; }
+.vmap-loc-strip-coords { font-size: 10px; color: #22c55e; font-family: monospace; margin-top: 2px; }
+.vmap-loc-strip-change {
+  background: rgba(249,115,22,0.12); border: 1px solid rgba(249,115,22,0.25);
+  border-radius: 8px; padding: 5px 10px; color: #f97316;
+  font-size: 11px; font-weight: 700; cursor: pointer;
+  font-family: 'Inter',sans-serif; white-space: nowrap; flex-shrink: 0;
+}
+
+.vmap-form-scroll { flex: 1; overflow-y: auto; padding: 0 20px 24px; }
+.vmap-form-group { margin-bottom: 16px; }
+.vmap-form-label {
+  font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.4);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  display: block; margin-bottom: 7px;
+}
+.vmap-form-input {
+  width: 100%; background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.09);
+  border-radius: 12px; padding: 13px 15px;
+  color: #fff; font-size: 14px; font-family: 'Inter',sans-serif;
+  outline: none; transition: border-color .2s, background .2s;
+  box-sizing: border-box;
+}
+.vmap-form-input:focus {
+  border-color: rgba(249,115,22,0.5);
+  background: rgba(249,115,22,0.04);
+}
+.vmap-form-input::placeholder { color: rgba(255,255,255,0.2); }
+
+.vmap-form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+
+.vmap-label-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.vmap-label-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 18px; border-radius: 12px;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: 'Inter',sans-serif;
+  transition: all .15s;
+}
+.vmap-label-chip:hover { border-color: rgba(249,115,22,0.35); color: rgba(255,255,255,0.8); }
+.vmap-label-chip.active {
+  background: rgba(249,115,22,0.12);
+  border-color: rgba(249,115,22,0.45); color: #f97316;
+}
+.vmap-form-save-btn {
+  width: 100%; padding: 16px; background: #f97316; border: none;
+  border-radius: 14px; color: #fff; font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Inter',sans-serif;
+  box-shadow: 0 6px 20px rgba(249,115,22,0.3);
+  transition: transform .15s, opacity .15s;
+}
+.vmap-form-save-btn:hover { transform: translateY(-1px); opacity: .92; }
+.vmap-form-save-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+/* ── Mini Map (Admin/Delivery) ── */
+.vmini-map-wrap {
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08); position: relative;
+}
+.vmini-map-leaflet { width: 100%; }
+.vmini-nav-btn {
+  position: absolute; bottom: 10px; right: 10px; z-index: 1000;
+  background: #f97316; color: #fff; border: none; border-radius: 10px;
+  padding: 8px 14px; font-size: 12px; font-weight: 700; cursor: pointer;
+  font-family: 'Inter',sans-serif; display: flex; align-items: center; gap: 6px;
+  box-shadow: 0 3px 10px rgba(249,115,22,0.4); transition: opacity .15s;
+}
+.vmini-nav-btn:hover { opacity: .88; }
+.vmini-addr-strip {
+  padding: 10px 14px; background: rgba(249,115,22,0.07);
+  border-top: 1px solid rgba(249,115,22,0.1);
+  font-size: 12px; color: rgba(255,255,255,0.65);
+  font-family: 'Inter',sans-serif; line-height: 1.45;
+}
+
+/* ── Keyframes ── */
+@keyframes vloc-fadein { from { opacity:0; } to { opacity:1; } }
+@keyframes vloc-slideup {
+  from { transform: translateY(48px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes vmap-blink {
+  0%,100% { opacity:1; } 50% { opacity:.3; }
+}

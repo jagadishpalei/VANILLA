@@ -19,12 +19,18 @@ import DevAccess from './pages/DevAccess';
 import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
 import { DeliveryProvider } from './context/DeliveryContext';
+import { OwnerProvider } from './context/OwnerContext';
+import { MaintenanceProvider } from './context/MaintenanceContext';
+import { LocationProvider } from './context/LocationContext';
 import AdminRoute from './components/admin/AdminRoute';
 import DeliveryRoute from './components/delivery/DeliveryRoute';
+import OwnerRoute from './components/owner/OwnerRoute';
 import './App.css';
 import './admin.css';
 import './admin2.css';
 import './delivery.css';
+import './owner.css';
+import './map.css';
 
 /* ── Private mode: set via /dev-access?key=vanilla2024 ── */
 const isDevMode = () => localStorage.getItem('vanilla_dev_mode') === '1';
@@ -50,7 +56,20 @@ const DeliveryProfile   = lazy(() => import('./pages/delivery/DeliveryProfile'))
 /* ── Lazy cakes section ── */
 const CakesApp = lazy(() => import('./pages/cakes/CakesApp'));
 
-const OPERATIONAL_PREFIXES = ['/admin', '/delivery', '/cakes', '/dev-access'];
+/* ── Lazy owner pages ── */
+const OwnerLogin         = lazy(() => import('./pages/owner/OwnerLogin'));
+const OwnerDashboard     = lazy(() => import('./pages/owner/OwnerDashboard'));
+const OwnerFranchises    = lazy(() => import('./pages/owner/OwnerFranchises'));
+const OwnerAdminControl  = lazy(() => import('./pages/owner/OwnerAdminControl'));
+const OwnerOrders        = lazy(() => import('./pages/owner/OwnerOrders'));
+const OwnerDelivery      = lazy(() => import('./pages/owner/OwnerDelivery'));
+const OwnerCustomers     = lazy(() => import('./pages/owner/OwnerCustomers'));
+const OwnerAnalytics     = lazy(() => import('./pages/owner/OwnerAnalytics'));
+const OwnerFinance       = lazy(() => import('./pages/owner/OwnerFinance'));
+const OwnerSecurity      = lazy(() => import('./pages/owner/OwnerSecurity'));
+const OwnerSettings      = lazy(() => import('./pages/owner/OwnerSettings'));
+
+const OPERATIONAL_PREFIXES = ['/admin', '/delivery', '/cakes', '/dev-access', '/owner'];
 
 function CustomerShell({ splashDone, onSplashDone }) {
   const location = useLocation();
@@ -97,7 +116,7 @@ function AdminSection() {
         <Route path="/admin/analytics"    element={<AdminRoute><AdminAnalytics /></AdminRoute>} />
         <Route path="/admin/settings"     element={<AdminRoute><AdminSettings /></AdminRoute>} />
         <Route path="/admin/delivery"     element={<AdminRoute><AdminDelivery /></AdminRoute>} />
-        <Route path="*" element={null} />
+        <Route path="*" element={<></>} />
       </Routes>
     </Suspense>
   );
@@ -113,7 +132,7 @@ function DeliverySection() {
         <Route path="/delivery/active"    element={<DeliveryRoute><ActiveOrder /></DeliveryRoute>} />
         <Route path="/delivery/history"   element={<DeliveryRoute><DeliveryHistory /></DeliveryRoute>} />
         <Route path="/delivery/profile"   element={<DeliveryRoute><DeliveryProfile /></DeliveryRoute>} />
-        <Route path="*" element={null} />
+        <Route path="*" element={<></>} />
       </Routes>
     </Suspense>
   );
@@ -124,7 +143,28 @@ function CakesSection() {
     <Suspense fallback={<div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', fontFamily:'Poppins,sans-serif', color:'#8A8A8A', fontSize:'.9rem' }}>Loading…</div>}>
       <Routes>
         <Route path="/cakes/*" element={<CakesApp />} />
-        <Route path="*" element={null} />
+        <Route path="*" element={<></>} />
+      </Routes>
+    </Suspense>
+  );
+}
+
+function OwnerSection() {
+  return (
+    <Suspense fallback={<div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', background:'#0d0e11', color:'#8a8f9e', fontFamily:'Inter,sans-serif', fontSize:'.9rem' }}>Loading Owner Panel…</div>}>
+      <Routes>
+        <Route path="/owner-login"           element={<OwnerLogin />} />
+        <Route path="/owner/dashboard"       element={<OwnerRoute><OwnerDashboard /></OwnerRoute>} />
+        <Route path="/owner/franchises"      element={<OwnerRoute><OwnerFranchises /></OwnerRoute>} />
+        <Route path="/owner/admin-control"   element={<OwnerRoute><OwnerAdminControl /></OwnerRoute>} />
+        <Route path="/owner/orders"          element={<OwnerRoute><OwnerOrders /></OwnerRoute>} />
+        <Route path="/owner/delivery-control"element={<OwnerRoute><OwnerDelivery /></OwnerRoute>} />
+        <Route path="/owner/customers"       element={<OwnerRoute><OwnerCustomers /></OwnerRoute>} />
+        <Route path="/owner/analytics"       element={<OwnerRoute><OwnerAnalytics /></OwnerRoute>} />
+        <Route path="/owner/finance"         element={<OwnerRoute><OwnerFinance /></OwnerRoute>} />
+        <Route path="/owner/security"        element={<OwnerRoute><OwnerSecurity /></OwnerRoute>} />
+        <Route path="/owner/settings"        element={<OwnerRoute><OwnerSettings /></OwnerRoute>} />
+        <Route path="*" element={<></>} />
       </Routes>
     </Suspense>
   );
@@ -133,20 +173,27 @@ function CakesSection() {
 function App() {
   const [splashDone, setSplashDone] = useState(false);
   return (
-    <DeliveryProvider>
-      <AdminProvider>
-        <AuthProvider>
-          <Router>
-            {/* Developer bypass route — always accessible */}
-            <Routes><Route path="/dev-access" element={<DevAccess />} /></Routes>
-            <AdminSection />
-            <DeliverySection />
-            <CakesSection />
-            <CustomerShell splashDone={splashDone} onSplashDone={() => setSplashDone(true)} />
-          </Router>
-        </AuthProvider>
-      </AdminProvider>
-    </DeliveryProvider>
+    <LocationProvider>
+    <MaintenanceProvider>
+    <OwnerProvider>
+      <DeliveryProvider>
+        <AdminProvider>
+          <AuthProvider>
+            <Router>
+              {/* Developer bypass route — always accessible */}
+              <Routes><Route path="/dev-access" element={<DevAccess />} /><Route path="*" element={<></>} /></Routes>
+              <OwnerSection />
+              <AdminSection />
+              <DeliverySection />
+              <CakesSection />
+              <CustomerShell splashDone={splashDone} onSplashDone={() => setSplashDone(true)} />
+            </Router>
+          </AuthProvider>
+        </AdminProvider>
+      </DeliveryProvider>
+    </OwnerProvider>
+    </MaintenanceProvider>
+    </LocationProvider>
   );
 }
 

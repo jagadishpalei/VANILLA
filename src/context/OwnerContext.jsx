@@ -1,0 +1,271 @@
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+
+const OwnerContext = createContext(null);
+
+/* ── Owner Credentials (highest privilege) ── */
+const OWNER_CREDENTIALS = [
+  { email: 'owner@vanilla.com',    password: 'vanilla@owner2025',    role: 'owner',       name: 'Founder & Owner',        avatar: 'FO' },
+  { email: 'founder@vanilla.com',  password: 'vanilla@founder2025',  role: 'owner',       name: 'Co-Founder',             avatar: 'CF' },
+  { email: 'super@vanilla.com',    password: 'vanilla@super2025',    role: 'super_admin', name: 'Super Administrator',    avatar: 'SA' },
+  { email: 'franchise@vanilla.com',password: 'vanilla@franchise2025',role: 'franchise_controller', name: 'Franchise Controller', avatar: 'FC' },
+];
+
+/* ── Seed: Franchise Branches ── */
+const SEED_FRANCHISES = [
+  {
+    id: 'FR001', name: 'Vanilla Crafted Cakes — Keonjhar Main',
+    city: 'Keonjhar', locality: 'Station Road', state: 'Odisha',
+    status: 'active', adminEmail: 'admin@vanilla.com',
+    adminName: 'Rajesh Mohanta', phone: '9437890123',
+    deliveryRadius: 8, riders: 4, staff: 12,
+    monthlyRevenue: 284700, weeklyOrders: 312,
+    rating: 4.7, joinDate: '2024-01-15',
+    coordinates: { lat: 21.4677, lng: 85.5835 },
+    brand: 'Vanilla Crafted Cakes',
+  },
+  {
+    id: 'FR002', name: 'Vanilla Crafted Cakes — Barbil',
+    city: 'Barbil', locality: 'Market Square', state: 'Odisha',
+    status: 'active', adminEmail: 'barbil@vanilla.com',
+    adminName: 'Sanjay Pradhan', phone: '9861234567',
+    deliveryRadius: 6, riders: 2, staff: 8,
+    monthlyRevenue: 156300, weeklyOrders: 178,
+    rating: 4.5, joinDate: '2024-06-10',
+    coordinates: { lat: 22.1022, lng: 85.3864 },
+    brand: 'Vanilla Crafted Cakes',
+  },
+  {
+    id: 'FR003', name: 'Vanilla Restaurant — Keonjhar',
+    city: 'Keonjhar', locality: 'College Road', state: 'Odisha',
+    status: 'active', adminEmail: 'restaurant@vanilla.com',
+    adminName: 'Priti Nayak', phone: '9040123456',
+    deliveryRadius: 10, riders: 6, staff: 18,
+    monthlyRevenue: 421000, weeklyOrders: 489,
+    rating: 4.8, joinDate: '2023-08-20',
+    coordinates: { lat: 21.4621, lng: 85.5791 },
+    brand: 'Vanilla Restaurant',
+  },
+  {
+    id: 'FR004', name: 'Vanilla Crafted Cakes — Rourkela',
+    city: 'Rourkela', locality: 'Udit Nagar', state: 'Odisha',
+    status: 'pending', adminEmail: 'rourkela@vanilla.com',
+    adminName: 'Suresh Kujur', phone: '7894561230',
+    deliveryRadius: 12, riders: 0, staff: 0,
+    monthlyRevenue: 0, weeklyOrders: 0,
+    rating: null, joinDate: '2026-06-01',
+    coordinates: { lat: 22.2604, lng: 84.8536 },
+    brand: 'Vanilla Crafted Cakes',
+  },
+  {
+    id: 'FR005', name: 'Vanilla Crafted Cakes — Bhubaneswar',
+    city: 'Bhubaneswar', locality: 'Saheed Nagar', state: 'Odisha',
+    status: 'suspended', adminEmail: 'bbsr@vanilla.com',
+    adminName: 'Anil Tripathy', phone: '9123456780',
+    deliveryRadius: 15, riders: 3, staff: 9,
+    monthlyRevenue: 0, weeklyOrders: 0,
+    rating: 4.1, joinDate: '2025-03-01',
+    coordinates: { lat: 20.2961, lng: 85.8245 },
+    brand: 'Vanilla Crafted Cakes',
+  },
+];
+
+/* ── Seed: Admin Accounts ── */
+const SEED_ADMINS = [
+  { id: 'ADM001', name: 'Rajesh Mohanta',  email: 'admin@vanilla.com',      role: 'branch_admin', branch: 'FR001', status: 'active',    lastLogin: '2026-05-11T18:22:00', loginCount: 312, actionsToday: 24 },
+  { id: 'ADM002', name: 'Sanjay Pradhan',  email: 'barbil@vanilla.com',     role: 'branch_admin', branch: 'FR002', status: 'active',    lastLogin: '2026-05-11T16:10:00', loginCount: 198, actionsToday: 11 },
+  { id: 'ADM003', name: 'Priti Nayak',     email: 'restaurant@vanilla.com', role: 'branch_admin', branch: 'FR003', status: 'active',    lastLogin: '2026-05-11T20:45:00', loginCount: 421, actionsToday: 38 },
+  { id: 'ADM004', name: 'Suresh Kujur',    email: 'rourkela@vanilla.com',   role: 'branch_admin', branch: 'FR004', status: 'pending',   lastLogin: null,                  loginCount: 0,   actionsToday: 0 },
+  { id: 'ADM005', name: 'Anil Tripathy',   email: 'bbsr@vanilla.com',       role: 'branch_admin', branch: 'FR005', status: 'suspended', lastLogin: '2026-04-18T10:00:00', loginCount: 87,  actionsToday: 0 },
+  { id: 'ADM006', name: 'Meena Sahoo',     email: 'manager1@vanilla.com',   role: 'staff_manager', branch: 'FR001', status: 'active',  lastLogin: '2026-05-11T09:30:00', loginCount: 145, actionsToday: 7 },
+];
+
+/* ── Seed: Global Orders ── */
+const SEED_GLOBAL_ORDERS = [
+  { id: 'G-ORD-001', franchise: 'FR001', customer: 'Rahul Sharma',   total: 419, status: 'delivered',    deliveryType: 'fixed_time', time: new Date(Date.now() - 2*3600000).toISOString(), city: 'Keonjhar', rider: 'Bikash Nayak' },
+  { id: 'G-ORD-002', franchise: 'FR003', customer: 'Priya Das',      total: 678, status: 'out_for_delivery', deliveryType: 'fixed_time', time: new Date(Date.now() - 30*60000).toISOString(), city: 'Keonjhar', rider: 'Raju Munda' },
+  { id: 'G-ORD-003', franchise: 'FR002', customer: 'Amit Kumar',     total: 299, status: 'preparing',    deliveryType: 'fixed_time', time: new Date(Date.now() - 10*60000).toISOString(), city: 'Barbil', rider: null },
+  { id: 'G-ORD-004', franchise: 'FR001', customer: 'Sunita Rath',    total: 512, status: 'new',          deliveryType: 'fixed_time', time: new Date(Date.now() - 2*60000).toISOString(),  city: 'Keonjhar', rider: null },
+  { id: 'G-ORD-005', franchise: 'FR003', customer: 'Debasish Nayak', total: 890, status: 'delivered',    deliveryType: 'fixed_time', time: new Date(Date.now() - 5*3600000).toISOString(), city: 'Keonjhar', rider: 'Sonu Kumar' },
+  { id: 'G-ORD-006', franchise: 'FR002', customer: 'Lipika Mishra',  total: 345, status: 'delivered',    deliveryType: 'fixed_time', time: new Date(Date.now() - 8*3600000).toISOString(), city: 'Barbil', rider: 'Mantu Das' },
+  { id: 'G-ORD-007', franchise: 'FR001', customer: 'Roshan Panda',   total: 756, status: 'cancelled',    deliveryType: 'fixed_time', time: new Date(Date.now() - 4*3600000).toISOString(), city: 'Keonjhar', rider: null },
+  { id: 'G-ORD-008', franchise: 'FR001', customer: 'Kabita Sahu',    total: 231, status: 'new',          deliveryType: 'fixed_time', time: new Date(Date.now() - 1*60000).toISOString(),  city: 'Keonjhar', rider: null },
+];
+
+/* ── Seed: Riders ── */
+const SEED_RIDERS = [
+  { id: 'RDR001', name: 'Bikash Nayak',  franchise: 'FR001', city: 'Keonjhar', status: 'active',    deliveriesToday: 8,  rating: 4.8, phone: '9437801234' },
+  { id: 'RDR002', name: 'Raju Munda',    franchise: 'FR003', city: 'Keonjhar', status: 'on_delivery',deliveriesToday: 12, rating: 4.6, phone: '7978123456' },
+  { id: 'RDR003', name: 'Sonu Kumar',    franchise: 'FR003', city: 'Keonjhar', status: 'active',    deliveriesToday: 9,  rating: 4.7, phone: '9040567890' },
+  { id: 'RDR004', name: 'Mantu Das',     franchise: 'FR002', city: 'Barbil',   status: 'active',    deliveriesToday: 6,  rating: 4.5, phone: '9861098765' },
+  { id: 'RDR005', name: 'Pintu Sahu',    franchise: 'FR002', city: 'Barbil',   status: 'inactive',  deliveriesToday: 0,  rating: 4.2, phone: '9123478901' },
+  { id: 'RDR006', name: 'Gopal Rao',     franchise: 'FR001', city: 'Keonjhar', status: 'on_delivery',deliveriesToday: 11, rating: 4.9, phone: '8917654321' },
+];
+
+/* ── Seed: Customers ── */
+const SEED_CUSTOMERS = [
+  { id: 'CUS001', name: 'Rahul Sharma',   phone: '9876543210', email: 'rahul@example.com',    totalOrders: 28, totalSpend: 11200, tier: 'Gold',     lastOrder: '2026-05-11', status: 'active',  complaints: 0 },
+  { id: 'CUS002', name: 'Priya Das',      phone: '9123456780', email: 'priya@example.com',    totalOrders: 14, totalSpend: 5600,  tier: 'Silver',   lastOrder: '2026-05-10', status: 'active',  complaints: 1 },
+  { id: 'CUS003', name: 'Roshan Panda',   phone: '7978901234', email: 'roshan@example.com',   totalOrders: 52, totalSpend: 22840, tier: 'Platinum', lastOrder: '2026-05-11', status: 'active',  complaints: 0 },
+  { id: 'CUS004', name: 'Sunita Rath',    phone: '7894561230', email: 'sunita@example.com',   totalOrders: 19, totalSpend: 7700,  tier: 'Silver',   lastOrder: '2026-05-09', status: 'active',  complaints: 2 },
+  { id: 'CUS005', name: 'Debasish Nayak', phone: '9437890123', email: 'debasish@example.com', totalOrders: 7,  totalSpend: 2800,  tier: 'Bronze',   lastOrder: '2026-05-08', status: 'active',  complaints: 0 },
+  { id: 'CUS006', name: 'Lipika Mishra',  phone: '9861234567', email: 'lipika@example.com',   totalOrders: 33, totalSpend: 13200, tier: 'Gold',     lastOrder: '2026-05-07', status: 'active',  complaints: 1 },
+  { id: 'CUS007', name: 'Kabita Sahu',    phone: '9040123456', email: 'kabita@example.com',   totalOrders: 4,  totalSpend: 1600,  tier: 'Bronze',   lastOrder: '2026-05-06', status: 'blocked', complaints: 5 },
+  { id: 'CUS008', name: 'Amit Kumar',     phone: '9988776655', email: 'amit@example.com',     totalOrders: 9,  totalSpend: 3600,  tier: 'Silver',   lastOrder: '2026-05-05', status: 'active',  complaints: 0 },
+];
+
+/* ── Seed: Finance Records ── */
+const SEED_FINANCE = {
+  totalRevenue: 862000,
+  platformCommission: 86200,
+  deliveryExpenses: 48000,
+  refundsIssued: 12400,
+  taxCollected: 43100,
+  netProfit: 672300,
+  monthlyData: [
+    { month: 'Nov', revenue: 98000, expenses: 21000, profit: 77000 },
+    { month: 'Dec', revenue: 134000, expenses: 28000, profit: 106000 },
+    { month: 'Jan', revenue: 112000, expenses: 24000, profit: 88000 },
+    { month: 'Feb', revenue: 118000, expenses: 25000, profit: 93000 },
+    { month: 'Mar', revenue: 156000, expenses: 31000, profit: 125000 },
+    { month: 'Apr', revenue: 142000, expenses: 30000, profit: 112000 },
+    { month: 'May', revenue: 102000, expenses: 21000, profit: 81000 },
+  ],
+  payouts: [
+    { id: 'PAY001', franchise: 'FR001', amount: 228000, status: 'paid',    date: '2026-05-01' },
+    { id: 'PAY002', franchise: 'FR002', amount: 126000, status: 'paid',    date: '2026-05-01' },
+    { id: 'PAY003', franchise: 'FR003', amount: 336000, status: 'pending', date: '2026-05-11' },
+    { id: 'PAY004', franchise: 'FR001', amount: 56700,  status: 'pending', date: '2026-05-11' },
+  ],
+};
+
+/* ── Seed: Security Logs ── */
+const SEED_SECURITY = [
+  { id: 'SEC001', type: 'login',   user: 'admin@vanilla.com',      ip: '192.168.1.45', device: 'Chrome/Win',  time: new Date(Date.now()-5*60000).toISOString(),   status: 'success' },
+  { id: 'SEC002', type: 'login',   user: 'unknown@attacker.com',   ip: '45.132.81.22', device: 'Unknown',     time: new Date(Date.now()-18*60000).toISOString(),  status: 'failed' },
+  { id: 'SEC003', type: 'action',  user: 'restaurant@vanilla.com', ip: '192.168.1.72', device: 'Firefox/Mac', time: new Date(Date.now()-2*3600000).toISOString(), status: 'success' },
+  { id: 'SEC004', type: 'login',   user: 'bbsr@vanilla.com',       ip: '103.44.18.99', device: 'Mobile/And',  time: new Date(Date.now()-6*3600000).toISOString(), status: 'blocked' },
+  { id: 'SEC005', type: 'config',  user: 'owner@vanilla.com',      ip: '10.0.0.1',     device: 'Chrome/Win',  time: new Date(Date.now()-1*3600000).toISOString(), status: 'success' },
+];
+
+/* ═══════════════════ PROVIDER ═══════════════════ */
+export function OwnerProvider({ children }) {
+  /* ── Auth ── */
+  const [ownerUser, setOwnerUser] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('vanilla_owner')) || null; }
+    catch { return null; }
+  });
+
+  /* ── State ── */
+  const [franchises, setFranchises]     = useState(SEED_FRANCHISES);
+  const [admins, setAdmins]             = useState(SEED_ADMINS);
+  const [globalOrders]                  = useState(SEED_GLOBAL_ORDERS);
+  const [riders]                        = useState(SEED_RIDERS);
+  const [customers]                     = useState(SEED_CUSTOMERS);
+  const [finance]                       = useState(SEED_FINANCE);
+  const [securityLogs]                  = useState(SEED_SECURITY);
+  const [liveActivity, setLiveActivity] = useState([
+    { id: 1, type: 'order',   msg: 'New order #G-ORD-008 received at Keonjhar Main',     time: '1m ago' },
+    { id: 2, type: 'payment', msg: 'UPI payment ₹231 confirmed — Kabita Sahu',            time: '1m ago' },
+    { id: 3, type: 'rider',   msg: 'Raju Munda picked up order G-ORD-002',               time: '3m ago' },
+    { id: 4, type: 'admin',   msg: 'Priti Nayak updated menu item — Keonjhar Restaurant', time: '8m ago' },
+    { id: 5, type: 'order',   msg: 'Order #G-ORD-004 status → Preparing',                time: '12m ago' },
+    { id: 6, type: 'alert',   msg: 'Failed login attempt from IP 45.132.81.22',           time: '18m ago' },
+    { id: 7, type: 'payment', msg: 'Payout ₹2,28,000 released to FR001',                 time: '4h ago' },
+  ]);
+
+  const [platformSettings, setPlatformSettings] = useState({
+    platformName: 'Vanilla Commerce Ecosystem',
+    defaultCurrency: 'INR',
+    taxRate: 5,
+    commissionRate: 10,
+    maxDeliveryRadius: 20,
+    maintenanceMode: false,
+    newFranchiseOnboarding: true,
+    autoPayoutEnabled: false,
+    supportEmail: 'support@vanilla.com',
+    supportPhone: '+91-9437890123',
+  });
+
+  /* ── Owner Auth ── */
+  const ownerLogin = useCallback((email, password) => {
+    const match = OWNER_CREDENTIALS.find(c => c.email === email && c.password === password);
+    if (match) {
+      const u = { email: match.email, name: match.name, role: match.role, avatar: match.avatar };
+      setOwnerUser(u);
+      localStorage.setItem('vanilla_owner', JSON.stringify(u));
+      return { success: true };
+    }
+    return { success: false, error: 'Invalid owner credentials' };
+  }, []);
+
+  const ownerLogout = useCallback(() => {
+    setOwnerUser(null);
+    localStorage.removeItem('vanilla_owner');
+  }, []);
+
+  /* ── Franchise CRUD ── */
+  const updateFranchiseStatus = useCallback((id, status) => {
+    setFranchises(prev => prev.map(f => f.id === id ? { ...f, status } : f));
+  }, []);
+
+  /* ── Admin CRUD ── */
+  const updateAdminStatus = useCallback((id, status) => {
+    setAdmins(prev => prev.map(a => a.id === id ? { ...a, status } : a));
+  }, []);
+
+  const createAdmin = useCallback((adminData) => {
+    const newAdmin = { ...adminData, id: `ADM${Date.now()}`, status: 'active', lastLogin: null, loginCount: 0, actionsToday: 0 };
+    setAdmins(prev => [...prev, newAdmin]);
+  }, []);
+
+  /* ── Platform Settings ── */
+  const updatePlatformSettings = useCallback((updates) => {
+    setPlatformSettings(prev => ({ ...prev, ...updates }));
+  }, []);
+
+  /* ── Global Analytics ── */
+  const globalAnalytics = useMemo(() => {
+    const activeOrders   = globalOrders.filter(o => ['new','preparing','out_for_delivery'].includes(o.status)).length;
+    const deliveredToday = globalOrders.filter(o => o.status === 'delivered').length;
+    const totalRevToday  = globalOrders.filter(o => o.status === 'delivered').reduce((s,o) => s + o.total, 0);
+    const activeFranchises = franchises.filter(f => f.status === 'active').length;
+    const totalRiders    = riders.filter(r => r.status !== 'inactive').length;
+    const activeRiders   = riders.filter(r => r.status === 'on_delivery').length;
+
+    return {
+      totalRevenue: finance.totalRevenue,
+      activeOrders, deliveredToday, totalRevToday,
+      activeFranchises, totalFranchises: franchises.length,
+      totalAdmins: admins.length, activeAdmins: admins.filter(a => a.status === 'active').length,
+      totalRiders, activeRiders,
+      totalCustomers: customers.length,
+      systemHealth: 98.4,
+    };
+  }, [globalOrders, franchises, riders, admins, customers, finance]);
+
+  const value = useMemo(() => ({
+    ownerUser, ownerLogin, ownerLogout,
+    franchises, updateFranchiseStatus,
+    admins, updateAdminStatus, createAdmin,
+    globalOrders, riders, customers,
+    finance, securityLogs, liveActivity, setLiveActivity,
+    platformSettings, updatePlatformSettings,
+    globalAnalytics,
+  }), [
+    ownerUser, ownerLogin, ownerLogout,
+    franchises, updateFranchiseStatus,
+    admins, updateAdminStatus, createAdmin,
+    globalOrders, riders, customers,
+    finance, securityLogs, liveActivity,
+    platformSettings, updatePlatformSettings,
+    globalAnalytics,
+  ]);
+
+  return <OwnerContext.Provider value={value}>{children}</OwnerContext.Provider>;
+}
+
+export function useOwner() {
+  const ctx = useContext(OwnerContext);
+  if (!ctx) throw new Error('useOwner must be used within OwnerProvider');
+  return ctx;
+}
