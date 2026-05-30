@@ -12,8 +12,8 @@ export function CakesToast() {
         <motion.div
           className={`ck-toast ${toast.type}`}
           initial={{ opacity: 0, y: 20, scale: .92 }}
-          animate={{ opacity: 1, y: 0,  scale: 1 }}
-          exit={  { opacity: 0, y: 20, scale: .92 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: .92 }}
           transition={{ duration: .22 }}
         >
           {toast.type === 'error'

@@ -61,11 +61,7 @@ export const ADDONS = [
   { id: 'choco',    label: 'Chocolate Box',     image: '/cake-images/chocolate/p-decadent-dark-chocolate-cake-269995-m.avif', price: 199, desc: '12-piece assorted box' },
 ];
 
-export const DELIVERY_SLOTS = [
-  { id: 'std',      label: 'Standard',     time: '4–6 hours',  price: 49,  image: '/cake-images/why/delivery.png' },
-  { id: 'sameday',  label: 'Same Day',     time: 'By 9 PM',    price: 0,   image: '/cake-images/trust/fast-delivery.png' },
-  { id: 'fixed',    label: 'Fixed Time',   time: 'You choose', price: 79,  image: '/cake-images/why/delivery.png' },
-];
+
 
 export const OFFERS = [
   { id: 1, title: 'FLAT 20% OFF',  subtitle: 'On all Birthday Cakes',    code: 'BDAY20',   color: '#D97706' },
@@ -74,10 +70,10 @@ export const OFFERS = [
 ];
 
 export const REVIEWS = [
-  { id: 1, name: 'Priya Sharma',  city: 'Delhi',     rating: 5, avatar: 'PS', cake: 'Belgian Chocolate Truffle', text: 'Ordered for my husband\'s birthday — absolutely divine! Fresh delivery, stunning presentation. Will definitely order again.' },
+  { id: 1, name: 'Priya Sharma',  city: 'Delhi',     rating: 5, avatar: 'PS', cake: 'Belgian Chocolate Truffle', text: 'Ordered for my husband\'s birthday — absolutely divine! Freshly crafted, stunning presentation. Will definitely order again.' },
   { id: 2, name: 'Arjun Mehta',   city: 'Mumbai',    rating: 5, avatar: 'AM', cake: 'Gold Luxe Cake',            text: 'Blew everyone\'s minds at our anniversary dinner. The gold presentation was truly cinematic. Worth every rupee.' },
-  { id: 3, name: 'Sneha Patel',   city: 'Bangalore', rating: 5, avatar: 'SP', cake: 'Unicorn Magic Cake',        text: 'My daughter was in tears of joy. Magical cake, perfect packaging, and on-time delivery!' },
-  { id: 4, name: 'Rohit Kumar',   city: 'Hyderabad', rating: 5, avatar: 'RK', cake: 'Red Velvet Love Cake',      text: 'Ordered standard delivery — arrived perfectly on time. Impressive logistics and incredible taste!' },
+  { id: 3, name: 'Sneha Patel',   city: 'Bangalore', rating: 5, avatar: 'SP', cake: 'Unicorn Magic Cake',        text: 'My daughter was in tears of joy. Magical cake, perfect packaging, and received on time!' },
+  { id: 4, name: 'Rohit Kumar',   city: 'Hyderabad', rating: 5, avatar: 'RK', cake: 'Red Velvet Love Cake',      text: 'Arrived perfectly on time. Impressive coordination and incredible taste!' },
   { id: 5, name: 'Ananya Singh',  city: 'Pune',      rating: 5, avatar: 'AS', cake: 'Marble Texture Cake',       text: 'My guests thought I got it from abroad. Stunning art, incredible flavour. The team is so talented.' },
   { id: 6, name: 'Vikram Nair',   city: 'Chennai',   rating: 5, avatar: 'VN', cake: 'Rainbow Birthday Cake',     text: 'Fed 15 office colleagues — everyone loved every bite. Premium packaging too. 10/10 experience.' },
 ];

@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAdmin } from './CakesAdminContext';
 import {
   LayoutDashboard, ShoppingBag, Cake, Tag, Palette,
-  Truck, Users, Gift, BarChart2, Settings, LogOut, Menu, X, ChefHat
+  Users, Gift, BarChart2, Settings, LogOut, Menu, X, ChefHat
 } from 'lucide-react';
 import './admin.css';
 
@@ -12,7 +12,7 @@ const NAV = [
     { to: '/cakes/admin',          label: 'Dashboard',    icon: LayoutDashboard, end: true },
     { to: '/cakes/admin/orders',   label: 'Orders',       icon: ShoppingBag,     badge: 'orders' },
     { to: '/cakes/admin/custom',   label: 'Custom Cakes', icon: Palette,         badge: 'custom' },
-    { to: '/cakes/admin/delivery', label: 'Delivery',     icon: Truck },
+
   ]},
   { group: 'Catalogue', items: [
     { to: '/cakes/admin/cakes',      label: 'Cakes',      icon: Cake },

@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAdmin } from '../../context/AdminContext';
 import {
   LayoutDashboard, ShoppingBag, UtensilsCrossed,
-  Users, BarChart2, Settings, LogOut, Bike
+  Users, BarChart2, Settings, LogOut
 } from 'lucide-react';
 
 const NAV = [
@@ -11,7 +11,6 @@ const NAV = [
   { to: '/admin/orders',    icon: ShoppingBag,      label: 'Orders' },
   { to: '/admin/menu',      icon: UtensilsCrossed,  label: 'Menu' },
   { to: '/admin/customers', icon: Users,            label: 'Customers' },
-  { to: '/admin/delivery',  icon: Bike,             label: 'Delivery' },
   { to: '/admin/analytics', icon: BarChart2,        label: 'Analytics' },
   { to: '/admin/settings',  icon: Settings,         label: 'Settings' },
 ];

@@ -13,7 +13,6 @@ export function CakesProvider({ children }) {
   /* ── Checkout state ── */
   const [coupon, setCoupon]                   = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [deliverySlot, setDeliverySlot]       = useState('sameday');
   const [paymentMethod, setPaymentMethod]     = useState('upi');
   const [orders, setOrders]                   = useState([]);
   const [savedAddresses, setSavedAddresses]   = useState([
@@ -87,9 +86,8 @@ export function CakesProvider({ children }) {
   const cartCount  = cart.reduce((s, i) => s + i.qty, 0);
   const cartTotal  = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const couponDisc = coupon?.discount > 0 ? Math.floor(cartTotal * coupon.discount / 100) : 0;
-  const deliveryFee = cartTotal >= 999 ? 0 : 49;
   const gst        = Math.floor((cartTotal - couponDisc) * 0.05);
-  const grandTotal = cartTotal - couponDisc + deliveryFee + gst;
+  const grandTotal = cartTotal - couponDisc + gst;
 
   return (
     <CakesCtx.Provider value={{
@@ -99,12 +97,11 @@ export function CakesProvider({ children }) {
       coupon, applyCoupon, removeCoupon,
       selectedAddress, setSelectedAddress,
       savedAddresses, addAddress,
-      deliverySlot, setDeliverySlot,
       paymentMethod, setPaymentMethod,
       orders, placeOrder,
       addToCart, removeFromCart, updateQty,
       toggleWishlist, cartCount, cartTotal,
-      couponDisc, deliveryFee, gst, grandTotal,
+      couponDisc, gst, grandTotal,
       showToast,
     }}>
       {children}

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CAKES, ADDONS, DELIVERY_SLOTS, REVIEWS } from './CakesData';
+import { CAKES, ADDONS, REVIEWS } from './CakesData';
 import { useCakes } from './CakesContext';
 import {
   ChevronLeft, Heart, Share2, ShoppingBag, Zap,
-  ChevronDown, ChevronUp, MapPin, Clock, Star,
-  Plus, Minus, Check, Shield, Truck
+  ChevronDown, ChevronUp, MapPin, Star,
+  Plus, Minus, Check, Shield, Award
 } from 'lucide-react';
 import './detail.css';
 
@@ -95,7 +95,6 @@ export default function CakeDetail() {
 
   const [weight, setWeight]         = useState(cake?.weights[0] || '1Kg');
   const [addons, setAddons]         = useState([]);
-  const [delivery, setDelivery]     = useState('sameday');
   const [message, setMessage]       = useState('');
   const [msgActive, setMsgActive]   = useState(false);
 
@@ -114,8 +113,7 @@ export default function CakeDetail() {
   const isWished = wishlist.includes(cake.id);
   const toggleAddon = (id) => setAddons(a => a.includes(id) ? a.filter(x => x !== id) : [...a, id]);
   const addonTotal = ADDONS.filter(a => addons.includes(a.id)).reduce((s, a) => s + a.price, 0);
-  const delSlot = DELIVERY_SLOTS.find(d => d.id === delivery);
-  const total = cake.price + addonTotal + (delSlot?.price || 0);
+  const total = cake.price + addonTotal;
   const related = CAKES.filter(c => c.category === cake.category && c.id !== cake.id).slice(0, 4);
 
   return (
@@ -168,8 +166,6 @@ export default function CakeDetail() {
               <span className="det-rating-val">{cake.rating}</span>
             </div>
             <span className="det-reviews">{cake.reviews.toLocaleString()} reviews</span>
-            <span className="det-sep">·</span>
-            <span className="det-del-time"><Clock size={11} /> {cake.deliveryTime}</span>
           </div>
 
           {/* Price */}
@@ -248,28 +244,7 @@ export default function CakeDetail() {
           </div>
         </div>
 
-        {/* ── Delivery ── */}
-        <div className="det-section">
-          <p className="det-section-label">Delivery Options</p>
-          <div className="det-delivery-list">
-            {DELIVERY_SLOTS.map(slot => (
-              <button
-                key={slot.id}
-                className={`det-del-slot${delivery === slot.id ? ' on' : ''}`}
-                onClick={() => setDelivery(slot.id)}
-              >
-                <img src={slot.image} alt={slot.label} className="det-del-img" loading="lazy" />
-                <div className="det-del-info">
-                  <p className="det-del-name">{slot.label}</p>
-                  <p className="det-del-time-txt">{slot.time}</p>
-                </div>
-                <span className="det-del-price">
-                  {slot.price === 0 ? <span className="det-free">FREE</span> : `+₹${slot.price}`}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
+
 
         {/* ── Accordions ── */}
         <div className="det-section">
@@ -282,17 +257,17 @@ export default function CakeDetail() {
           <Accordion title="Storage Instructions">
             <p className="det-acc-text">{cake.storage}</p>
           </Accordion>
-          <Accordion title="Delivery Information">
-            <p className="det-acc-text">We deliver across Delhi NCR, Mumbai, Bangalore, Hyderabad, Pune, Chennai. All cakes are packed in temperature-safe premium boxes.</p>
+          <Accordion title="Customisation Options">
+            <p className="det-acc-text">We offer custom messages, photo prints, fondant designs, and special dietary variants. Contact us on WhatsApp to discuss your vision.</p>
           </Accordion>
         </div>
 
         {/* Trust badges */}
         <div className="det-trust">
           {[
-            { icon: <Truck size={14} />, text: 'Temperature-safe delivery' },
+            { icon: <Award size={14} />, text: 'Handcrafted by artisans' },
             { icon: <Shield size={14} />, text: '100% freshness guarantee' },
-            { icon: <Zap size={14} />, text: 'Express delivery available' },
+            { icon: <Zap size={14} />,   text: 'Premium ingredients only' },
           ].map(t => (
             <div key={t.text} className="det-trust-item">
               {t.icon} {t.text}

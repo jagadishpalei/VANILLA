@@ -4,10 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES, CAKES, REVIEWS } from './CakesData';
 import { useCakes } from './CakesContext';
 import {
-  Clock, Zap, ShieldCheck, Heart, ShoppingBag,
-  ArrowRight, Gift, Moon, ChevronRight,
-  Truck, Leaf, MapPin, Star
+  Zap, ShieldCheck, Heart, ShoppingBag,
+  ArrowRight, Gift, ChevronRight,
+  Leaf, MapPin, Star
 } from 'lucide-react';
+
 import './cakes-home.css';
 import CategoryShowcase from './CategoryShowcase';
 
@@ -190,10 +191,6 @@ function CakeCard({ cake, compact = false }) {
           <span className="mh-meta-gray">({cake.reviews.toLocaleString()})</span>
         </div>
 
-        <div className="mh-delivery-badge">
-          <Clock size={10} /> {cake.deliveryTime}
-        </div>
-
         {!compact && (
           <div className="mh-weight-row">
             {cake.weights.slice(0, 3).map(w => (
@@ -223,24 +220,24 @@ function CakeCard({ cake, compact = false }) {
 
 
 /* ═══════════════════════════════════════════════
-   4. DELIVERY BANNER
+   4. ARTISAN BANNER
    ═══════════════════════════════════════════════ */
-function DeliveryBanner() {
+function ArtisanBanner() {
   return (
     <motion.section {...reveal(0)} className="mh-delivery-banner">
       <div className="mh-db-inner">
         <p className="mh-eyebrow" style={{ color: '#C6A769' }}>Our Promise</p>
-        <h2 className="mh-h2" style={{ color: '#FAF6F0' }}>Same Day<br />Delivery</h2>
-        <p className="mh-db-sub">Order before 6 PM — delivered fresh the same day. Guaranteed.</p>
+        <h2 className="mh-h2" style={{ color: '#FAF6F0' }}>Handcrafted<br />With Love</h2>
+        <p className="mh-db-sub">Every cake is baked fresh to order by our master artisans — using only premium ingredients.</p>
         <Link to="/cakes/category/birthday" className="mh-db-btn">
           Order Now <ArrowRight size={13} />
         </Link>
         <div className="mh-db-features">
           {[
-            { icon: <Zap size={14} />, text: 'Fast delivery' },
-            { icon: <Star size={14} />, text: 'Bestselling recipes' },
-            { icon: <Gift size={14} />, text: 'Gift packaging' },
-            { icon: <ShieldCheck size={14} />, text: 'Fresh guarantee' },
+            { icon: <Zap size={14} />,        text: 'Freshly baked to order' },
+            { icon: <Star size={14} />,        text: 'Bestselling recipes' },
+            { icon: <Gift size={14} />,        text: 'Gift packaging included' },
+            { icon: <ShieldCheck size={14} />, text: '100% freshness guarantee' },
           ].map(f => (
             <div key={f.text} className="mh-db-feat">
               {f.icon} {f.text}
@@ -298,15 +295,15 @@ function WhyUs() {
   const FEATURES = [
     {
       img: '/cake-images/why/freshly-baked.png',
-      title: 'Freshly Baked',
+      title: 'Freshly Crafted',
       sub: 'Baked to order daily',
       alt: 'Freshly baked cake',
     },
     {
-      img: '/cake-images/why/delivery.png',
-      title: 'Same Day Delivery',
-      sub: 'Fast and reliable',
-      alt: 'Premium cake delivery',
+      img: '/cake-images/why/quality.png',
+      title: 'Artisan Quality',
+      sub: 'Master bakers only',
+      alt: 'Artisan cake quality',
     },
     {
       img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
@@ -322,9 +319,9 @@ function WhyUs() {
     },
     {
       img: '/cake-images/why/quality.png',
-      title: 'Premium Quality',
-      sub: 'Top ingredients',
-      alt: 'Premium cake quality',
+      title: 'Celebration Ready',
+      sub: 'Custom designs for every moment',
+      alt: 'Celebration cake',
     },
   ];
   return (
@@ -439,13 +436,13 @@ function Gallery() {
    9. OFFER STRIP (marquee)
    ═══════════════════════════════════════════════ */
 const OFFER_ITEMS = [
-  '🎉 Same Day Delivery Available',
-  '✨ Flat 10% OFF on First Order — FIRST10',
-  '🌙 Midnight Delivery Available',
   '🎂 Freshly Handcrafted Cakes',
-  '⭐ Rated 4.9 by 50K+ customers',
+  '✨ Flat 10% OFF on First Order — FIRST10',
+  '🌟 Artisan Made with Premium Ingredients',
   '🎁 100% Eggless Options Available',
-  '🚀 Order by 6 PM for Same Day Delivery',
+  '⭐ Rated 4.9 by 50K+ Happy Customers',
+  '🎉 Custom Cakes for Every Celebration',
+  '🏆 Luxury Bakery Experience',
 ];
 
 function Offers() {
@@ -463,14 +460,14 @@ function Offers() {
    10. MOVING TRUST BAR
    ═══════════════════════════════════════════════ */
 const TRUST_ITEMS = [
-  '✦ Freshly Made',
-  '✦ 100% Eggless Available',
-  '✦ 4.9★ Ratings',
-  '✦ Same Day Preparation',
+  '✦ Freshly Crafted',
   '✦ Premium Ingredients',
+  '✦ 100% Eggless Available',
+  '✦ 4.9★ Customer Rating',
   '✦ Handcrafted Daily',
-  '✦ Free Delivery above ₹999',
-  '✦ Trusted by 50K+ Customers',
+  '✦ Celebration Ready',
+  '✦ Custom Creations',
+  '✦ Made With Care',
 ];
 
 function MovingTrustBar() {
@@ -494,7 +491,7 @@ export default function CakesHome() {
       <Hero />
       <MovingTrustBar />
       <CategoryShowcase />
-      <DeliveryBanner />
+      <ArtisanBanner />
       <Trending />
       <WhyUs />
       <Reviews />

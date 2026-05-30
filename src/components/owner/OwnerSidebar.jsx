@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useOwner } from '../../context/OwnerContext';
 import {
   LayoutDashboard, GitBranch, ShieldCheck, ShoppingBag,
-  Bike, Users, BarChart2, Wallet, Settings, Lock, LogOut, Layers
+  Users, BarChart2, Wallet, Settings, Lock, LogOut, Layers
 } from 'lucide-react';
 
 const NAV_GROUPS = [
@@ -24,7 +24,6 @@ const NAV_GROUPS = [
     label: 'Operations',
     items: [
       { to: '/owner/orders',         icon: ShoppingBag,   label: 'Orders' },
-      { to: '/owner/delivery-control', icon: Bike,        label: 'Delivery' },
       { to: '/owner/customers',      icon: Users,         label: 'Customers' },
     ],
   },

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCakes } from './CakesContext';
-import { DELIVERY_SLOTS } from './CakesData';
+
 import {
   Trash2, Plus, Minus, Tag, X, ChevronRight,
-  ShoppingBag, Heart, Truck, ArrowRight, Gift
+  ShoppingBag, Heart, ArrowRight, Gift, Shield
 } from 'lucide-react';
 import './checkout.css';
 
@@ -20,7 +20,7 @@ export default function CakesCartPage() {
   const {
     cart, updateQty, removeFromCart, toggleWishlist,
     coupon, applyCoupon, removeCoupon,
-    cartTotal, couponDisc, deliveryFee, gst, grandTotal,
+    cartTotal, couponDisc, gst, grandTotal,
   } = useCakes();
 
   const [couponInput, setCouponInput] = useState('');
@@ -73,9 +73,6 @@ export default function CakesCartPage() {
                 <div className="co-item-info">
                   <p className="co-item-name">{item.name}</p>
                   <p className="co-item-meta">{item.weight}</p>
-                  <div className="co-item-del">
-                    <span>⚡ {item.deliveryTime}</span>
-                  </div>
                   <div className="co-item-row">
                     <span className="co-item-price">₹{(item.price * item.qty).toLocaleString()}</span>
                     <div className="co-qty">
@@ -98,24 +95,7 @@ export default function CakesCartPage() {
           </AnimatePresence>
         </div>
 
-        {/* ── Delivery slot quick pick ── */}
-        <div className="co-section co-section-sm">
-          <p className="co-section-label">Quick Delivery</p>
-          <div className="co-del-quick">
-            {DELIVERY_SLOTS.slice(0, 3).map(s => (
-              <div key={s.id} className="co-del-quick-item">
-                <img src={s.image} alt={s.label} className="co-del-img" loading="lazy" />
-                <div>
-                  <p className="co-del-quick-name">{s.label}</p>
-                  <p className="co-del-quick-sub">{s.time}</p>
-                </div>
-                <span className="co-del-quick-price">
-                  {s.price === 0 ? <span className="co-free">FREE</span> : `₹${s.price}`}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+
 
         {/* ── Coupon ── */}
         <div className="co-section co-section-sm">
@@ -160,10 +140,6 @@ export default function CakesCartPage() {
                 <span>Coupon Discount ({coupon.code})</span><span>-₹{couponDisc}</span>
               </div>
             )}
-            <div className="co-summary-row">
-              <span>Delivery</span>
-              <span>{deliveryFee === 0 ? <span className="co-free">FREE</span> : `₹${deliveryFee}`}</span>
-            </div>
             <div className="co-summary-row"><span>GST (5%)</span><span>₹{gst}</span></div>
             <div className="co-summary-total">
               <span>Total Amount</span><span>₹{grandTotal.toLocaleString()}</span>

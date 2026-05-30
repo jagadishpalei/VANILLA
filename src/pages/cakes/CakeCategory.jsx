@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES, CAKES, OCCASIONS } from './CakesData';
 import { useCakes } from './CakesContext';
-import { Heart, ShoppingBag, Clock, SlidersHorizontal, X, ChevronLeft, Search } from 'lucide-react';
+import { Heart, ShoppingBag, SlidersHorizontal, X, ChevronLeft, Search } from 'lucide-react';
 import './category.css';
 
 const reveal = (d = 0) => ({
@@ -60,9 +60,8 @@ function ListCard({ cake }) {
           <span className="cat-stars">{'★'.repeat(Math.floor(cake.rating))}</span>
           <span className="cat-rating">{cake.rating}</span>
           <span className="cat-rev">({cake.reviews.toLocaleString()})</span>
-          <span className="cat-dot">·</span>
-          <Clock size={10} /><span className="cat-del">{cake.deliveryTime}</span>
         </div>
+
       </Link>
 
       {/* Weight + price + add */}
