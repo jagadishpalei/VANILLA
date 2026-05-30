@@ -46,34 +46,233 @@
 }
 .mh-hscroll::-webkit-scrollbar { display: none; }
 
-/* ── OFFER TICKER ───────────────────────────────────────── */
-.mh-offer-strip {
-  background: #1A1A1A;
-  padding: 9px 16px;
+/* ── OFFER MARQUEE (orange, slim) ───────────────────────── */
+.offer-marquee-wrap {
+  background: #D97706;
+  height: 34px;
   overflow: hidden;
-  min-height: 36px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  border-radius: 0;
+  width: 100%;
 }
-.mh-offer-text {
+.offer-marquee-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: marquee-scroll 28s linear infinite;
+  will-change: transform;
+}
+.offer-marquee-text {
   font-family: 'Poppins', sans-serif;
-  font-size: .72rem;
-  font-weight: 500;
-  color: #E8D5B0;
-  text-align: center;
+  font-size: .70rem;
+  font-weight: 600;
+  color: #fff;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
+  padding: 0 24px;
+  letter-spacing: .01em;
+}
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.offer-marquee-wrap:hover .offer-marquee-track {
+  animation-play-state: paused;
 }
 
-/* ── HERO ───────────────────────────────────────────────── */
+/* ── HERO BASE ──────────────────────────────────────────── */
 .mh-hero {
   position: relative;
   padding: 32px 20px 28px;
   overflow: hidden;
   background: #FAF6F0;
+}
+
+/* ── HERO V2 (redesigned) ───────────────────────────────── */
+.mh-hero-v2 {
+  padding: 24px 16px 28px;
+  background: #FAF6F0;
+}
+
+/* Heading block */
+.hero-heading-block {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.hero-v2-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #1A1A1A;
+  line-height: 1.12;
+  letter-spacing: -.025em;
+  margin: 0 0 8px;
+}
+.hero-v2-accent {
+  color: #D97706;
+  display: inline;
+  position: relative;
+}
+.hero-v2-accent::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0; right: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, #C6A769, #D97706);
+  border-radius: 2px;
+}
+.hero-v2-sub {
+  font-family: 'Poppins', sans-serif;
+  font-size: .78rem;
+  color: #6B4F3A;
+  line-height: 1.6;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+/* ── OCCASION GRID ──────────────────────────────────────── */
+.occ-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 9px;
+  margin-bottom: 20px;
+}
+
+/* Occasion card */
+.occ-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  position: relative;
+  transition: transform .18s cubic-bezier(.34,1.56,.64,1);
+}
+.occ-card:active { transform: scale(.93); }
+
+/* Image wrapper — square */
+.occ-img-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #FFF8F2;
+  border: 1.5px solid #EAD9C4;
+  box-shadow: 0 3px 10px rgba(107,79,58,.10), 0 1px 3px rgba(107,79,58,.06);
+  transition: box-shadow .2s, border-color .2s;
+}
+.occ-card:hover .occ-img-wrap,
+.occ-card:active .occ-img-wrap {
+  border-color: #D97706;
+  box-shadow: 0 6px 18px rgba(217,119,6,.18), 0 2px 6px rgba(107,79,58,.10);
+}
+
+/* Actual image */
+.occ-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  opacity: 0;
+  transition: opacity .35s ease, transform .38s cubic-bezier(.34,1.56,.64,1);
+}
+.occ-img.ready { opacity: 1; }
+.occ-card:hover .occ-img,
+.occ-card:active .occ-img { transform: scale(1.07); }
+
+/* Skeleton shimmer while loading */
+.occ-img-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #F5EDE0 25%, #EAD9C4 50%, #F5EDE0 75%);
+  background-size: 200% 100%;
+  animation: mh-shimmer 1.4s infinite linear;
+  z-index: 1;
+  border-radius: 12px;
+}
+
+/* Emoji fallback */
+.occ-img-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  background: #FAF6F0;
+}
+
+/* Occasion label */
+.occ-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: .58rem;
+  font-weight: 700;
+  color: #1A1A1A;
+  text-align: center;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  padding: 0 2px;
+  transition: color .18s;
+}
+.occ-card:hover .occ-label,
+.occ-card:active .occ-label { color: #D97706; }
+
+/* ── HERO PROMO IMAGE CARD ──────────────────────────────── */
+.hero-promo-card {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(60,42,33,.10), 0 2px 8px rgba(60,42,33,.07);
+  background: #1A1A1A;
+  border: 1.5px solid #2D2D2D;
+  margin-bottom: 0;
+}
+.hero-promo-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* ── MOVING TRUST BAR ───────────────────────────────────── */
+.trust-bar-wrap {
+  background: #D97706;
+  height: 38px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.trust-bar-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: trust-scroll 24s linear infinite;
+  will-change: transform;
+}
+.trust-bar-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: .68rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  padding: 0 20px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+@keyframes trust-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.trust-bar-wrap:hover .trust-bar-track {
+  animation-play-state: paused;
 }
 .mh-blob {
   position: absolute;

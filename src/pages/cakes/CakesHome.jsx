@@ -19,82 +19,85 @@ const reveal = (d = 0) => ({
 });
 
 /* ═══════════════════════════════════════════════
+   OCCASIONS DATA
+   ═══════════════════════════════════════════════ */
+const OCCASIONS_GRID = [
+  { id: 'birthday',        label: 'Birthday',        image: '/cake-images/categories/birthday.png' },
+  { id: 'anniversary',     label: 'Anniversary',     image: '/cake-images/categories/anniversary.png' },
+  { id: 'engagement',      label: 'Engagement',      image: '/cake-images/categories/engagement.png' },
+  { id: 'baby-shower',     label: 'Baby Shower',     image: '/cake-images/categories/baby-shower.png' },
+  { id: 'congratulations', label: 'Congratulations', image: '/cake-images/occasions/congratulations.png' },
+  { id: 'kids',            label: 'Kids Cakes',      image: '/cake-images/categories/kids.png' },
+  { id: 'designer',        label: 'Designer Cakes',  image: '/cake-images/occasions/designer.png' },
+  { id: 'annaprasanna',    label: 'Annaprasanna',    image: '/cake-images/occasions/annaprasanna.png' },
+  { id: 'half-birthday',   label: 'Half Birthday',   image: '/cake-images/occasions/half-birthday.png' },
+  { id: 'bento',           label: 'Bento Cakes',     image: '/cake-images/occasions/bento.png' },
+  { id: 'first-birthday',  label: '1st Birthday',    image: '/cake-images/occasions/first-birthday.png' },
+  { id: 'couple',          label: 'Couple Cakes',    image: '/cake-images/desiner/p-sparkling-celebration-cream-cake-271465-m.avif' },
+  { id: 'photo-print',     label: 'Photo Print',     image: '/cake-images/desiner/p-3-tier-rosette-fondant-cake-8-kg--112712-m.avif' },
+  { id: 'for-her',         label: 'Cake For Her',    image: '/cake-images/red velvet/p-rose-hearts-cake-199613-m.avif' },
+  { id: 'for-him',         label: 'Cake For Him',    image: '/cake-images/chocolate/p-decadent-dark-chocolate-cake-269995-m.avif' },
+  { id: 'wedding',         label: 'Wedding Cakes',   image: '/cake-images/categories/wedding.png' },
+];
+
+/* ═══════════════════════════════════════════════
    1. HERO
    ═══════════════════════════════════════════════ */
-function Hero() {
-  const [orders, setOrders] = useState(1247);
-  useEffect(() => {
-    const t = setInterval(() => setOrders(n => n + Math.floor(Math.random() * 2 + 1)), 5000);
-    return () => clearInterval(t);
-  }, []);
-
+function OccasionCard({ occ }) {
+  const [imgStatus, setImgStatus] = useState('loading');
   return (
-    <section className="mh-hero">
+    <Link to={`/cakes/category/${occ.id}`} className="occ-card">
+      <div className="occ-img-wrap">
+        {imgStatus === 'loading' && <div className="occ-img-skeleton" />}
+        <img
+          src={occ.image}
+          alt={occ.label}
+          className={`occ-img${imgStatus === 'ready' ? ' ready' : ''}`}
+          loading="lazy"
+          onLoad={() => setImgStatus('ready')}
+          onError={() => setImgStatus('error')}
+        />
+        {imgStatus === 'error' && <span className="occ-img-fallback">🎂</span>}
+      </div>
+      <p className="occ-label">{occ.label}</p>
+    </Link>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="mh-hero mh-hero-v2">
       {/* Decorative warm blobs */}
       <div className="mh-blob mh-blob-a" />
       <div className="mh-blob mh-blob-b" />
 
       <div className="mh-hero-inner">
-        {/* Live badge */}
-        <motion.div {...reveal(0)} className="mh-live-badge">
-          <span className="mh-live-dot" />
-          <span>{orders.toLocaleString()} cakes delivered today</span>
+        {/* ── HEADING ── */}
+        <motion.div {...reveal(0)} className="hero-heading-block">
+          <motion.h1 {...reveal(0.04)} className="hero-v2-title">
+            Crafted For Every
+            <span className="hero-v2-accent"> Celebration</span>
+          </motion.h1>
+          <motion.p {...reveal(0.08)} className="hero-v2-sub">
+            Luxury handcrafted cakes made for every special moment.
+          </motion.p>
         </motion.div>
 
-        {/* Headline */}
-        <motion.h1 {...reveal(0.07)} className="mh-hero-title">
-          Crafted For<br />
-          Every <em>Celebration</em>
-        </motion.h1>
-
-        {/* Premium Hero Image */}
-        <motion.div {...reveal(0.12)} className="mh-hero-image-wrap">
-          <img 
-            src="/cake-images/hero/hero-promo.png" 
-            alt="Premium Vanilla Crafted Cake Collection" 
-            className="mh-hero-image" 
-            loading="eager"
-          />
-        </motion.div>
-
-        {/* Subheadline */}
-        <motion.p {...reveal(0.15)} className="mh-hero-sub">
-          Luxury handcrafted cakes delivered fresh to your doorstep.
-        </motion.p>
-
-        {/* Trust strip */}
-        <motion.div {...reveal(0.19)} className="mh-trust-row">
-          {[
-            { img: '/cake-images/trust/rating.png',        val: '4.9★', sub: '50K+ reviews' },
-            { img: '/cake-images/trust/fast-delivery.png',  val: 'Fast',  sub: 'delivery' },
-            { img: '/cake-images/trust/rating.png',         val: '4.9/5', sub: 'avg rating' },
-          ].map(t => (
-            <div key={t.val} className="mh-trust-pill">
-              <img src={t.img} alt={t.val} className="mh-trust-img" loading="lazy" />
-              <div>
-                <p className="mh-trust-val">{t.val}</p>
-                <p className="mh-trust-sub">{t.sub}</p>
-              </div>
-            </div>
+        {/* ── OCCASION GRID ── */}
+        <motion.div {...reveal(0.1)} className="occ-grid">
+          {OCCASIONS_GRID.map((occ, i) => (
+            <OccasionCard key={occ.id} occ={occ} />
           ))}
         </motion.div>
 
-        {/* CTA buttons */}
-        <motion.div {...reveal(0.23)} className="mh-hero-btns">
-          <Link to="/cakes/category/birthday" className="mh-btn-primary">
-            Explore Cakes <ArrowRight size={14} />
-          </Link>
-          <Link to="/cakes/category/chocolate" className="mh-btn-outline">
-            Same Day Delivery
-          </Link>
-        </motion.div>
-
-        {/* Delivery promise */}
-        <motion.div {...reveal(0.27)} className="mh-promise-strip">
-          <span><Truck size={11} /> Free delivery above ₹999</span>
-          <span className="mh-dot-sep">·</span>
-
-          <span><ShieldCheck size={11} /> Freshly baked</span>
+        {/* ── HERO PROMO IMAGE ── */}
+        <motion.div {...reveal(0.14)} className="hero-promo-card">
+          <img
+            src="/cake-images/hero/hero-promo.png"
+            alt="Vanilla Crafted Cakes — Crafted to Perfection"
+            className="hero-promo-img"
+            loading="eager"
+          />
         </motion.div>
       </div>
     </section>
@@ -433,34 +436,50 @@ function Gallery() {
 }
 
 /* ═══════════════════════════════════════════════
-   9. OFFERS STRIP
+   9. OFFER STRIP (marquee)
    ═══════════════════════════════════════════════ */
+const OFFER_ITEMS = [
+  '🎉 Same Day Delivery Available',
+  '✨ Flat 10% OFF on First Order — FIRST10',
+  '🌙 Midnight Delivery Available',
+  '🎂 Freshly Handcrafted Cakes',
+  '⭐ Rated 4.9 by 50K+ customers',
+  '🎁 100% Eggless Options Available',
+  '🚀 Order by 6 PM for Same Day Delivery',
+];
+
 function Offers() {
-  const [idx, setIdx] = useState(0);
-  const ITEMS = [
-    '🎉 Use code BDAY20 — 20% off Birthday Cakes',
-    '⭐ Rated 4.9 by 10,000+ customers',
-    '🎁 Buy 1 Get 1 on Cupcake Boxes',
-    '✨ 30% off all Designer Cakes — FEST30',
-  ];
-  useEffect(() => {
-    const t = setInterval(() => setIdx(i => (i + 1) % ITEMS.length), 3500);
-    return () => clearInterval(t);
-  }, []);
+  const text = OFFER_ITEMS.join('   •   ');
   return (
-    <div className="mh-offer-strip">
-      <AnimatePresence mode="wait">
-        <motion.p
-          key={idx}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: .3 }}
-          className="mh-offer-text"
-        >
-          {ITEMS[idx]}
-        </motion.p>
-      </AnimatePresence>
+    <div className="offer-marquee-wrap" role="marquee" aria-label="Offers and promotions">
+      <div className="offer-marquee-track">
+        <span className="offer-marquee-text">{text}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{text}</span>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   10. MOVING TRUST BAR
+   ═══════════════════════════════════════════════ */
+const TRUST_ITEMS = [
+  '✦ Freshly Made',
+  '✦ 100% Eggless Available',
+  '✦ 4.9★ Ratings',
+  '✦ Same Day Preparation',
+  '✦ Premium Ingredients',
+  '✦ Handcrafted Daily',
+  '✦ Free Delivery above ₹999',
+  '✦ Trusted by 50K+ Customers',
+];
+
+function MovingTrustBar() {
+  const text = TRUST_ITEMS.join('   ');
+  return (
+    <div className="trust-bar-wrap" aria-label="Trust indicators">
+      <div className="trust-bar-track">
+        <span className="trust-bar-text">{text}&nbsp;&nbsp;&nbsp;{text}</span>
+      </div>
     </div>
   );
 }
@@ -473,6 +492,7 @@ export default function CakesHome() {
     <main className="ck-page mh-root">
       <Offers />
       <Hero />
+      <MovingTrustBar />
       <CategoryShowcase />
       <DeliveryBanner />
       <Trending />
