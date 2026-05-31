@@ -32,7 +32,7 @@ function OrderCard({ order, onStatusChange, onApprove, onReject }) {
                 {order.cakeId}
               </span>
             )}
-            <span style={{ fontSize: '.74rem', color: 'var(--adm-text3)' }}>{order.customer} · {SLOT_LABEL[order.pickupSlot] || order.pickupSlot}</span>
+            <span style={{ fontSize: '.74rem', color: 'var(--adm-text3)' }}>{order.customer} · {order.pickupSlot || '—'}</span>
           </div>
         </div>
         <span className="adm-badge" style={{ background: STATUS_BG[order.status], color: STATUS_COLOR[order.status], flexShrink: 0 }}>
@@ -109,7 +109,7 @@ function OrderCard({ order, onStatusChange, onApprove, onReject }) {
               <div className="adm-order-field" style={{ display: 'flex', alignItems: 'center', gap: 4, width: '100%' }}>
                 <Store size={11} color="var(--adm-text3)" />
                 <span style={{ fontSize: '.74rem', color: 'var(--adm-text3)' }}>
-                  Pickup: {order.pickupDate ? new Date(order.pickupDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }) : '—'} · {SLOT_LABEL[order.pickupSlot] || '—'}
+                  Pickup: {order.pickupDate ? new Date(order.pickupDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }) : '—'} · {order.pickupSlot || '—'}
                 </span>
               </div>
 
@@ -162,7 +162,7 @@ function OrderCard({ order, onStatusChange, onApprove, onReject }) {
                 )}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, marginTop: 6 }}>
                   <div style={{ fontSize: '.72rem' }}><span style={{ color: '#6b7280' }}>Pickup Date: </span><strong>{order.pickupDate || '—'}</strong></div>
-                  <div style={{ fontSize: '.72rem' }}><span style={{ color: '#6b7280' }}>Time Slot: </span><strong>{SLOT_LABEL[order.pickupSlot] || '—'}</strong></div>
+                  <div style={{ fontSize: '.72rem' }}><span style={{ color: '#6b7280' }}>Pickup Time: </span><strong>{order.pickupSlot || '—'}</strong></div>
                 </div>
               </div>
 

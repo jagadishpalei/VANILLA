@@ -7,11 +7,8 @@ import './checkout.css';
 
 const WHATSAPP_NUMBER = '917008061760';
 
-const SLOT_LABELS = {
-  morning:   'Morning (9:00 AM – 12:00 PM)',
-  afternoon: 'Afternoon (12:00 PM – 4:00 PM)',
-  evening:   'Evening (4:00 PM – 8:00 PM)',
-};
+
+
 
 const COUNTER_LABELS = {
   'keonjhar-main': 'Keonjhar Main Store',
@@ -38,7 +35,8 @@ export default function CakesOrderSuccess() {
     ? new Date(order.pickupDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
     : '—';
   const counterLabel = COUNTER_LABELS[order?.pickupCounter] || order?.pickupCounter || '—';
-  const slotLabel    = SLOT_LABELS[order?.pickupSlot] || '—';
+  const slotLabel    = order?.pickupSlot || '—';
+
 
   /* Re-open WhatsApp if needed */
   const handleReopen = () => {

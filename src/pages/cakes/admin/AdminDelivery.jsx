@@ -79,7 +79,7 @@ export default function AdminPickup() {
               <div style={{ marginTop:8, display:'flex', flexDirection:'column', gap:4 }}>
                 <span style={{ fontSize:'.76rem', color:'var(--adm-text2)', display:'flex', alignItems:'center', gap:5 }}>
                   <Clock size={12} color="var(--adm-text3)" />
-                  <strong>{o.customer}</strong> · {SLOT_LABEL[o.pickupSlot] || o.pickupSlot}
+                  <strong>{o.customer}</strong> · {o.pickupSlot || '—'}
                 </span>
                 {o.pickupCounter && (
                   <span style={{ fontSize:'.74rem', color:'var(--adm-text3)', display:'flex', alignItems:'center', gap:5 }}>

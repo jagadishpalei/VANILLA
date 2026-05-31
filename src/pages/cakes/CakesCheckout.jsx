@@ -20,18 +20,67 @@ const PICKUP_COUNTERS = [
   { id: 'restaurant',   name: 'Keonjhar Restaurant',   address: 'College Road, Keonjhar 758001',        emoji: '🍽️' },
 ];
 
-const PICKUP_SLOTS = [
-  { id: 'morning',   label: 'Morning',   time: '9:00 AM – 12:00 PM', emoji: '🌅' },
-  { id: 'afternoon', label: 'Afternoon', time: '12:00 PM – 4:00 PM', emoji: '☀️' },
-  { id: 'evening',   label: 'Evening',   time: '4:00 PM – 8:00 PM',  emoji: '🌆' },
-];
+/* ─────────────────────────────────────
+   Time picker constants & helpers
+───────────────────────────────────── */
+const STORE_OPEN_H  = 9;   // 9:00 AM
+const STORE_CLOSE_H = 22;  // 10:00 PM
+const CUTOFF_H      = 20;  // 8:00 PM same-day cutoff
+const PREP_MINUTES  = 120; // 2 hours minimum
 
-const CURRENT_HOUR = new Date().getHours();
-const IS_OPEN = CURRENT_HOUR < 20;
+/* Format a Date to "H:MM AM/PM" */
+function fmtTime(h, m) {
+  const ampm = h < 12 ? 'AM' : 'PM';
+  const hh   = h % 12 === 0 ? 12 : h % 12;
+  return `${hh}:${String(m).padStart(2, '0')} ${ampm}`;
+}
+
+/* Generate every 15-min slot from STORE_OPEN to STORE_CLOSE */
+function generateAllSlots() {
+  const slots = [];
+  for (let h = STORE_OPEN_H; h < STORE_CLOSE_H; h++) {
+    for (let m = 0; m < 60; m += 15) {
+      slots.push(fmtTime(h, m));
+    }
+  }
+  slots.push(fmtTime(STORE_CLOSE_H, 0)); // include 10:00 PM
+  return slots;
+}
+const ALL_TIME_SLOTS = generateAllSlots();
+
+/* Get slots valid for a given date string (YYYY-MM-DD) */
+function getAvailableSlots(dateStr) {
+  const now    = new Date();
+  const today  = now.toISOString().split('T')[0];
+  if (dateStr !== today) return ALL_TIME_SLOTS; // future days: all slots open
+
+  // Earliest pickup = now + 2 hours, rounded up to next 15-min
+  const earliest = new Date(now.getTime() + PREP_MINUTES * 60 * 1000);
+  const eH = earliest.getHours();
+  const eM = Math.ceil(earliest.getMinutes() / 15) * 15;
+  const adjH = eM >= 60 ? eH + 1 : eH;
+  const adjM = eM >= 60 ? 0 : eM;
+
+  return ALL_TIME_SLOTS.filter(slot => {
+    const [timePart, ampm] = slot.split(' ');
+    const [sh, sm] = timePart.split(':').map(Number);
+    let h24 = sh;
+    if (ampm === 'PM' && sh !== 12) h24 = sh + 12;
+    if (ampm === 'AM' && sh === 12) h24 = 0;
+    if (h24 < adjH) return false;
+    if (h24 === adjH && sm < adjM) return false;
+    return true;
+  });
+}
+
+/* Is same-day ordering still open? */
+function isSameDayOpen() {
+  return new Date().getHours() < CUTOFF_H;
+}
 
 function getPickupDates() {
   const dates = [];
-  const start = IS_OPEN ? 0 : 1;
+  const start = isSameDayOpen() ? 0 : 1;
   for (let i = start; i <= 6; i++) {
     const d = new Date();
     d.setDate(d.getDate() + i);
@@ -49,9 +98,8 @@ function getPickupDates() {
 ───────────────────────────────────── */
 function buildWhatsAppMessage({ orderId, items, customerName, customerPhone, customerEmail, cakeMessage, specialNotes, pickupCounter, pickupDate, pickupSlot, grandTotal }) {
   const counter = PICKUP_COUNTERS.find(c => c.id === pickupCounter);
-  const slot    = PICKUP_SLOTS.find(s => s.id === pickupSlot);
   const dateStr = pickupDate ? new Date(pickupDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '—';
-  const timeStr = slot ? slot.time : pickupSlot || '—';
+  const timeStr = pickupSlot || '—';
 
   const formatWeight = (w) => {
     if (!w) return '—';
@@ -286,7 +334,13 @@ export default function CakesCheckout() {
   };
 
   const activeCounter = PICKUP_COUNTERS.find(c => c.id === pickupCounter);
-  const activeSlot    = PICKUP_SLOTS.find(s => s.id === pickupSlot);
+  const availableSlots = getAvailableSlots(pickupDate || '');
+  /* clear slot if it's no longer valid for selected date */
+  useEffect(() => {
+    if (pickupSlot && pickupDate && !getAvailableSlots(pickupDate).includes(pickupSlot)) {
+      setPickupSlot(null);
+    }
+  }, [pickupDate]);
 
   return (
     <main className="ck-page co-page" style={{ minHeight: '100vh', paddingBottom: 40 }}>
@@ -298,11 +352,11 @@ export default function CakesCheckout() {
         <h1 className="co-title">Order Summary</h1>
       </div>
 
-      {/* Cutoff notice */}
-      {!IS_OPEN && (
+      {/* Cutoff notice — only show after 8 PM */}
+      {!isSameDayOpen() && (
         <div style={{ margin: '0 16px 12px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 12, padding: '11px 14px', display: 'flex', gap: 8, alignItems: 'center' }}>
           <span>🕗</span>
-          <p style={{ margin: 0, fontSize: '.8rem', color: '#ef4444', fontWeight: 600 }}>Orders accepted until 8:00 PM daily. Select a future pickup date.</p>
+          <p style={{ margin: 0, fontSize: '.8rem', color: '#ef4444', fontWeight: 600 }}>Today's ordering window has closed. Please select a pickup time for tomorrow.</p>
         </div>
       )}
 
@@ -420,27 +474,53 @@ export default function CakesCheckout() {
 
         {/* ── Pickup Time ── */}
         <Section icon={Clock} title="Pickup Time">
-          <div id="field-slot" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {PICKUP_SLOTS.map(slot => (
-              <button key={slot.id} onClick={() => setPickupSlot(slot.id)} style={{
-                display: 'flex', alignItems: 'center', gap: 14,
-                padding: '13px 16px', borderRadius: 12, cursor: 'pointer', textAlign: 'left',
-                border: `1.5px solid ${pickupSlot === slot.id ? '#f97316' : 'rgba(255,255,255,0.1)'}`,
-                background: pickupSlot === slot.id ? 'rgba(249,115,22,0.1)' : 'rgba(255,255,255,0.03)',
-                transition: 'all .15s',
+          {!pickupDate ? (
+            <p style={{ fontSize: '.8rem', color: '#888', margin: 0 }}>Please select a pickup date first.</p>
+          ) : availableSlots.length === 0 ? (
+            <p style={{ fontSize: '.8rem', color: '#ef4444', margin: 0 }}>No times available today. Please select tomorrow.</p>
+          ) : (
+            <>
+              <p style={{ fontSize: '.72rem', color: '#888', margin: '0 0 12px', letterSpacing: '.02em' }}>
+                {pickupDate === new Date().toISOString().split('T')[0]
+                  ? `Available from ${availableSlots[0]} — 2 hr prep time applied`
+                  : 'Select your preferred pickup time'}
+              </p>
+              <div id="field-slot" style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: 8,
+                maxHeight: 260,
+                overflowY: 'auto',
+                paddingRight: 4,
               }}>
-                <span style={{ fontSize: '1.2rem', width: 32, textAlign: 'center' }}>{slot.emoji}</span>
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontWeight: 700, fontSize: '.84rem', color: pickupSlot === slot.id ? '#f97316' : '#eee', margin: 0 }}>{slot.label} Pickup</p>
-                  <p style={{ fontSize: '.73rem', color: '#888', margin: '2px 0 0' }}>{slot.time}</p>
-                </div>
-                <div style={{ width: 18, height: 18, borderRadius: '50%', border: `2px solid ${pickupSlot === slot.id ? '#f97316' : '#555'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  {pickupSlot === slot.id && <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#f97316' }} />}
-                </div>
-              </button>
-            ))}
-          </div>
-          {errors.slot && <p style={{ color: '#ef4444', fontSize: '.73rem', marginTop: 6 }}>⚠ {errors.slot}</p>}
+                {availableSlots.map(slot => {
+                  const selected = pickupSlot === slot;
+                  return (
+                    <button
+                      key={slot}
+                      onClick={() => setPickupSlot(slot)}
+                      style={{
+                        padding: '10px 6px',
+                        borderRadius: 10,
+                        cursor: 'pointer',
+                        textAlign: 'center',
+                        border: `1.5px solid ${selected ? '#f97316' : 'rgba(255,255,255,0.1)'}`,
+                        background: selected ? 'rgba(249,115,22,0.15)' : 'rgba(255,255,255,0.03)',
+                        color: selected ? '#f97316' : '#ccc',
+                        fontSize: '.78rem',
+                        fontWeight: selected ? 800 : 500,
+                        transition: 'all .12s',
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {slot}
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
+          {errors.slot && <p style={{ color: '#ef4444', fontSize: '.73rem', marginTop: 8 }}>⚠ {errors.slot}</p>}
         </Section>
 
         {/* ── Order Summary strip ── */}
@@ -450,7 +530,7 @@ export default function CakesCheckout() {
             <p style={{ fontSize: '.8rem', fontWeight: 700, color: '#f97316', margin: '0 0 10px', letterSpacing: '.02em' }}>Order Summary</p>
             {activeCounter && <p style={{ fontSize: '.78rem', color: '#ddd', margin: '3px 0' }}>📍 {activeCounter.name}</p>}
             {pickupDate    && <p style={{ fontSize: '.78rem', color: '#ddd', margin: '3px 0' }}>📅 {new Date(pickupDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}</p>}
-            {activeSlot    && <p style={{ fontSize: '.78rem', color: '#ddd', margin: '3px 0' }}>🕐 {activeSlot.label} ({activeSlot.time})</p>}
+            {pickupSlot    && <p style={{ fontSize: '.78rem', color: '#ddd', margin: '3px 0' }}>🕐 {pickupSlot}</p>}
             <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(249,115,22,0.15)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
                 <span style={{ fontSize: '.78rem', color: '#aaa' }}>Total Cost</span>
