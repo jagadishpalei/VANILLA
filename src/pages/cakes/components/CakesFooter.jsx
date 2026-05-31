@@ -59,7 +59,7 @@ const SECTIONS = [
     title: 'Support',
     links: [
       { label: 'Contact Us',         to: '/cakes/account/help' },
-      { label: 'Delivery Info',      to: '/cakes/account/help' },
+      { label: 'Pickup Info',        to: '/cakes/account/help' },
       { label: 'FAQ',                to: '/cakes/account/help' },
       { label: 'My Orders',          to: '/cakes/account/orders' },
     ],

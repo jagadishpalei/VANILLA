@@ -361,6 +361,13 @@ All item images stored in `/public/images/<category-name>/`
 - [x] **Performance - React**: Memoized Cart totals and state context in `AuthContext` to prevent unnecessary re-renders during interactions.
 - [x] **Performance - Assets**: Removed `loading="lazy"` across all non-hero images (Menu, Gallery, Cart) as requested.
 - [x] **Reviews UX**: Built a "Read More / Show Less" expandable text feature for review cards, truncating at 130 characters with smooth `framer-motion` layout transitions.
+- [x] **Boutique Pivot & Dual-ID System (Latest Session)**:
+  - [x] **Boutique Pickup Architecture**: Removed delivery executives, maps, tracking status codes, express cutoff timers, and payment processors to focus entirely on self-pickup orders.
+  - [x] **Permanent Cake ID System**: Assigned individual, persistent VCC-CAT-0000 format IDs to curated inventory. Integrated automatic incremental ID generation (`nextCakeId()`) in admin workflows.
+  - [x] **Order ID System**: Implemented sequential `VC-ORD-YYYY-00000` order identifiers via local persistence.
+  - [x] **WhatsApp Checkout integration**: Formatted WhatsApp message with Cake ID, Order ID, customized text, date, and slots sent to the official boutique business line (`7008061760`).
+  - [x] **Workshop Interface**: Eliminated separate kitchen screens. Added visual **Workshop Reference Card** to the admin order dashboard for precise cake preparation by decoration teams.
+
 
 ---
 
@@ -415,7 +422,16 @@ All item images stored in `/public/images/<category-name>/`
 - **CSS Strategy**: Operational CSS (`admin.css`, `admin2.css`, `delivery.css`) loaded explicitly and scoped to avoid conflicting with the "Quiet Luxury" customer aesthetic.
 - **React Rendering Fixes**: Replaced direct state-mutating navigation with `useEffect` redirects in auth login pages to resolve `Cannot update a component while rendering a different component` warnings.
 
+### 5. Premium Boutique Self-Pickup & Dual-ID System
+- **Business Pivot**: Fully transitioned to a premium self-pickup boutique model. Removed all standard delivery mechanisms, express delivery buffers, delivery executive integrations, and payment gateways. All payments and order confirmations are finalized manually via WhatsApp.
+- **WhatsApp Checkout CRM**: Checkout flow triggers a direct WhatsApp message to the official shop number (`+91 70080 61760`) containing all ordered items, customer details, exact pickup counter, date, slot, message, and unique IDs.
+- **Identification Engine (`cakeIdUtils.js`)**:
+  - **Cake ID (Permanent)**: Persistent VCC-{CAT}-{4-digit} IDs (e.g. `VCC-CHO-0001`, `VCC-RDV-0001`, `VCC-DES-0003`) map to every inventory item, categorized by prefix (CHO, RDV, DES, WED, BSH, etc.). Generated systematically on admin cake addition.
+  - **Order ID (Per Order)**: Unique sequential `VC-ORD-{YEAR}-{5-digit}` IDs (e.g. `VC-ORD-2026-00001`) generated on each checkout request to easily trace individual customer orders.
+- **Workshop-Centric Admin**: All references to a separate "Kitchen" or "Kitchen Staff" have been purged. Orders flow from Customer → Admin Approval → Workshop Cake Prep Team → Pickup. Added an image-centric **Workshop Reference** section to order cards showing Cake IDs, Messages, Weight, and Slot for exact decoration references.
+
 ------
+
 
 ## 🚀 Deployment
 

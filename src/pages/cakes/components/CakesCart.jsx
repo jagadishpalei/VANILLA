@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useCakes } from '../CakesContext';
-import { X, ShoppingBag, Plus, Minus, Trash2, Tag, ArrowRight, Truck } from 'lucide-react';
+import { X, ShoppingBag, Plus, Minus, Trash2, Tag, ArrowRight, Store } from 'lucide-react';
 import './cart.css';
 
 export default function CakesCart() {
@@ -11,10 +11,10 @@ export default function CakesCart() {
   const {
     cart, cartOpen, setCartOpen,
     updateQty, removeFromCart,
-    cartTotal, deliveryFee,
+    cartTotal,
   } = useCakes();
 
-  const total = cartTotal + deliveryFee;
+  const total = cartTotal;
 
   /* ── Fix: reliable checkout handler ── */
   const handleCheckout = useCallback(() => {
@@ -117,12 +117,10 @@ export default function CakesCart() {
             {/* Footer */}
             {cart.length > 0 && (
               <div className="ck-drawer-footer">
-                {/* Delivery note */}
+                {/* Pickup notice */}
                 <div className="ck-cart-delivery-note">
-                  <Truck size={13} />
-                  {deliveryFee === 0
-                    ? <span className="ck-green-text">🎉 Free delivery applied!</span>
-                    : <span>Add ₹{(999 - cartTotal).toFixed(0)} more for <strong>FREE delivery</strong></span>}
+                  <Store size={13} />
+                  <span>🏪 <strong>Free Self Pickup</strong> — collect at our store</span>
                 </div>
 
                 {/* Bill summary */}
@@ -131,11 +129,11 @@ export default function CakesCart() {
                     <span>Subtotal</span><span>₹{cartTotal.toLocaleString()}</span>
                   </div>
                   <div className="ck-cart-bill-row">
-                    <span>Delivery</span>
-                    <span>{deliveryFee === 0 ? <span className="ck-green-text">FREE</span> : `₹${deliveryFee}`}</span>
+                    <span>GST (5%)</span>
+                    <span>₹{Math.floor(cartTotal * 0.05).toLocaleString()}</span>
                   </div>
                   <div className="ck-cart-bill-row ck-cart-bill-total">
-                    <span>Total</span><span>₹{total.toLocaleString()}</span>
+                    <span>Total</span><span>₹{Math.floor(cartTotal * 1.05).toLocaleString()}</span>
                   </div>
                 </div>
 

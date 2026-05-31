@@ -34,7 +34,7 @@ const HelpPage           = lazy(() => import('../account/HelpPage'));
 
 const ACCOUNT_PATHS = ['/cakes/login', '/cakes/register', '/cakes/forgot-password', '/cakes/account'];
 const ADMIN_PATH    = '/cakes/admin';
-const BYPASS_PATHS  = ['/cakes/admin', '/admin', '/owner', '/delivery', '/dev-access'];
+const BYPASS_PATHS  = ['/cakes/admin', '/admin', '/owner', '/dev-access'];
 
 /* Check if logged-in user has privileged access (admin or owner) */
 const hasPrivilegedAccess = () => {

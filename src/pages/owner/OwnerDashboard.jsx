@@ -3,13 +3,13 @@ import OwnerLayout from '../../components/owner/OwnerLayout';
 import { useOwner } from '../../context/OwnerContext';
 import {
   TrendingUp, ShoppingBag, GitBranch, ShieldCheck,
-  Bike, Users, Activity, Zap, AlertTriangle
+  Store, Users, Activity, Zap, AlertTriangle
 } from 'lucide-react';
 
 const fmt = (n) => n >= 100000 ? `₹${(n/100000).toFixed(1)}L` : n >= 1000 ? `₹${(n/1000).toFixed(1)}K` : `₹${n}`;
 
 const FEED_COLORS = {
-  order: '#f97316', payment: '#22c55e', rider: '#3b82f6',
+  order: '#f97316', payment: '#22c55e', pickup: '#3b82f6',
   admin: '#8b5cf6', alert: '#ef4444', franchise: '#f59e0b',
 };
 
@@ -23,9 +23,9 @@ export default function OwnerDashboard() {
     { label: 'Active Orders',      value: g.activeOrders,           sub: 'Live right now',          color: '#22c55e', icon: <ShoppingBag size={28}/> },
     { label: 'Active Franchises',  value: `${g.activeFranchises}/${g.totalFranchises}`, sub: 'Branches online', color: '#3b82f6', icon: <GitBranch size={28}/> },
     { label: 'Admins Online',      value: `${g.activeAdmins}/${g.totalAdmins}`,        sub: 'Logged in today', color: '#8b5cf6', icon: <ShieldCheck size={28}/> },
-    { label: 'Active Riders',      value: `${g.activeRiders}/${g.totalRiders}`,        sub: 'On delivery',     color: '#f59e0b', icon: <Bike size={28}/> },
+    { label: 'Ready for Pickup',   value: g.readyForPickup ?? 0,   sub: 'Awaiting collection',     color: '#f59e0b', icon: <Store size={28}/> },
     { label: 'Total Customers',    value: g.totalCustomers,         sub: 'Registered users',        color: '#06b6d4', icon: <Users size={28}/> },
-    { label: "Today's Revenue",    value: fmt(g.totalRevToday),     sub: 'Delivered orders',        color: '#22c55e', icon: <Zap size={28}/> },
+    { label: "Today's Revenue",    value: fmt(g.totalRevToday),     sub: 'Collected orders',        color: '#22c55e', icon: <Zap size={28}/> },
     { label: 'System Health',      value: `${g.systemHealth}%`,     sub: 'All services up',         color: '#22c55e', icon: <Activity size={28}/> },
   ];
 

@@ -1,8 +1,30 @@
 /* ═══════════════════════════════════════════
-   CHECKOUT, CART & SUCCESS PAGE CSS (324px)
+   CHECKOUT, CART & SUCCESS PAGE CSS
    ═══════════════════════════════════════════ */
 
+/* Dark-mode checkout (new WhatsApp order flow) */
+.ck-page.co-page {
+  background: #0e0e0f;
+  color: #f0ede8;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+.ck-page.co-page .co-header {
+  background: rgba(14,14,15,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  color: #f0ede8;
+}
+.ck-page.co-page .co-back {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #f0ede8;
+}
+.ck-page.co-page .co-title { color: #f0ede8; }
+
+/* Light co-page (cart page etc) */
 .co-page { background: #FAF6F0; min-height: 100vh; padding-bottom: 20px; }
+
 
 /* Header */
 .co-header {

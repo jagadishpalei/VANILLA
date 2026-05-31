@@ -32,9 +32,9 @@ function RevBar({ label, value, max }) {
 export default function AdminAnalytics() {
   const { orders, cakes, customers, categories } = useAdmin();
 
-  const delivered = orders.filter(o => o.status === 'delivered');
-  const totalRev  = delivered.reduce((s, o) => s + o.amount, 0);
-  const avgOrder  = delivered.length ? Math.round(totalRev / delivered.length) : 0;
+  const collected = orders.filter(o => o.status === 'collected');
+  const totalRev  = collected.reduce((s, o) => s + o.amount, 0);
+  const avgOrder  = collected.length ? Math.round(totalRev / collected.length) : 0;
 
   // Revenue by category (approximate from cake price × orders)
   const revByCategory = categories.map(cat => {
@@ -53,11 +53,11 @@ export default function AdminAnalytics() {
 
   // Status distribution
   const statusDist = [
-    { label: 'Delivered',    value: orders.filter(o => o.status === 'delivered').length,    color: '#2D6A4F' },
-    { label: 'In Progress',  value: orders.filter(o => ['preparing','confirmed','quality_check','customization'].includes(o.status)).length, color: '#D97706' },
-    { label: 'Out for Del.', value: orders.filter(o => o.status === 'out_delivery').length, color: '#2563EB' },
-    { label: 'Pending',      value: orders.filter(o => o.status === 'pending').length,      color: '#92400E' },
-    { label: 'Cancelled',    value: orders.filter(o => o.status === 'cancelled').length,    color: '#C0392B' },
+    { label: 'Collected',      value: orders.filter(o => o.status === 'collected').length,                                                                                            color: '#2D6A4F' },
+    { label: 'In Progress',    value: orders.filter(o => ['preparing','confirmed','quality_check','customization'].includes(o.status)).length,                                        color: '#D97706' },
+    { label: 'Ready Pickup',   value: orders.filter(o => o.status === 'ready_pickup').length,                                                                                        color: '#2563EB' },
+    { label: 'Pending',        value: orders.filter(o => o.status === 'pending').length,                                                                                             color: '#92400E' },
+    { label: 'Cancelled',      value: orders.filter(o => o.status === 'cancelled').length,                                                                                           color: '#C0392B' },
   ];
   const maxStatus = Math.max(...statusDist.map(s => s.value)) || 1;
 
@@ -127,13 +127,13 @@ export default function AdminAnalytics() {
           ))}
 
           <div style={{ marginTop: 16, padding: '12px', background: 'var(--adm-bg2)', borderRadius: 10 }}>
-            <div style={{ fontFamily: 'var(--adm-font-h)', fontSize: '.76rem', fontWeight: 700, color: 'var(--adm-text)', marginBottom: 8 }}>Delivery Rate</div>
+            <div style={{ fontFamily: 'var(--adm-font-h)', fontSize: '.76rem', fontWeight: 700, color: 'var(--adm-text)', marginBottom: 8 }}>Collection Rate</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ flex: 1, height: 8, background: 'var(--adm-border)', borderRadius: 4, overflow: 'hidden' }}>
-                <div style={{ height: '100%', borderRadius: 4, background: 'linear-gradient(90deg, var(--adm-green), #52B788)', width: `${orders.length ? Math.round((delivered.length / orders.length) * 100) : 0}%`, transition: 'width .6s' }} />
+                <div style={{ height: '100%', borderRadius: 4, background: 'linear-gradient(90deg, var(--adm-green), #52B788)', width: `${orders.length ? Math.round((collected.length / orders.length) * 100) : 0}%`, transition: 'width .6s' }} />
               </div>
               <span style={{ fontSize: '.8rem', fontWeight: 700, color: 'var(--adm-green)' }}>
-                {orders.length ? Math.round((delivered.length / orders.length) * 100) : 0}%
+                {orders.length ? Math.round((collected.length / orders.length) * 100) : 0}%
               </span>
             </div>
           </div>

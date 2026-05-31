@@ -150,6 +150,11 @@ export default function AdminCakes() {
             </div>
             <div className="adm-cake-info">
               <div className="adm-cake-name" title={cake.name}>{cake.name}</div>
+              {cake.cakeId && (
+                <div style={{ display: 'inline-block', marginBottom: 4, fontSize: '.6rem', fontWeight: 700, letterSpacing: '.05em', color: '#7c3aed', background: '#f5f3ff', border: '1px solid #e9d5ff', borderRadius: 4, padding: '1px 6px' }}>
+                  {cake.cakeId}
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span className="adm-cake-price">₹{cake.price}</span>
                 {cake.originalPrice && <span style={{ fontSize: '.7rem', textDecoration: 'line-through', color: 'var(--adm-text3)' }}>₹{cake.originalPrice}</span>}

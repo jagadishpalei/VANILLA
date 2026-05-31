@@ -1,6 +1,11 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
+import { generateOrderId } from './cakeIdUtils';
 
 const CakesCtx = createContext(null);
+
+const WHATSAPP_NUMBER = '917008061760'; // Vanilla Crafted Cakes
+
+export { WHATSAPP_NUMBER };
 
 export function CakesProvider({ children }) {
   const [cart, setCart]             = useState([]);
@@ -8,16 +13,21 @@ export function CakesProvider({ children }) {
   const [cartOpen, setCartOpen]     = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [toast, setToast]           = useState(null);
-  const [location, setLocation]     = useState('Delhi');
+  const [location, setLocation]     = useState('Keonjhar');
 
-  /* ── Checkout state ── */
-  const [coupon, setCoupon]                   = useState(null);
-  const [selectedAddress, setSelectedAddress] = useState(null);
-  const [paymentMethod, setPaymentMethod]     = useState('upi');
-  const [orders, setOrders]                   = useState([]);
-  const [savedAddresses, setSavedAddresses]   = useState([
-    { id: 1, name: 'Home', line1: '42 MG Road', line2: 'Near Green Park', city: 'Delhi', pin: '110016', phone: '9876543210', default: true },
-  ]);
+  /* ── Order / Pickup state ── */
+  const [orders, setOrders]             = useState([]);
+  const [pickupDate, setPickupDate]     = useState(null);
+  const [pickupSlot, setPickupSlot]     = useState(null);
+  const [pickupCounter, setPickupCounter] = useState(null);
+  const [coupon, setCoupon]             = useState(null);
+
+  /* ── Customer info ── */
+  const [customerName, setCustomerName]       = useState('');
+  const [customerPhone, setCustomerPhone]     = useState('');
+  const [customerEmail, setCustomerEmail]     = useState('');
+  const [cakeMessage, setCakeMessage]         = useState('');
+  const [specialNotes, setSpecialNotes]       = useState('');
 
   const showToast = useCallback((msg, type = 'success') => {
     setToast({ msg, type });
@@ -50,7 +60,7 @@ export function CakesProvider({ children }) {
   }, []);
 
   const applyCoupon = useCallback((code) => {
-    const COUPONS = { BDAY20: 20, FEST30: 30, BOGO: 10 };
+    const COUPONS = { BDAY20: 20, FEST30: 30, BOGO: 10, FIRSTCAKE: 15, VANILLA100: 10 };
     const disc = COUPONS[code.toUpperCase()];
     if (disc !== undefined) {
       setCoupon({ code: code.toUpperCase(), discount: disc });
@@ -63,25 +73,29 @@ export function CakesProvider({ children }) {
 
   const removeCoupon = useCallback(() => setCoupon(null), []);
 
-  const addAddress = useCallback((addr) => {
-    const newAddr = { ...addr, id: Date.now(), default: false };
-    setSavedAddresses(prev => [...prev, newAddr]);
-    setSelectedAddress(newAddr);
-    return newAddr;
-  }, []);
-
+  /* ── Place order — creates local record, triggers WhatsApp ── */
   const placeOrder = useCallback((orderData) => {
     const order = {
-      id: `VCC${Date.now().toString().slice(-6)}`,
-      date: new Date().toISOString(),
-      status: 'confirmed',
+      id:     generateOrderId(),
+      cakeId: orderData.items?.[0]?.cakeId || null,
+      date:   new Date().toISOString(),
+      status: 'new_request',
+      customerName, customerPhone, customerEmail,
+      cakeMessage, specialNotes,
+      pickupDate, pickupSlot, pickupCounter,
       ...orderData,
     };
     setOrders(prev => [order, ...prev]);
+    /* Reset checkout state */
     setCart([]);
     setCoupon(null);
+    setPickupDate(null);
+    setPickupSlot(null);
+    setPickupCounter(null);
+    setCakeMessage('');
+    setSpecialNotes('');
     return order;
-  }, []);
+  }, [customerName, customerPhone, customerEmail, cakeMessage, specialNotes, pickupDate, pickupSlot, pickupCounter]);
 
   const cartCount  = cart.reduce((s, i) => s + i.qty, 0);
   const cartTotal  = cart.reduce((s, i) => s + i.price * i.qty, 0);
@@ -95,14 +109,20 @@ export function CakesProvider({ children }) {
       searchOpen, setSearchOpen,
       toast, location, setLocation,
       coupon, applyCoupon, removeCoupon,
-      selectedAddress, setSelectedAddress,
-      savedAddresses, addAddress,
-      paymentMethod, setPaymentMethod,
+      pickupDate, setPickupDate,
+      pickupSlot, setPickupSlot,
+      pickupCounter, setPickupCounter,
+      customerName, setCustomerName,
+      customerPhone, setCustomerPhone,
+      customerEmail, setCustomerEmail,
+      cakeMessage, setCakeMessage,
+      specialNotes, setSpecialNotes,
       orders, placeOrder,
       addToCart, removeFromCart, updateQty,
       toggleWishlist, cartCount, cartTotal,
       couponDisc, gst, grandTotal,
       showToast,
+      WHATSAPP_NUMBER,
     }}>
       {children}
     </CakesCtx.Provider>

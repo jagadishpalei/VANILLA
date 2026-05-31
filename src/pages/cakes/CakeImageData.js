@@ -1,5 +1,5 @@
-/**
- * CAKE IMAGE CATALOG — Auto-generated from local folder scan
+﻿/**
+ * CAKE IMAGE CATALOG â€” Auto-generated from local folder scan
  * Folder: d:\mamu\cake photos\{category}\{image.avif}
  *
  * NAME PROCESSING RULE:
@@ -10,7 +10,7 @@
  *   - Remove weight/size suffixes like "200 Gm", "1 Kg", "Half Kg"
  */
 
-/** Maps folder name → category id used in CakesData */
+/** Maps folder name â†’ category id used in CakesData */
 export const FOLDER_TO_CATEGORY = {
   chocolate:   'chocolate',
   desiner:     'designer',
@@ -20,7 +20,7 @@ export const FOLDER_TO_CATEGORY = {
   truffle:     'truffle',
 };
 
-/** Maps folder name → display subcategory label */
+/** Maps folder name â†’ display subcategory label */
 export const FOLDER_TO_SUBCATEGORY = {
   chocolate:   'Chocolate Cakes',
   desiner:     'Designer Cakes',
@@ -30,19 +30,19 @@ export const FOLDER_TO_SUBCATEGORY = {
   truffle:     'Truffle Cakes',
 };
 
-/** Maps folder name → emoji */
+/** Maps folder name â†’ emoji */
 export const FOLDER_TO_EMOJI = {
-  chocolate:   '🍫',
-  desiner:     '✨',
-  mango:       '🥭',
-  pineapple:   '🍍',
-  'red velvet':'❤️',
-  truffle:     '🎂',
+  chocolate:   'ðŸ«',
+  desiner:     'âœ¨',
+  mango:       'ðŸ¥­',
+  pineapple:   'ðŸ',
+  'red velvet':'â¤ï¸',
+  truffle:     'ðŸŽ‚',
 };
 
 /**
  * Parse a raw filename into a clean product name.
- * "p-chocolate-truffle-cream-cake-361113-m.avif" → "Chocolate Truffle Cream Cake"
+ * "p-chocolate-truffle-cream-cake-361113-m.avif" â†’ "Chocolate Truffle Cream Cake"
  */
 export function parseImageName(filename) {
   let name = filename
@@ -50,7 +50,7 @@ export function parseImageName(filename) {
     .replace(/^p-/, '')                // strip leading "p-"
     .replace(/-\d[\d-]*-m$/, '')       // strip trailing -361113-m or -200-gm--274709-m
     .replace(/-m$/, '')                // strip trailing -m
-    .replace(/-+/g, ' ')              // hyphens → spaces
+    .replace(/-+/g, ' ')              // hyphens â†’ spaces
     .replace(/\s+\d+(\s+\d+)*\s*$/,'') // strip trailing numbers
     .replace(/\b(200|250|300|500|750|1|1\.5|2|2\.5|3|4|5|6|8)\s*(gm|g|kg)\b/gi, '') // strip weights
     .replace(/\bhalf\s+kg\b/gi, '')
@@ -76,7 +76,7 @@ export function generateProduct(id, filename, folder) {
   const name      = parseImageName(filename);
   const category  = FOLDER_TO_CATEGORY[folder]  || 'chocolate';
   const subcat    = FOLDER_TO_SUBCATEGORY[folder]|| 'Specialty Cakes';
-  const emoji     = FOLDER_TO_EMOJI[folder]      || '🎂';
+  const emoji     = FOLDER_TO_EMOJI[folder]      || 'ðŸŽ‚';
   const imgPath   = `/cake-images/${folder}/${filename}`;
   const slug      = nameToSlug(name);
 
@@ -143,20 +143,19 @@ export function generateProduct(id, filename, folder) {
     category,
     subcategory: subcat,
     name,
-    subtitle:    `${subcat} · Freshly Baked`,
+    subtitle:    `${subcat} Â· Freshly Baked`,
     price,
     originalPrice,
     discount,
     rating:      4.5 + Math.round(Math.random() * 4) / 10,
     reviews:     200 + Math.floor(Math.random() * 1800),
-    deliveryTime:'2 hrs',
     emoji,
     image:       imgPath,
     tag,
     slug,
     occasions,
     weights:     ['500g','1Kg','1.5Kg','2Kg'],
-    serves:      '6–8',
+    serves:      '6â€“8',
     flavor:      subcat.replace(' Cakes',''),
     desc:        `A premium ${name.toLowerCase()} crafted with the finest ingredients. Freshly baked to order and delivered to your doorstep.`,
     ingredients: 'Premium Flour, Fresh Cream, Sugar, Butter, Natural Flavors',
@@ -167,7 +166,7 @@ export function generateProduct(id, filename, folder) {
 }
 
 /**
- * RAW IMAGE CATALOG — folder → [filename, ...]
+ * RAW IMAGE CATALOG â€” folder â†’ [filename, ...]
  * Generated from: d:\mamu\cake photos\
  */
 export const IMAGE_CATALOG = {
@@ -346,7 +345,7 @@ export const IMAGE_CATALOG = {
  * Deduplicates by normalized name.
  */
 export function buildImportedCakes(startId = 100) {
-  const seen  = new Map(); // normalizedName → product
+  const seen  = new Map(); // normalizedName â†’ product
   let   id    = startId;
 
   for (const [folder, files] of Object.entries(IMAGE_CATALOG)) {
@@ -355,7 +354,7 @@ export function buildImportedCakes(startId = 100) {
       const normKey = name.toLowerCase().replace(/\s+/g, ' ').trim();
 
       if (seen.has(normKey)) {
-        // Already added — just update image if first occurrence had different folder
+        // Already added â€” just update image if first occurrence had different folder
         continue;
       }
 
@@ -365,3 +364,4 @@ export function buildImportedCakes(startId = 100) {
 
   return Array.from(seen.values());
 }
+
