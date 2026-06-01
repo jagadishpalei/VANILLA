@@ -4,17 +4,17 @@ import { useAdmin } from './CakesAdminContext';
 import {
   LayoutDashboard, ShoppingBag, Cake, Users, MoreHorizontal,
   BarChart2, Settings, LogOut, X, ChefHat, ExternalLink,
-  Bell, ArrowLeft, Store, Crown
+  Bell, ArrowLeft, Store, Crown, Gift
 } from 'lucide-react';
 import './admin.css';
 
 /* ── Bottom nav tabs ── */
 const BOTTOM_TABS = [
-  { to: '/cakes/admin',         label: 'Dashboard', icon: LayoutDashboard, end: true  },
-  { to: '/cakes/admin/orders',  label: 'Orders',    icon: ShoppingBag,     badge: 'orders' },
-  { to: '/cakes/admin/cakes',   label: 'Menu',      icon: Cake                        },
-  { to: '/cakes/admin/customers',label:'Customers', icon: Users                       },
-  { to: '#more',                label: 'More',      icon: MoreHorizontal              },
+  { to: '/cakes/admin',          label: 'Dashboard', icon: LayoutDashboard, end: true  },
+  { to: '/cakes/admin/orders',   label: 'Orders',    icon: ShoppingBag,     badge: 'orders' },
+  { to: '/cakes/admin/cakes',    label: 'Menu',      icon: Cake                        },
+  { to: '/cakes/admin/offers',   label: 'Offers',    icon: Gift                        },
+  { to: '#more',                 label: 'More',      icon: MoreHorizontal              },
 ];
 
 /* ── "More" drawer items ── */

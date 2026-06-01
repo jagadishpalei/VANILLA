@@ -241,6 +241,29 @@
   object-position: center;
 }
 
+/* ── OFFER BANNER SECTION ───────────────────────────────── */
+.offer-banner-section {
+  padding: 0 16px 4px;
+}
+.offer-banner-wrap {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 4px 20px rgba(107,79,58,.12),
+    0 1px 4px rgba(107,79,58,.06);
+  position: relative;
+  background: #F5EDE3;
+}
+.offer-banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+
 /* ── MOVING TRUST BAR ───────────────────────────────────── */
 .trust-bar-wrap {
   background: #D97706;

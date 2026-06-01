@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES, CAKES, REVIEWS } from './CakesData';
 import { useCakes } from './CakesContext';
+import { useBanner } from './BannerContext';
 import {
   Zap, ShieldCheck, Heart, ShoppingBag,
   ArrowRight, Gift, ChevronRight,
@@ -102,6 +103,33 @@ function Hero() {
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   OFFER BANNER  (admin-controlled)
+   ═══════════════════════════════════════════════ */
+function OfferBanner() {
+  const { activeBanner } = useBanner();
+  if (!activeBanner) return null;
+  return (
+    <motion.section
+      className="offer-banner-section"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-20px' }}
+      transition={{ duration: .4, ease: [.4, 0, .2, 1] }}
+      aria-label="Special Offer"
+    >
+      <div className="offer-banner-wrap">
+        <img
+          src={activeBanner.image}
+          alt={activeBanner.title || 'Special Offer — Vanilla Crafted Cakes'}
+          className="offer-banner-img"
+          loading="lazy"
+        />
+      </div>
+    </motion.section>
   );
 }
 
@@ -489,6 +517,7 @@ export default function CakesHome() {
     <main className="ck-page mh-root">
       <Offers />
       <Hero />
+      <OfferBanner />
       <MovingTrustBar />
       <CategoryShowcase />
       <ArtisanBanner />

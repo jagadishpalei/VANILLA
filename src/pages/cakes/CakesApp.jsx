@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CakesProvider } from './CakesContext';
+import { BannerProvider } from './BannerContext';
 import CakesNavbar from './components/CakesNavbar';
 import Footer from './components/Footer';
 import CakesCart from './components/CakesCart';
@@ -122,8 +123,10 @@ function CakesInner() {
 
 export default function CakesApp() {
   return (
-    <CakesProvider>
-      <CakesInner />
-    </CakesProvider>
+    <BannerProvider>
+      <CakesProvider>
+        <CakesInner />
+      </CakesProvider>
+    </BannerProvider>
   );
 }
