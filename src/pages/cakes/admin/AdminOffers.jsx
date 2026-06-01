@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { useBanner } from '../BannerContext';
+import { useBanner, DEFAULT_BANNER } from '../BannerContext';
 import AdminLayout from './AdminLayout';
-import { Upload, Trash2, Eye, EyeOff, ImagePlus, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Upload, Trash2, Eye, EyeOff, ImagePlus, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
 
 export default function AdminOffers() {
   const { offerBanner, uploadBanner, toggleBanner, deleteBanner } = useBanner();
@@ -91,7 +91,42 @@ export default function AdminOffers() {
       </div>
 
       {/* ─────────────────────────────────────────────
-          CURRENT BANNER (if exists)
+          DEFAULT BANNER PREVIEW (when no custom banner uploaded)
+      ───────────────────────────────────────────── */}
+      {!offerBanner && !preview && (
+        <div className="adm-card" style={{ marginBottom: 24, overflow: 'hidden' }}>
+          {/* Status bar */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '10px 16px', borderBottom: '1px solid var(--adm-border2)',
+            background: '#FFFBF0',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Sparkles size={14} color="var(--adm-gold)" />
+              <span style={{ fontSize: '.76rem', fontWeight: 700, color: '#92400E' }}>
+                Default Preview — Upload to replace
+              </span>
+            </div>
+            <span style={{ fontSize: '.68rem', color: 'var(--adm-text3)', background: '#FEF3C7', borderRadius: 6, padding: '2px 8px', fontWeight: 600 }}>
+              AUTO
+            </span>
+          </div>
+          {/* Preview image */}
+          <img
+            src={DEFAULT_BANNER.image}
+            alt="Default offer banner preview"
+            style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 300, objectFit: 'cover' }}
+          />
+          <div style={{ padding: '10px 16px' }}>
+            <p style={{ fontSize: '.74rem', color: 'var(--adm-text3)', lineHeight: 1.5 }}>
+              This default banner is visible to customers right now. Upload your own banner to replace it.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ─────────────────────────────────────────────
+          CURRENT CUSTOM BANNER (if admin uploaded one)
       ───────────────────────────────────────────── */}
       {offerBanner && !preview && (
         <div className="adm-card" style={{ marginBottom: 24, overflow: 'hidden' }}>
@@ -192,7 +227,7 @@ export default function AdminOffers() {
         /* Drop zone — shown when no preview */
         <div>
           <p className="adm-section-label" style={{ marginTop: 0, marginBottom: 12 }}>
-            {offerBanner ? 'Replace Banner' : 'Upload Banner'}
+            {offerBanner ? 'Replace Your Banner' : 'Upload Your Banner'}
           </p>
           <div
             onClick={() => fileInputRef.current?.click()}

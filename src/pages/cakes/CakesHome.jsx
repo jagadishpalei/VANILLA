@@ -107,11 +107,11 @@ function Hero() {
 }
 
 /* ═══════════════════════════════════════════════
-   OFFER BANNER  (admin-controlled)
+   OFFER BANNER  (admin-controlled, fallback to default)
    ═══════════════════════════════════════════════ */
 function OfferBanner() {
-  const { activeBanner } = useBanner();
-  if (!activeBanner) return null;
+  const { displayBanner } = useBanner();
+  if (!displayBanner) return null;
   return (
     <motion.section
       className="offer-banner-section"
@@ -123,8 +123,8 @@ function OfferBanner() {
     >
       <div className="offer-banner-wrap">
         <img
-          src={activeBanner.image}
-          alt={activeBanner.title || 'Special Offer — Vanilla Crafted Cakes'}
+          src={displayBanner.image}
+          alt={displayBanner.title || 'Special Offer — Vanilla Crafted Cakes'}
           className="offer-banner-img"
           loading="lazy"
         />
