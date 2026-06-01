@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import OwnerLayout from '../../components/owner/OwnerLayout';
 import { useOwner } from '../../context/OwnerContext';
 
-const BRANCH = { FR001:'Keonjhar Main', FR002:'Barbil', FR003:'Keonjhar Restaurant', FR004:'Rourkela', FR005:'Bhubaneswar' };
+const BRANCH = { FR001:'Vanilla – Jagannathpur', FR002:'Vanilla – Mining Road', FR003:'Vanilla – Autopur' };
 const STATUS_CLS = { new:'ow-badge-blue', preparing:'ow-badge-amber', out_for_delivery:'ow-badge-orange', delivered:'ow-badge-green', cancelled:'ow-badge-red' };
 const STATUS_LBL = { new:'New', preparing:'Preparing', out_for_delivery:'Out for Delivery', delivered:'Delivered', cancelled:'Cancelled' };
 

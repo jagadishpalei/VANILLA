@@ -20,7 +20,7 @@ function Ico({ children }) { return <svg width="20" height="20" fill="none" stro
 const QUICK_ACTIONS = [
   { label: 'My Orders',       sub: 'View & reorder',     image: '/cake-images/why/delivery.png', to: '/cakes/account/orders'        },
   { label: 'Wishlist',        sub: 'Saved for later',    image: '/cake-images/gallery/truffle.png', to: '/cakes/account/wishlist'       },
-  { label: 'Addresses',       sub: 'Delivery locations', image: '/cake-images/why/freshly-baked.png', to: '/cakes/account/addresses'      },
+  { label: 'Addresses',       sub: 'Saved details', image: '/cake-images/why/freshly-baked.png', to: '/cakes/account/addresses'      },
   { label: 'Rewards',         sub: 'Points & offers',    image: '/cake-images/why/quality.png', to: '/cakes/account/rewards'        },
   { label: 'Notifications',   sub: 'Alerts & updates',   image: '/cake-images/trust/support.png', to: '/cakes/account/notifications'  },
   { label: 'Help & Support',  sub: 'FAQs & chat',        image: '/cake-images/trust/rating.png', to: '/cakes/account/help'           },

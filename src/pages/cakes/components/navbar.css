@@ -124,7 +124,7 @@
   display: flex;
   align-items: center;
   gap: 2px;
-  margin-left: auto;
+  margin-left: 90px;
   flex-shrink: 0;
 }
 .ck-nb-icon-btn {

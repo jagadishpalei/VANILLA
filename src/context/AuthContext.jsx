@@ -12,13 +12,13 @@ function persist(key, val) {
 }
 
 const INITIAL_ADDRESSES = [
-  { id: 1, type: 'Home', line1: '42 MG Road', line2: 'Near Green Park', city: 'Delhi', pin: '110016', phone: '9876543210', default: true },
+  { id: 1, type: 'Home', line1: 'Autopur', line2: 'Near Mining Road', city: 'Keonjhar', pin: '758001', phone: '9876543210', default: true },
 ];
 
 const INITIAL_NOTIFICATIONS = [
   { id: 1, type: 'order', title: 'Order Confirmed!', body: 'Your Chocolate Truffle Cake is being baked.', time: '2m ago', read: false },
-  { id: 2, type: 'offer', title: '🎉 Weekend Special', body: 'Get 20% off on all cheesecakes this weekend.', time: '1h ago', read: false },
-  { id: 3, type: 'reward', title: '✨ Points Added', body: 'You earned 120 reward points on your last order.', time: '3h ago', read: true },
+  { id: 2, type: 'offer', title: 'Weekend Special', body: 'Get 20% off on all cheesecakes this weekend.', time: '1h ago', read: false },
+  { id: 3, type: 'reward', title: 'Points Added', body: 'You earned 120 reward points on your last order.', time: '3h ago', read: true },
   { id: 4, type: 'delivery', title: 'Out for Delivery', body: 'Your order #VNL284901 is on the way!', time: 'Yesterday', read: true },
 ];
 

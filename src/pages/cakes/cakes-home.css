@@ -174,7 +174,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: center;
   display: block;
   opacity: 0;
   transition: opacity .35s ease, transform .38s cubic-bezier(.34,1.56,.64,1);
@@ -558,17 +558,21 @@
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(107,79,58,.06);
+  display: flex;
+  flex-direction: column;
 }
-.mh-cake-card--compact .mh-cake-tile { height: 90px; }
 
-/* Tile */
+/* Tile — aspect-ratio locked, never height:auto */
 .mh-cake-tile {
   position: relative;
   background: linear-gradient(135deg, #FFF8F2 0%, #FAF6F0 100%);
-  height: 110px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.mh-cake-card--compact .mh-cake-tile {
+  aspect-ratio: 4 / 3;
 }
 .mh-cake-emoji {
   font-size: 3.2rem;
@@ -1099,22 +1103,20 @@
 }
 
 /* ── CAKE IMAGE DISPLAY ─────────────────────────────────── */
-.mh-cake-tile { position: relative; }
+/* .mh-cake-tile aspect-ratio is set in the FEATURED CAKES section above */
 .mh-cake-img-wrap {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
 }
 .mh-cake-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  display: block;
   opacity: 0;
   transition: opacity .35s ease;
-  display: block;
 }
 .mh-cake-img.ready { opacity: 1; }
 .mh-img-skeleton {
@@ -1130,7 +1132,85 @@
   100% { background-position: -200% 0; }
 }
 .mh-cake-emoji-fb {
-  font-size: 3rem;
-  line-height: 1;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(107,79,58,0.25);
+  background: #FAF6F0;
   z-index: 2;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE IMAGE CONSISTENCY — ALL BREAKPOINTS
+   ═══════════════════════════════════════════════════════════ */
+
+/* 324px – 359px: base mobile (Keonjhar target device) */
+@media (max-width: 359px) {
+  .occ-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
+  }
+  .occ-label { font-size: .52rem; }
+  .mh-cakes-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mh-cake-tile { aspect-ratio: 1 / 1; }
+}
+
+/* 360px – 374px */
+@media (min-width: 360px) and (max-width: 374px) {
+  .occ-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .mh-cakes-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
+}
+
+/* 375px – 389px */
+@media (min-width: 375px) and (max-width: 389px) {
+  .occ-grid { grid-template-columns: repeat(4, 1fr); gap: 9px; }
+  .mh-cakes-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+}
+
+/* 390px – 413px */
+@media (min-width: 390px) and (max-width: 413px) {
+  .occ-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .mh-cakes-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+}
+
+/* 414px – 479px */
+@media (min-width: 414px) and (max-width: 479px) {
+  .occ-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .mh-cakes-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+}
+
+/* 480px – 639px: large phones / small tablets */
+@media (min-width: 480px) and (max-width: 639px) {
+  .occ-grid { grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .mh-cakes-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .mh-hero-v2 { padding: 28px 24px 32px; }
+}
+
+/* 640px – 767px: tablet portrait */
+@media (min-width: 640px) and (max-width: 767px) {
+  .occ-grid { grid-template-columns: repeat(8, 1fr); gap: 10px; }
+  .mh-cakes-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .mh-hero-v2 { padding: 32px 32px 36px; }
+}
+
+/* 768px+: desktop */
+@media (min-width: 768px) {
+  .mh-hero-v2 { padding: 40px 40px 44px; }
+  .occ-grid {
+    grid-template-columns: repeat(8, 1fr);
+    gap: 12px;
+  }
+  .occ-label { font-size: .65rem; }
+  .mh-cakes-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  /* Lock card images — same ratio at every size */
+  .mh-cake-tile { aspect-ratio: 1 / 1; }
+  .hero-promo-card { max-width: 540px; margin: 0 auto; }
+}
+

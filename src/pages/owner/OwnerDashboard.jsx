@@ -144,7 +144,7 @@ export default function OwnerDashboard() {
           </div>
           <div style={{ fontSize:13, color:'var(--ow-text)', display:'flex', alignItems:'center', gap:10 }}>
             <span className="ow-badge ow-badge-amber">FRANCHISE</span>
-            Bhubaneswar branch suspended — payout hold in place
+            Autopur branch pending review — payout hold in place
           </div>
         </div>
       </div>

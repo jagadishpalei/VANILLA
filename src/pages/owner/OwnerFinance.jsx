@@ -4,7 +4,7 @@ import { useOwner } from '../../context/OwnerContext';
 import { CheckCircle, Clock } from 'lucide-react';
 
 const fmt = n => `₹${n.toLocaleString('en-IN')}`;
-const BRANCH = { FR001:'Keonjhar Main', FR002:'Barbil', FR003:'Keonjhar Restaurant', FR004:'Rourkela', FR005:'Bhubaneswar' };
+const BRANCH = { FR001:'Vanilla – Jagannathpur', FR002:'Vanilla – Mining Road', FR003:'Vanilla – Autopur' };
 
 export default function OwnerFinance() {
   const { finance } = useOwner();

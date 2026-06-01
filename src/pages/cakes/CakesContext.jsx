@@ -42,7 +42,7 @@ export function CakesProvider({ children }) {
       if (hit) return prev.map(i => i.key === key ? { ...i, qty: i.qty + 1 } : i);
       return [...prev, { ...cake, key, weight: w, qty: 1 }];
     });
-    showToast(`${cake.name} added to cart 🎂`);
+    showToast(`${cake.name} added to cart`);
     setCartOpen(true);
   }, [showToast]);
 
@@ -64,7 +64,7 @@ export function CakesProvider({ children }) {
     const disc = COUPONS[code.toUpperCase()];
     if (disc !== undefined) {
       setCoupon({ code: code.toUpperCase(), discount: disc });
-      showToast(`Coupon "${code.toUpperCase()}" applied! ${disc}% off 🎉`);
+      showToast(`Coupon "${code.toUpperCase()}" applied! ${disc}% off`);
       return true;
     }
     showToast('Invalid coupon code', 'error');

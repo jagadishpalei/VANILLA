@@ -81,7 +81,7 @@ function ReviewCard({ review }) {
           {expanded ? 'Show less' : 'Read more'}
         </button>
       )}
-      <p className="det-review-cake">🎂 {review.cake}</p>
+      <p className="det-review-cake">Cake ordered: {review.cake}</p>
     </div>
   );
 }
@@ -102,7 +102,7 @@ export default function CakeDetail() {
     return (
       <main className="ck-page det-root">
         <div className="det-not-found">
-          <p style={{ fontSize: '3rem' }}>🎂</p>
+          <p style={{ fontSize: '3rem', fontWeight: 800, color: 'rgba(26,26,26,0.1)' }}>V</p>
           <p className="det-nf-title">Cake not found</p>
           <Link to="/cakes/category/all" className="det-nf-link">Browse All Cakes</Link>
         </div>
@@ -154,7 +154,7 @@ export default function CakeDetail() {
         <div className="det-title-block">
           <div className="det-tags">
 
-            <span className="det-flavor">🍰 {cake.flavor}</span>
+            <span className="det-flavor">{cake.flavor}</span>
             <span className="det-serves">Serves {cake.serves}</span>
           </div>
           <h1 className="det-title">{cake.name}</h1>
@@ -218,7 +218,7 @@ export default function CakeDetail() {
               >
                 <textarea
                   className="det-msg-input"
-                  placeholder="e.g. Happy Birthday Rahul! 🎂"
+                  placeholder="e.g. Happy Birthday Rahul!"
                   maxLength={60}
                   value={message}
                   onChange={e => setMessage(e.target.value)}

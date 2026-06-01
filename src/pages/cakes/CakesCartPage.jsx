@@ -145,7 +145,7 @@ export default function CakesCartPage() {
               <span>Total Amount</span><span>₹{grandTotal.toLocaleString()}</span>
             </div>
             {couponDisc > 0 && (
-              <div className="co-summary-saving">🎉 You're saving ₹{couponDisc} on this order!</div>
+              <div className="co-summary-saving">You're saving ₹{couponDisc} on this order!</div>
             )}
           </div>
         </div>

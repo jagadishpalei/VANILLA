@@ -14,9 +14,9 @@ const SUGGESTED_COUPONS = [
 ];
 
 const DELIVERY_OPTIONS = [
-  { id: 'standard', label: 'Standard',   icon: '🛵', eta: '30-40 min', fee: 29  },
-  { id: 'express',  label: 'Express',    icon: '⚡', eta: '15-20 min', fee: 59  },
-  { id: 'schedule', label: 'Scheduled',  icon: '🕐', eta: 'Choose time', fee: 29 },
+  { id: 'standard', label: 'Standard',   icon: 'S', eta: '30-40 min', fee: 29  },
+  { id: 'express',  label: 'Express',    icon: 'E', eta: '15-20 min', fee: 59  },
+  { id: 'schedule', label: 'Scheduled',  icon: 'T', eta: 'Choose time', fee: 29 },
 ];
 
 export default function CartPage() {
@@ -51,7 +51,7 @@ export default function CartPage() {
     <motion.div className="vnl-cart-page" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <Navbar />
       <div className="vnl-cart-empty">
-        <div className="vnl-cart-empty-icon">🛒</div>
+        <div className="vnl-cart-empty-icon" style={{ fontSize: '1.5rem', fontWeight: 800, color: 'rgba(26,26,26,0.3)' }}>V</div>
         <h2 className="vnl-cart-empty-title">Your cart is empty</h2>
         <p className="vnl-cart-empty-sub">Looks like you haven't added anything yet</p>
         <Link to="/menu" className="vnl-cart-browse-btn"><ShoppingBag size={15} /> Browse Menu</Link>
@@ -83,7 +83,7 @@ export default function CartPage() {
                     <div className="vnl-cart-item-img">
                       {item.image
                         ? <img src={item.image} alt={item.name} />
-                        : <span className="vnl-cart-item-emoji">🍽️</span>}
+                        : <span className="vnl-cart-item-emoji" style={{ fontSize: '1.2rem', fontWeight: 800, color: 'rgba(26,26,26,0.3)' }}>V</span>}
                     </div>
                     <div className="vnl-cart-item-body">
                       <p className="vnl-cart-item-name">{item.name}</p>
@@ -132,7 +132,7 @@ export default function CartPage() {
               {coupon ? (
                 <motion.div className="vnl-coupon-applied" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                   <div>
-                    <p className="vnl-coupon-code">🎉 {coupon.code} applied</p>
+                    <p className="vnl-coupon-code">{coupon.code} applied</p>
                     <p className="vnl-coupon-saved">
                       {coupon.discount > 0 ? `${coupon.discount}% discount` : 'Free delivery applied'}
                     </p>
@@ -198,9 +198,9 @@ export default function CartPage() {
                 {user ? 'Proceed to Checkout' : 'Login to Checkout'} <ArrowRight size={15} />
               </button>
               <div className="vnl-trust-row">
-                <span>🔒 Secure</span><span>•</span>
-                <span>✅ Freshly made</span><span>•</span>
-                <span>⚡ Fast delivery</span>
+                <span>Secure</span><span>•</span>
+                <span>Freshly made</span><span>•</span>
+                <span>Fast delivery</span>
               </div>
             </div>
           </div>

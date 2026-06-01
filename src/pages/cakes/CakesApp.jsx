@@ -3,7 +3,7 @@ import { Routes, Route, useLocation, Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CakesProvider } from './CakesContext';
 import CakesNavbar from './components/CakesNavbar';
-import CakesFooter from './components/CakesFooter';
+import Footer from './components/Footer';
 import CakesCart from './components/CakesCart';
 import CakesSearchOverlay from './components/CakesSearchOverlay';
 import { CakesToast, PageLoader } from './components/CakesUI';
@@ -12,7 +12,7 @@ import CakesMaintenanceScreen from './CakesMaintenanceScreen';
 import { useMaintenance } from '../../context/MaintenanceContext';
 import './cakes.css';
 import './components/navbar.css';
-import './components/footer.css';
+
 
 const CakesHome         = lazy(() => import('./CakesHome'));
 const CakeCategory      = lazy(() => import('./CakeCategory'));
@@ -61,7 +61,7 @@ function PT({ children }) {
 function CakesNotFound() {
   return (
     <div className="ck-page" style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:'60vh', gap:16, textAlign:'center', padding:'0 24px' }}>
-      <span style={{ fontSize:'4rem' }}>🎂</span>
+      <span style={{ fontSize:'4rem', fontWeight: 800, color: 'rgba(26,26,26,0.1)' }}>V</span>
       <h2 className="ck-h2">Page not found</h2>
       <p className="ck-body">This slice doesn't exist. Head back and explore our cakes!</p>
       <Link to="/cakes" className="ck-btn ck-btn-primary" style={{ marginTop:8 }}>Back to Home</Link>
@@ -115,7 +115,7 @@ function CakesInner() {
         </AnimatePresence>
       </Suspense>
 
-      {!isAccountRoute && !isAdminRoute && <CakesFooter />}
+      {!isAccountRoute && !isAdminRoute && <Footer />}
     </div>
   );
 }

@@ -44,7 +44,7 @@ export default function CakesOrderSuccess() {
     const items = order.items || [];
     const itemLines = items.map(i => `• ${i.name} (${i.weight}) ×${i.qty}`).join('\n');
     const msg = encodeURIComponent(
-`🎂 Vanilla Crafted Cakes — Order Request
+`Vanilla Crafted Cakes — Order Request
 Order ID: ${orderId}
 Items: ${itemLines}
 Pickup: ${counterLabel}
@@ -82,7 +82,7 @@ Total: ₹${order.total?.toLocaleString()}`
         transition={{ delay: .4, duration: .4 }}>
 
         <p className="cs-eyebrow" style={{ color: '#25D366' }}>Order Request Ready!</p>
-        <h1 className="cs-title">Your order is on its<br />way to our baker ✨</h1>
+        <h1 className="cs-title">Your order is on its<br />way to our baker</h1>
         <p className="cs-sub" style={{ color: '#aaa' }}>
           Please <strong style={{ color: '#25D366' }}>send the WhatsApp message</strong> that just opened to complete your order request.
         </p>
@@ -135,8 +135,8 @@ Total: ₹${order.total?.toLocaleString()}`
             </div>
             {order?.customerName && (
               <div style={{ marginTop: 6, padding: '8px 10px', background: 'rgba(249,115,22,0.07)', borderRadius: 10, border: '1px solid rgba(249,115,22,0.15)' }}>
-                <p style={{ fontSize: '.76rem', color: '#f97316', fontWeight: 700, margin: 0 }}>👤 {order.customerName}</p>
-                <p style={{ fontSize: '.73rem', color: '#888', margin: '2px 0 0' }}>📱 {order.customerPhone}</p>
+                <p style={{ fontSize: '.76rem', color: '#f97316', fontWeight: 700, margin: 0 }}>{order.customerName}</p>
+                <p style={{ fontSize: '.73rem', color: '#888', margin: '2px 0 0' }}>{order.customerPhone}</p>
               </div>
             )}
           </div>
@@ -168,7 +168,7 @@ Total: ₹${order.total?.toLocaleString()}`
                 <div className="cs-item-img-wrap">
                   {item.image
                     ? <img src={item.image} alt={item.name} className="cs-item-img" loading="lazy" />
-                    : <span style={{ fontSize: '1.2rem' }}>{item.emoji}</span>
+                    : <span style={{ fontSize: '1rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)' }}>V</span>
                   }
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -202,7 +202,7 @@ Total: ₹${order.total?.toLocaleString()}`
 
         <div style={{ background: 'rgba(37,211,102,0.06)', border: '1px solid rgba(37,211,102,0.2)', borderRadius: 12, padding: '12px 16px', marginBottom: 20 }}>
           <p style={{ fontSize: '.8rem', color: '#25D366', fontWeight: 600, margin: 0 }}>
-            📲 Our team will confirm your order via WhatsApp within a few hours.
+            Our team will confirm your order via WhatsApp within a few hours.
           </p>
         </div>
 

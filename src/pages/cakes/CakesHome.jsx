@@ -24,19 +24,19 @@ const reveal = (d = 0) => ({
    ═══════════════════════════════════════════════ */
 const OCCASIONS_GRID = [
   { id: 'birthday',        label: 'Birthday',        image: '/cake-images/categories/birthday.png' },
-  { id: 'anniversary',     label: 'Anniversary',     image: '/cake-images/categories/anniversary.png' },
+  { id: 'anniversary',     label: 'Anniversary',     image: '/cake-images/categories/anniversary.png?v=2' },
   { id: 'engagement',      label: 'Engagement',      image: '/cake-images/categories/engagement.png' },
   { id: 'baby-shower',     label: 'Baby Shower',     image: '/cake-images/categories/baby-shower.png' },
   { id: 'congratulations', label: 'Congratulations', image: '/cake-images/occasions/congratulations.png' },
-  { id: 'kids',            label: 'Kids Cakes',      image: '/cake-images/categories/kids.png' },
+  { id: 'kids',            label: 'Kids Cakes',      image: '/cake-images/categories/kids.png?v=2' },
   { id: 'designer',        label: 'Designer Cakes',  image: '/cake-images/occasions/designer.png' },
   { id: 'annaprasanna',    label: 'Annaprasanna',    image: '/cake-images/occasions/annaprasanna.png' },
   { id: 'half-birthday',   label: 'Half Birthday',   image: '/cake-images/occasions/half-birthday.png' },
-  { id: 'bento',           label: 'Bento Cakes',     image: '/cake-images/occasions/bento.png' },
+  { id: 'bento',           label: 'Bento Cakes',     image: '/cake-images/occasions/bento.png?v=2' },
   { id: 'first-birthday',  label: '1st Birthday',    image: '/cake-images/occasions/first-birthday.png' },
   { id: 'couple',          label: 'Couple Cakes',    image: '/cake-images/desiner/p-sparkling-celebration-cream-cake-271465-m.avif' },
   { id: 'photo-print',     label: 'Photo Print',     image: '/cake-images/desiner/p-3-tier-rosette-fondant-cake-8-kg--112712-m.avif' },
-  { id: 'for-her',         label: 'Cake For Her',    image: '/cake-images/red velvet/p-rose-hearts-cake-199613-m.avif' },
+  { id: 'for-her',         label: 'Cake For Her',    image: '/cake-images/categories/for-her.png?v=2' },
   { id: 'for-him',         label: 'Cake For Him',    image: '/cake-images/chocolate/p-decadent-dark-chocolate-cake-269995-m.avif' },
   { id: 'wedding',         label: 'Wedding Cakes',   image: '/cake-images/categories/wedding.png' },
 ];
@@ -58,7 +58,7 @@ function OccasionCard({ occ }) {
           onLoad={() => setImgStatus('ready')}
           onError={() => setImgStatus('error')}
         />
-        {imgStatus === 'error' && <span className="occ-img-fallback">🎂</span>}
+        {imgStatus === 'error' && <span className="occ-img-fallback" style={{ fontSize: '1rem', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>{occ.label.charAt(0)}</span>}
       </div>
       <p className="occ-label">{occ.label}</p>
     </Link>
@@ -94,7 +94,7 @@ function Hero() {
         {/* ── HERO PROMO IMAGE ── */}
         <motion.div {...reveal(0.14)} className="hero-promo-card">
           <img
-            src="/cake-images/hero/hero-promo.png"
+            src="/cake-images/hero/hero-promo.png?v=2"
             alt="Vanilla Crafted Cakes — Crafted to Perfection"
             className="hero-promo-img"
             loading="eager"
@@ -149,7 +149,7 @@ function CakeImage({ src, emoji, alt }) {
           onError={() => setStatus('error')}
         />
       )}
-      {status === 'error' && <span className="mh-cake-emoji-fb">{emoji}</span>}
+      {status === 'error' && <span className="mh-cake-emoji-fb" style={{ fontSize: '1.2rem', fontWeight: 700, color: 'rgba(255,255,255,0.3)' }}>V</span>}
     </div>
   );
 }
@@ -232,15 +232,15 @@ function ArtisanBanner() {
         <Link to="/cakes/category/birthday" className="mh-db-btn">
           Order Now <ArrowRight size={13} />
         </Link>
-        <div className="mh-db-features">
+        <div className="mh-db-features" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '16px', textAlign: 'left', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           {[
-            { icon: <Zap size={14} />,        text: 'Freshly baked to order' },
-            { icon: <Star size={14} />,        text: 'Bestselling recipes' },
-            { icon: <Gift size={14} />,        text: 'Gift packaging included' },
-            { icon: <ShieldCheck size={14} />, text: '100% freshness guarantee' },
+            { label: 'Freshly Baked', text: 'Made fresh daily' },
+            { label: 'Premium',       text: 'Finest ingredients' },
+            { label: 'Artisan',       text: 'Masterfully crafted' },
           ].map(f => (
-            <div key={f.text} className="mh-db-feat">
-              {f.icon} {f.text}
+            <div key={f.label}>
+              <span style={{ display: 'block', fontWeight: 700, fontSize: '0.9rem', color: '#C6A769', marginBottom: '4px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{f.label}</span>
+              <span style={{ display: 'block', fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>{f.text}</span>
             </div>
           ))}
         </div>
@@ -268,7 +268,7 @@ function Trending() {
                 {cake.image ? (
                   <img src={cake.image} alt={cake.name} className="mh-trend-img ready" loading="lazy" />
                 ) : (
-                  <span className="mh-trend-tile" style={{fontSize: '2rem', padding: 0, margin: 0, background: 'none'}}>{cake.emoji}</span>
+                  <span className="mh-trend-tile" style={{fontSize: '1.5rem', fontWeight: 700, color: 'rgba(255,255,255,0.3)', padding: 0, margin: 0, background: 'none'}}>V</span>
                 )}
               </div>
             </Link>
@@ -368,7 +368,7 @@ function Reviews() {
               <div className="mh-review-stars">{'★'.repeat(r.rating)}</div>
             </div>
             <p className="mh-review-text">"{r.text.slice(0, 90)}…"</p>
-            <p className="mh-review-cake">🎂 {r.cake}</p>
+            <p className="mh-review-cake" style={{ fontWeight: 600, color: '#C6A769', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{r.cake}</p>
           </motion.div>
         ))}
       </div>
@@ -436,13 +436,13 @@ function Gallery() {
    9. OFFER STRIP (marquee)
    ═══════════════════════════════════════════════ */
 const OFFER_ITEMS = [
-  '🎂 Freshly Handcrafted Cakes',
-  '✨ Flat 10% OFF on First Order — FIRST10',
-  '🌟 Artisan Made with Premium Ingredients',
-  '🎁 100% Eggless Options Available',
-  '⭐ Rated 4.9 by 50K+ Happy Customers',
-  '🎉 Custom Cakes for Every Celebration',
-  '🏆 Luxury Bakery Experience',
+  'Freshly Handcrafted Cakes',
+  'Flat 10% OFF on First Order — FIRST10',
+  'Artisan Made with Premium Ingredients',
+  '100% Eggless Options Available',
+  'Rated 4.9 by 50K+ Happy Customers',
+  'Custom Cakes for Every Celebration',
+  'Luxury Bakery Experience',
 ];
 
 function Offers() {
@@ -460,14 +460,14 @@ function Offers() {
    10. MOVING TRUST BAR
    ═══════════════════════════════════════════════ */
 const TRUST_ITEMS = [
-  '✦ Freshly Crafted',
-  '✦ Premium Ingredients',
-  '✦ 100% Eggless Available',
-  '✦ 4.9★ Customer Rating',
-  '✦ Handcrafted Daily',
-  '✦ Celebration Ready',
-  '✦ Custom Creations',
-  '✦ Made With Care',
+  'Freshly Crafted',
+  'Premium Ingredients',
+  '100% Eggless Available',
+  '4.9★ Customer Rating',
+  'Handcrafted Daily',
+  'Celebration Ready',
+  'Custom Creations',
+  'Made With Care',
 ];
 
 function MovingTrustBar() {

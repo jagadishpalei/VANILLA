@@ -602,8 +602,8 @@ export default function Home() {
 
         <RevealSection delay={0.3}>
           <div style={{ textAlign: 'center', marginTop: '3rem', marginBottom: '2rem' }}>
-            <a href="https://www.google.com/search?client=ms-android-samsung-ss&sca_esv=6ec4181ccdb48170&sxsrf=ANbL-n7g7GOkgo7nkO7hnm3hgaqlyKpRvw:1777569178751&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOQr5U8rNhSCjHRAu5UPq5-B8ACnWLYv_y3KvRtSGNobyg9KdKdwznj1Ulj6-OaN1hljA0hvkFujwE8RaaaqEdI5sUnsAZlK-C8eDdLQ0_AciqiGSTbnWD2jjagc2g5X-xleKyXlF3e_LZaKz_UaUm8V0PgcF&q=Vanilla+Food+Court+-+Cafe+%26+Cake+Shop+in+Keonjhar+Reviews&sa=X&ved=2ahUKEwi059mbiZaUAxXNXGcHHeWaGe0Q0bkNegQIJBAH&biw=1536&bih=776&dpr=1.25#lrd=0x3a1efd6964a0eee7:0x33708f66ddbb494,3,,,," target="_blank" rel="noreferrer" className="google-review-btn">
-              ⭐ Leave a Review on Google
+            <a href="https://www.google.com/search?q=Vanilla+Food+Court+-+Cafe+%26+Cake+Shop+in+Keonjhar+Reviews" target="_blank" rel="noreferrer" className="google-review-btn">
+              Leave a Review on Google
             </a>
           </div>
         </RevealSection>

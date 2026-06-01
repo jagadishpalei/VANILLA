@@ -3,14 +3,15 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
+import { CheckCircle, Utensils, Package, Truck, Heart, Clock, ShoppingBag } from 'lucide-react';
 import './checkout-flow.css';
 
 const STAGES = [
-  { id: 'confirmed',   icon: '✅', label: 'Order Confirmed',   desc: 'We received your order' },
-  { id: 'preparing',   icon: '🍳', label: 'Preparing',         desc: 'Kitchen is at work' },
-  { id: 'ready',       icon: '📦', label: 'Ready for Pickup',  desc: 'Ready to dispatch' },
-  { id: 'on_the_way',  icon: '🛵', label: 'Out for Delivery',  desc: 'Rider on the way' },
-  { id: 'delivered',   icon: '🎉', label: 'Delivered',          desc: 'Enjoy your meal!' },
+  { id: 'confirmed',   icon: <CheckCircle size={16} />, label: 'Order Confirmed',   desc: 'We received your order' },
+  { id: 'preparing',   icon: <Utensils size={16} />,    label: 'Preparing',         desc: 'Kitchen is at work' },
+  { id: 'ready',       icon: <Package size={16} />,     label: 'Ready for Pickup',  desc: 'Ready to dispatch' },
+  { id: 'on_the_way',  icon: <Truck size={16} />,       label: 'Out for Delivery',  desc: 'Rider on the way' },
+  { id: 'delivered',   icon: <Heart size={16} />,       label: 'Delivered',          desc: 'Enjoy your meal!' },
 ];
 
 export default function OrderSuccess() {
@@ -37,7 +38,7 @@ export default function OrderSuccess() {
           <motion.div className="vso-icon"
             initial={{ scale: 0 }} animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 14, delay: .1 }}>
-            🍔
+            <ShoppingBag size={32} color="#D97706" />
           </motion.div>
         </div>
 
@@ -45,7 +46,7 @@ export default function OrderSuccess() {
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ delay: .4 }}>
           <p className="vso-eyebrow">Order Placed!</p>
-          <h1 className="vso-title">Your food is on<br />its way! 🎉</h1>
+          <h1 className="vso-title">Your food is on<br />its way!</h1>
           <p className="vso-sub">Sit back and relax — our kitchen is already preparing your order.</p>
 
           {/* Order card */}
@@ -62,7 +63,7 @@ export default function OrderSuccess() {
             </div>
             <div className="vso-divider" />
             <div className="vso-eta-row">
-              <span className="vso-eta-icon">🛵</span>
+              <span className="vso-eta-icon"><Truck size={16} color="#D97706" /></span>
               <div>
                 <p className="vso-label">Estimated Delivery</p>
                 <p className="vso-eta-val">{deliveryEta}</p>
@@ -76,7 +77,7 @@ export default function OrderSuccess() {
               <p className="vso-card-label">Your Order</p>
               {order.items.map((item, i) => (
                 <div key={i} className="vso-item-row">
-                  <span className="vso-item-emoji">🍽️</span>
+                  <span className="vso-item-emoji"><Utensils size={14} color="#D97706" /></span>
                   <div>
                     <p className="vso-item-name">{item.name} × {item.qty}</p>
                   </div>
@@ -100,7 +101,7 @@ export default function OrderSuccess() {
                 </div>
                 <div>
                   <p className={`vso-tl-label ${i === 0 ? 'active' : ''}`}>{s.label}</p>
-                  <p className="vso-tl-desc">{i === 0 ? '⏳ ' : ''}{s.desc}</p>
+                  <p className="vso-tl-desc">{i === 0 ? <Clock size={11} style={{marginRight:4, verticalAlign:'-2px'}} /> : ''}{s.desc}</p>
                 </div>
               </div>
             ))}

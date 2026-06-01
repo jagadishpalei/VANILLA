@@ -21,7 +21,7 @@ export default function WishlistPage() {
       <div style={{ padding: '16px' }}>
         {wishlist.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 0' }}>
-            <div style={{ fontSize: '3.5rem', marginBottom: 12 }}>❤️</div>
+            <svg width="48" height="48" fill="none" stroke="#D97706" strokeWidth="1.5" viewBox="0 0 24 24" style={{ marginBottom: 12 }}><path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
             <div style={{ fontFamily: 'Montserrat,sans-serif', fontWeight: 700, fontSize: '1rem', color: '#1A1A1A', marginBottom: 6 }}>Your wishlist is empty</div>
             <div style={{ fontFamily: 'Poppins,sans-serif', fontSize: '.82rem', color: '#9A8070', marginBottom: 20 }}>Save cakes you love for later</div>
             <button onClick={() => navigate('/cakes')} className="ac-btn-primary" style={{ width: 'auto', padding: '12px 28px' }}>Explore Cakes</button>
@@ -39,7 +39,7 @@ export default function WishlistPage() {
                     <div style={{ width: 72, height: 72, borderRadius: 14, overflow: 'hidden', flexShrink: 0, background: 'linear-gradient(135deg,#FFF1E0,#FAF6F0)', border: '1px solid #EAD9C4', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {item.image
                         ? <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        : <span style={{ fontSize: '2rem' }}>🎂</span>
+                        : <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'rgba(217,119,6,0.3)' }}>V</span>
                       }
                     </div>
                     {/* Info */}
@@ -65,7 +65,7 @@ export default function WishlistPage() {
                       if (navigator.share) navigator.share({ title: item.name, text: `Check this cake from Vanilla!`, url: window.location.origin });
                     }}
                       style={{ flex: 1, background: '#FFF8F2', border: '1px solid #EAD9C4', borderRadius: 10, padding: '10px', fontFamily: 'Poppins,sans-serif', fontSize: '.78rem', color: '#6B4F3A', cursor: 'pointer' }}>
-                      Share 🔗
+                      Share
                     </button>
                   </div>
                 </motion.div>

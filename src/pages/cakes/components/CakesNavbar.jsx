@@ -61,7 +61,7 @@ export default function CakesNavbar() {
     }
   };
 
-  const CITIES = ['Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Pune', 'Chennai', 'Kolkata'];
+
 
   return (
     <>
@@ -96,31 +96,7 @@ export default function CakesNavbar() {
                 </span>
               </Link>
 
-              {/* Location picker */}
-              <div className="ck-nb-loc ck-desktop-only" ref={locRef}>
-                <button className="ck-nb-loc-btn" onClick={() => setLocOpen(v => !v)}>
-                  <MapPin size={13} />
-                  <span>{userLoc}</span>
-                  <ChevronDown size={12} className={locOpen ? 'rotated' : ''} />
-                </button>
-                <AnimatePresence>
-                  {locOpen && (
-                    <motion.div
-                      className="ck-nb-dropdown"
-                      initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: .18 }}
-                    >
-                      <p className="ck-nb-dd-label">Deliver to</p>
-                      {CITIES.map(c => (
-                        <button key={c} className={`ck-nb-dd-item ${c === userLoc ? 'active' : ''}`}
-                          onClick={() => { setLocation(c); setLocOpen(false); }}>
-                          <MapPin size={13} />{c}
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+
             </div>
 
 
@@ -150,7 +126,7 @@ export default function CakesNavbar() {
                       {OCCASIONS.map(c => (
                         <Link key={c.id} to={`/cakes/category/${c.id}`}
                           className="ck-nb-dd-item" onClick={() => setCatOpen(false)}>
-                          {c.emoji} {c.label} <ChevronRight size={12} />
+                          {c.label} <ChevronRight size={12} />
                         </Link>
                       ))}
                     </motion.div>
@@ -160,18 +136,6 @@ export default function CakesNavbar() {
 
 
 
-              <button className="ck-nb-icon-btn" onClick={() => setSearchOpen(true)} title="Search" aria-label="Search">
-                <Search size={18} className="ck-mobile-only" />
-              </button>
-
-              <button className="ck-nb-icon-btn ck-nb-wishlist" onClick={() => setAuthOpen(true)} title="Wishlist">
-                <Heart size={18} />
-                {wishlist.length > 0 && <span className="ck-nb-badge">{wishlist.length}</span>}
-              </button>
-
-              <button className="ck-nb-icon-btn" onClick={() => setAuthOpen(true)} title="Account">
-                <User size={18} />
-              </button>
 
               <button className="ck-nb-cart-btn" onClick={() => setCartOpen(true)}>
                 <ShoppingBag size={18} />
@@ -199,21 +163,8 @@ export default function CakesNavbar() {
               initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: .28 }}>
 
-              {/* Mobile search */}
-              <form className="ck-mob-search" onSubmit={e => { handleSearch(e); setMobileOpen(false); }}>
-                <Search size={15} />
-                <input value={searchVal} onChange={e => setSearchVal(e.target.value)}
-                  placeholder="Search cakes…" className="ck-nb-search-input" />
-              </form>
 
-              {/* Location */}
-              <div className="ck-mob-loc">
-                <MapPin size={15} />
-                <span>Delivering to:</span>
-                <select value={userLoc} onChange={e => setLocation(e.target.value)} className="ck-mob-loc-sel">
-                  {CITIES.map(c => <option key={c}>{c}</option>)}
-                </select>
-              </div>
+
 
               <p className="ck-mob-section-label">Categories</p>
               {CATEGORIES.map(c => (
@@ -228,18 +179,12 @@ export default function CakesNavbar() {
                 {OCCASIONS.map(c => (
                   <Link key={c.id} to={`/cakes/category/${c.id}`} className="ck-mob-link" style={{ padding: '8px 4px', fontSize: '0.85rem' }}
                     onClick={() => setMobileOpen(false)}>
-                    {c.emoji} {c.label}
+                    {c.label}
                   </Link>
                 ))}
               </div>
 
-              <p className="ck-mob-section-label">Account</p>
-              <button className="ck-mob-link" onClick={() => { setAuthOpen(true); setMobileOpen(false); }}>
-                <User size={15} /> Login / Register
-              </button>
-              <button className="ck-mob-link" onClick={() => { setAuthOpen(true); setMobileOpen(false); }}>
-                <Heart size={15} /> My Wishlist {wishlist.length > 0 && `(${wishlist.length})`}
-              </button>
+
             </motion.div>
           </>
         )}

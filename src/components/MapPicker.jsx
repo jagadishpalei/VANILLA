@@ -106,7 +106,7 @@ export default function MapPicker({ initialCoords, onConfirm, onClose }) {
         <div className="vmap-topbar">
           <button className="vmap-back-btn" onClick={onClose}>←</button>
           <div>
-            <div className="vmap-topbar-title">Select Delivery Location</div>
+            <div className="vmap-topbar-title">Select Location</div>
             <div className="vmap-topbar-sub">Move the map to position the pin</div>
           </div>
         </div>

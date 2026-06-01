@@ -68,10 +68,10 @@ export const OFFERS = [
 ];
 
 export const REVIEWS = [
-  { id:1, name:'Priya Sharma',  city:'Delhi',     rating:5, avatar:'PS', cake:'Belgian Chocolate Truffle', text:"Ordered for my husband's birthday — absolutely divine! Freshly crafted, stunning presentation. Will definitely order again." },
-  { id:2, name:'Arjun Mehta',   city:'Mumbai',    rating:5, avatar:'AM', cake:'Gold Luxe Cake',            text:"Blew everyone's minds at our anniversary dinner. The gold presentation was truly cinematic. Worth every rupee." },
-  { id:3, name:'Sneha Patel',   city:'Bangalore', rating:5, avatar:'SP', cake:'Unicorn Magic Cake',        text:"My daughter was in tears of joy. Magical cake, perfect packaging, and received on time!" },
-  { id:4, name:'Rohit Kumar',   city:'Hyderabad', rating:5, avatar:'RK', cake:'Red Velvet Love Cake',      text:"Arrived perfectly on time. Impressive coordination and incredible taste!" },
-  { id:5, name:'Ananya Singh',  city:'Pune',      rating:5, avatar:'AS', cake:'Marble Texture Cake',       text:"My guests thought I got it from abroad. Stunning art, incredible flavour. The team is so talented." },
-  { id:6, name:'Vikram Nair',   city:'Chennai',   rating:5, avatar:'VN', cake:'Rainbow Birthday Cake',     text:"Fed 15 office colleagues — everyone loved every bite. Premium packaging too. 10/10 experience." },
+  { id:1, name:'Priya Sharma',  city:'Keonjhar',     rating:5, avatar:'PS', cake:'Belgian Chocolate Truffle', text:"Ordered for my husband's birthday — absolutely divine! Freshly crafted, stunning presentation. Will definitely order again." },
+  { id:2, name:'Arjun Mehta',   city:'Keonjhar',    rating:5, avatar:'AM', cake:'Gold Luxe Cake',            text:"Blew everyone's minds at our anniversary dinner. The gold presentation was truly cinematic. Worth every rupee." },
+  { id:3, name:'Sneha Patel',   city:'Keonjhar', rating:5, avatar:'SP', cake:'Unicorn Magic Cake',        text:"My daughter was in tears of joy. Magical cake, perfect packaging, and received on time!" },
+  { id:4, name:'Rohit Kumar',   city:'Keonjhar', rating:5, avatar:'RK', cake:'Red Velvet Love Cake',      text:"Arrived perfectly on time. Impressive coordination and incredible taste!" },
+  { id:5, name:'Ananya Singh',  city:'Keonjhar',      rating:5, avatar:'AS', cake:'Marble Texture Cake',       text:"My guests thought I got it from abroad. Stunning art, incredible flavour. The team is so talented." },
+  { id:6, name:'Vikram Nair',   city:'Keonjhar',   rating:5, avatar:'VN', cake:'Rainbow Birthday Cake',     text:"Fed 15 office colleagues — everyone loved every bite. Premium packaging too. 10/10 experience." },
 ];

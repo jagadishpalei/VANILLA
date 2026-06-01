@@ -75,10 +75,10 @@ export function SectionHeader({ eyebrow, title, subtitle, center = false }) {
 }
 
 /* ── Empty State ─────────────────────────────────────── */
-export function EmptyState({ icon = '🎂', title, subtitle, action }) {
+export function EmptyState({ icon, title, subtitle, action }) {
   return (
     <div className="ck-empty">
-      <span className="ck-empty-icon">{icon}</span>
+      {icon && <span className="ck-empty-icon">{icon}</span>}
       <h3 className="ck-h4">{title}</h3>
       {subtitle && <p className="ck-body">{subtitle}</p>}
       {action}

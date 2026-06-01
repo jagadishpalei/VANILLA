@@ -165,10 +165,10 @@
 .cat-card-tile {
   position: relative;
   background: linear-gradient(135deg, #FFF8F2, #FAF6F0);
-  height: 110px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  flex-shrink: 0;
   text-decoration: none;
 }
 .cat-card-emoji { font-size: 3rem; line-height: 1; }
@@ -433,22 +433,20 @@
 }
 .cat-apply-btn:active { background: #B45309; }
 
-/* ── CAKE IMAGE DISPLAY ─────────────────────────── */
+/* ── CAKE IMAGE DISPLAY ────────────────── */
 .cat-img-wrap {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .cat-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  display: block;
   opacity: 0;
   transition: opacity .35s ease;
-  display: block;
 }
 .cat-img.ready { opacity: 1; }
 .cat-img-skeleton {
@@ -464,8 +462,13 @@
   100% { background-position: -200% 0; }
 }
 .cat-emoji-fb {
-  font-size: 3rem;
-  line-height: 1;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: #FAF6F0;
   z-index: 2;
 }
 

@@ -13,8 +13,8 @@ const OWNER_CREDENTIALS = [
 /* ── Seed: Franchise Branches ── */
 const SEED_FRANCHISES = [
   {
-    id: 'FR001', name: 'Vanilla Crafted Cakes — Keonjhar Main',
-    city: 'Keonjhar', locality: 'Station Road', state: 'Odisha',
+    id: 'FR001', name: 'Vanilla – Jagannathpur',
+    city: 'Keonjhar', locality: 'Jagannathpur', state: 'Odisha',
     status: 'active', adminEmail: 'admin@vanilla.com',
     adminName: 'Rajesh Mohanta', phone: '9437890123',
     staff: 12,
@@ -24,58 +24,34 @@ const SEED_FRANCHISES = [
     brand: 'Vanilla Crafted Cakes',
   },
   {
-    id: 'FR002', name: 'Vanilla Crafted Cakes — Barbil',
-    city: 'Barbil', locality: 'Market Square', state: 'Odisha',
-    status: 'active', adminEmail: 'barbil@vanilla.com',
+    id: 'FR002', name: 'Vanilla – Mining Road',
+    city: 'Keonjhar', locality: 'Mining Road', state: 'Odisha',
+    status: 'active', adminEmail: 'mining@vanilla.com',
     adminName: 'Sanjay Pradhan', phone: '9861234567',
     staff: 8,
     monthlyRevenue: 156300, weeklyOrders: 178,
     rating: 4.5, joinDate: '2024-06-10',
-    coordinates: { lat: 22.1022, lng: 85.3864 },
+    coordinates: { lat: 21.6163, lng: 85.5891 },
     brand: 'Vanilla Crafted Cakes',
   },
   {
-    id: 'FR003', name: 'Vanilla Restaurant — Keonjhar',
-    city: 'Keonjhar', locality: 'College Road', state: 'Odisha',
-    status: 'active', adminEmail: 'restaurant@vanilla.com',
+    id: 'FR003', name: 'Vanilla – Autopur',
+    city: 'Keonjhar', locality: 'Autopur', state: 'Odisha',
+    status: 'active', adminEmail: 'autopur@vanilla.com',
     adminName: 'Priti Nayak', phone: '9040123456',
     staff: 18,
     monthlyRevenue: 421000, weeklyOrders: 489,
     rating: 4.8, joinDate: '2023-08-20',
     coordinates: { lat: 21.4621, lng: 85.5791 },
-    brand: 'Vanilla Restaurant',
-  },
-  {
-    id: 'FR004', name: 'Vanilla Crafted Cakes — Rourkela',
-    city: 'Rourkela', locality: 'Udit Nagar', state: 'Odisha',
-    status: 'pending', adminEmail: 'rourkela@vanilla.com',
-    adminName: 'Suresh Kujur', phone: '7894561230',
-    staff: 0,
-    monthlyRevenue: 0, weeklyOrders: 0,
-    rating: null, joinDate: '2026-06-01',
-    coordinates: { lat: 22.2604, lng: 84.8536 },
     brand: 'Vanilla Crafted Cakes',
-  },
-  {
-    id: 'FR005', name: 'Vanilla Crafted Cakes — Bhubaneswar',
-    city: 'Bhubaneswar', locality: 'Saheed Nagar', state: 'Odisha',
-    status: 'suspended', adminEmail: 'bbsr@vanilla.com',
-    adminName: 'Anil Tripathy', phone: '9123456780',
-    staff: 9,
-    monthlyRevenue: 0, weeklyOrders: 0,
-    rating: 4.1, joinDate: '2025-03-01',
-    coordinates: { lat: 20.2961, lng: 85.8245 },
-    brand: 'Vanilla Crafted Cakes',
-  },
+  }
 ];
 
 /* ── Seed: Admin Accounts ── */
 const SEED_ADMINS = [
   { id: 'ADM001', name: 'Rajesh Mohanta',  email: 'admin@vanilla.com',      role: 'branch_admin', branch: 'FR001', status: 'active',    lastLogin: '2026-05-11T18:22:00', loginCount: 312, actionsToday: 24 },
-  { id: 'ADM002', name: 'Sanjay Pradhan',  email: 'barbil@vanilla.com',     role: 'branch_admin', branch: 'FR002', status: 'active',    lastLogin: '2026-05-11T16:10:00', loginCount: 198, actionsToday: 11 },
-  { id: 'ADM003', name: 'Priti Nayak',     email: 'restaurant@vanilla.com', role: 'branch_admin', branch: 'FR003', status: 'active',    lastLogin: '2026-05-11T20:45:00', loginCount: 421, actionsToday: 38 },
-  { id: 'ADM004', name: 'Suresh Kujur',    email: 'rourkela@vanilla.com',   role: 'branch_admin', branch: 'FR004', status: 'pending',   lastLogin: null,                  loginCount: 0,   actionsToday: 0 },
-  { id: 'ADM005', name: 'Anil Tripathy',   email: 'bbsr@vanilla.com',       role: 'branch_admin', branch: 'FR005', status: 'suspended', lastLogin: '2026-04-18T10:00:00', loginCount: 87,  actionsToday: 0 },
+  { id: 'ADM002', name: 'Sanjay Pradhan',  email: 'mining@vanilla.com',     role: 'branch_admin', branch: 'FR002', status: 'active',    lastLogin: '2026-05-11T16:10:00', loginCount: 198, actionsToday: 11 },
+  { id: 'ADM003', name: 'Priti Nayak',     email: 'autopur@vanilla.com',    role: 'branch_admin', branch: 'FR003', status: 'active',    lastLogin: '2026-05-11T20:45:00', loginCount: 421, actionsToday: 38 },
   { id: 'ADM006', name: 'Meena Sahoo',     email: 'manager1@vanilla.com',   role: 'staff_manager', branch: 'FR001', status: 'active',  lastLogin: '2026-05-11T09:30:00', loginCount: 145, actionsToday: 7 },
 ];
 
@@ -83,10 +59,10 @@ const SEED_ADMINS = [
 const SEED_GLOBAL_ORDERS = [
   { id: 'G-ORD-001', franchise: 'FR001', customer: 'Rahul Sharma',   total: 419, status: 'collected',    createdAt: new Date(Date.now() - 2*3600000).toISOString(),   city: 'Keonjhar' },
   { id: 'G-ORD-002', franchise: 'FR003', customer: 'Priya Das',      total: 678, status: 'ready_pickup', createdAt: new Date(Date.now() - 30*60000).toISOString(),    city: 'Keonjhar' },
-  { id: 'G-ORD-003', franchise: 'FR002', customer: 'Amit Kumar',     total: 299, status: 'preparing',    createdAt: new Date(Date.now() - 10*60000).toISOString(),    city: 'Barbil'   },
+  { id: 'G-ORD-003', franchise: 'FR002', customer: 'Amit Kumar',     total: 299, status: 'preparing',    createdAt: new Date(Date.now() - 10*60000).toISOString(),    city: 'Keonjhar'   },
   { id: 'G-ORD-004', franchise: 'FR001', customer: 'Sunita Rath',    total: 512, status: 'confirmed',    createdAt: new Date(Date.now() - 2*60000).toISOString(),     city: 'Keonjhar' },
   { id: 'G-ORD-005', franchise: 'FR003', customer: 'Debasish Nayak', total: 890, status: 'collected',    createdAt: new Date(Date.now() - 5*3600000).toISOString(),   city: 'Keonjhar' },
-  { id: 'G-ORD-006', franchise: 'FR002', customer: 'Lipika Mishra',  total: 345, status: 'collected',    createdAt: new Date(Date.now() - 8*3600000).toISOString(),   city: 'Barbil'   },
+  { id: 'G-ORD-006', franchise: 'FR002', customer: 'Lipika Mishra',  total: 345, status: 'collected',    createdAt: new Date(Date.now() - 8*3600000).toISOString(),   city: 'Keonjhar'   },
   { id: 'G-ORD-007', franchise: 'FR001', customer: 'Roshan Panda',   total: 756, status: 'cancelled',    createdAt: new Date(Date.now() - 4*3600000).toISOString(),   city: 'Keonjhar' },
   { id: 'G-ORD-008', franchise: 'FR001', customer: 'Kabita Sahu',    total: 231, status: 'confirmed',    createdAt: new Date(Date.now() - 1*60000).toISOString(),     city: 'Keonjhar' },
 ];
@@ -132,8 +108,7 @@ const SEED_FINANCE = {
 const SEED_SECURITY = [
   { id: 'SEC001', type: 'login',   user: 'admin@vanilla.com',      ip: '192.168.1.45', device: 'Chrome/Win',  time: new Date(Date.now()-5*60000).toISOString(),   status: 'success' },
   { id: 'SEC002', type: 'login',   user: 'unknown@attacker.com',   ip: '45.132.81.22', device: 'Unknown',     time: new Date(Date.now()-18*60000).toISOString(),  status: 'failed' },
-  { id: 'SEC003', type: 'action',  user: 'restaurant@vanilla.com', ip: '192.168.1.72', device: 'Firefox/Mac', time: new Date(Date.now()-2*3600000).toISOString(), status: 'success' },
-  { id: 'SEC004', type: 'login',   user: 'bbsr@vanilla.com',       ip: '103.44.18.99', device: 'Mobile/And',  time: new Date(Date.now()-6*3600000).toISOString(), status: 'blocked' },
+  { id: 'SEC003', type: 'action',  user: 'autopur@vanilla.com', ip: '192.168.1.72', device: 'Firefox/Mac', time: new Date(Date.now()-2*3600000).toISOString(), status: 'success' },
   { id: 'SEC005', type: 'config',  user: 'owner@vanilla.com',      ip: '10.0.0.1',     device: 'Chrome/Win',  time: new Date(Date.now()-1*3600000).toISOString(), status: 'success' },
 ];
 

@@ -15,9 +15,9 @@ import './checkout.css';
 const WHATSAPP_NUMBER = '917008061760';
 
 const PICKUP_COUNTERS = [
-  { id: 'keonjhar-main', name: 'Keonjhar Main Store',   address: 'Station Road, Keonjhar 758001',       emoji: '🏪' },
-  { id: 'barbil',        name: 'Barbil Store',           address: 'Market Square, Barbil 758035',         emoji: '🏬' },
-  { id: 'restaurant',   name: 'Keonjhar Restaurant',   address: 'College Road, Keonjhar 758001',        emoji: '🍽️' },
+  { id: 'jagannathpur', name: 'Vanilla – Jagannathpur', address: 'Keonjhar, Odisha', emoji: '🏪' },
+  { id: 'mining-road',  name: 'Vanilla – Mining Road',  address: 'Keonjhar, Odisha', emoji: '🏪' },
+  { id: 'autopur',      name: 'Vanilla – Autopur',      address: 'Keonjhar, Odisha', emoji: '🏪' },
 ];
 
 /* ─────────────────────────────────────
@@ -355,7 +355,7 @@ export default function CakesCheckout() {
       {/* Cutoff notice — only show after 8 PM */}
       {!isSameDayOpen() && (
         <div style={{ margin: '0 16px 12px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 12, padding: '11px 14px', display: 'flex', gap: 8, alignItems: 'center' }}>
-          <span>🕗</span>
+          <Clock size={16} color="#ef4444" />
           <p style={{ margin: 0, fontSize: '.8rem', color: '#ef4444', fontWeight: 600 }}>Today's ordering window has closed. Please select a pickup time for tomorrow.</p>
         </div>
       )}
@@ -369,7 +369,7 @@ export default function CakesCheckout() {
               <div style={{ width: 56, height: 56, borderRadius: 12, overflow: 'hidden', flexShrink: 0, border: '1px solid rgba(255,255,255,0.1)' }}>
                 {item.image
                   ? <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', background: 'rgba(249,115,22,0.1)' }}>{item.emoji}</div>
+                  : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 800, color: 'rgba(249,115,22,0.4)', background: 'rgba(249,115,22,0.1)' }}>V</div>
                 }
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
@@ -427,7 +427,7 @@ export default function CakesCheckout() {
             {errors.phone && <p style={{ color: '#ef4444', fontSize: '.73rem', marginTop: -8, marginBottom: 8 }}>⚠ {errors.phone}</p>}
           </div>
           <Field id="cust-email" label="Email (optional)" value={customerEmail} onChange={setCustomerEmail} placeholder="your@email.com" type="email" />
-          <TextArea id="cake-msg" label="Cake Message (text written on cake)" value={cakeMessage} onChange={setCakeMessage} placeholder='e.g. "Happy Birthday Priya! 🎂"' />
+          <TextArea id="cake-msg" label="Cake Message (text written on cake)" value={cakeMessage} onChange={setCakeMessage} placeholder='e.g. "Happy Birthday Priya!"' />
           <TextArea id="notes"    label="Special Notes" value={specialNotes} onChange={setSpecialNotes} placeholder="Any special requests, allergies, or customization notes…" />
         </Section>
 
@@ -442,7 +442,6 @@ export default function CakesCheckout() {
                 background: pickupCounter === c.id ? 'rgba(249,115,22,0.1)' : 'rgba(255,255,255,0.03)',
                 transition: 'all .15s',
               }}>
-                <span style={{ fontSize: '1.3rem' }}>{c.emoji}</span>
                 <div style={{ flex: 1 }}>
                   <p style={{ fontWeight: 700, fontSize: '.84rem', color: pickupCounter === c.id ? '#f97316' : '#eee', margin: 0 }}>{c.name}</p>
                   <p style={{ fontSize: '.72rem', color: '#888', margin: '2px 0 0' }}>{c.address}</p>
@@ -528,9 +527,9 @@ export default function CakesCheckout() {
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
             style={{ background: 'rgba(249,115,22,0.07)', border: '1.5px solid rgba(249,115,22,0.2)', borderRadius: 14, padding: '14px 18px', marginBottom: 20 }}>
             <p style={{ fontSize: '.8rem', fontWeight: 700, color: '#f97316', margin: '0 0 10px', letterSpacing: '.02em' }}>Order Summary</p>
-            {activeCounter && <p style={{ fontSize: '.78rem', color: '#ddd', margin: '3px 0' }}>📍 {activeCounter.name}</p>}
-            {pickupDate    && <p style={{ fontSize: '.78rem', color: '#ddd', margin: '3px 0' }}>📅 {new Date(pickupDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}</p>}
-            {pickupSlot    && <p style={{ fontSize: '.78rem', color: '#ddd', margin: '3px 0' }}>🕐 {pickupSlot}</p>}
+            {activeCounter && <p style={{ fontSize: '.78rem', color: '#ddd', margin: '3px 0' }}><MapPin size={12} style={{ display: 'inline', marginRight: 6, verticalAlign: '-1px' }} color="#aaa" />{activeCounter.name}</p>}
+            {pickupDate    && <p style={{ fontSize: '.78rem', color: '#ddd', margin: '3px 0' }}><Calendar size={12} style={{ display: 'inline', marginRight: 6, verticalAlign: '-1px' }} color="#aaa" />{new Date(pickupDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}</p>}
+            {pickupSlot    && <p style={{ fontSize: '.78rem', color: '#ddd', margin: '3px 0' }}><Clock size={12} style={{ display: 'inline', marginRight: 6, verticalAlign: '-1px' }} color="#aaa" />{pickupSlot}</p>}
             <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(249,115,22,0.15)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
                 <span style={{ fontSize: '.78rem', color: '#aaa' }}>Total Cost</span>

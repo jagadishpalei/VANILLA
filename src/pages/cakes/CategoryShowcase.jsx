@@ -180,7 +180,7 @@ function CategoryBubble({ cat, index, isActive, onTap }) {
               onError={() => setImgOk(false)}
             />
           ) : (
-            <div className="ccs-disc-fallback" style={{ background: cat.gradient }}>🎂</div>
+            <div className="ccs-disc-fallback" style={{ background: cat.gradient, fontFamily: 'var(--mh-font-h)', fontSize: '2rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>V</div>
           )}
 
           {/* Glass gloss overlay */}

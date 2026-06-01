@@ -97,7 +97,7 @@ function OrderCard({ order, onStatusChange, onApprove, onReject }) {
               {/* Cake Message */}
               {order.cakeMessage && (
                 <div className="adm-order-field" style={{ display: 'flex', gap: 5, width: '100%', background: '#FFFBEB', padding: '6px 10px', borderRadius: 8, border: '1px solid #FEF3C7' }}>
-                  <span style={{ fontSize: '.75rem', color: '#92400E', fontWeight: 600 }}>🎂 Cake Message: "{order.cakeMessage}"</span>
+                  <span style={{ fontSize: '.75rem', color: '#92400E', fontWeight: 600 }}>Cake Message: "{order.cakeMessage}"</span>
                 </div>
               )}
 
@@ -140,7 +140,7 @@ function OrderCard({ order, onStatusChange, onApprove, onReject }) {
 
               {/* Workshop Reference */}
               <div style={{ marginTop: 10, padding: '10px 12px', background: '#f3f4f6', borderRadius: 10, border: '1px solid #e5e7eb' }}>
-                <div style={{ fontSize: '.62rem', fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', marginBottom: 8, letterSpacing: '.05em' }}>📋 Workshop Reference</div>
+                <div style={{ fontSize: '.62rem', fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', marginBottom: 8, letterSpacing: '.05em' }}>Workshop Reference</div>
                 {order.items?.length > 0 ? order.items.map((item, idx) => (
                   <div key={item.key || idx} style={{ marginBottom: idx < order.items.length - 1 ? 8 : 0, paddingBottom: idx < order.items.length - 1 ? 8 : 0, borderBottom: idx < order.items.length - 1 ? '1px solid #e5e7eb' : 'none' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3 }}>
@@ -196,7 +196,7 @@ function OrderCard({ order, onStatusChange, onApprove, onReject }) {
               {/* WhatsApp customer */}
               <button className="adm-btn adm-btn-ghost adm-btn-sm"
                 onClick={() => window.open(`https://wa.me/91${order.phone}`, '_blank')}>
-                📲 WhatsApp Customer
+                WhatsApp Customer
               </button>
 
               {/* Cancel if not already terminal */}
@@ -247,7 +247,6 @@ export default function AdminOrders() {
       {/* Alert for new requests */}
       {newCount > 0 && (
         <div style={{ background: 'rgba(249,115,22,0.07)', border: '1.5px solid rgba(249,115,22,0.25)', borderRadius: 12, padding: '12px 16px', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ fontSize: '1.2rem' }}>📲</span>
           <div>
             <p style={{ margin: 0, fontWeight: 700, fontSize: '.84rem', color: 'var(--adm-orange)' }}>{newCount} WhatsApp order request{newCount > 1 ? 's' : ''} pending approval</p>
             <p style={{ margin: '2px 0 0', fontSize: '.75rem', color: 'var(--adm-text3)' }}>Review and approve or reject each order request below.</p>

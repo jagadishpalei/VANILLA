@@ -4,7 +4,7 @@ import { useOwner } from '../../context/OwnerContext';
 import { UserCheck, UserX, Plus, ShieldCheck, Clock } from 'lucide-react';
 
 const ROLE_LABEL = { branch_admin:'Branch Admin', staff_manager:'Staff Manager', super_admin:'Super Admin' };
-const BRANCH_NAME = { FR001:'Keonjhar Main', FR002:'Barbil', FR003:'Keonjhar Restaurant', FR004:'Rourkela', FR005:'Bhubaneswar' };
+const BRANCH_NAME = { FR001:'Vanilla – Jagannathpur', FR002:'Vanilla – Mining Road', FR003:'Vanilla – Autopur' };
 
 export default function OwnerAdminControl() {
   const { admins, updateAdminStatus, franchises } = useOwner();

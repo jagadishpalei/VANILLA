@@ -7,7 +7,7 @@ import './account.css';
 const FAQS = [
   { q: 'How long does delivery take?', a: 'Standard delivery: 60-90 minutes. Same-day orders placed before 6 PM are delivered the same evening. We deliver 7 days a week.' },
   { q: 'Can I customise my cake?', a: 'Yes! On the product page, you can add a personalised message, choose flavours, and select the size. For fully custom designs, use the WhatsApp chat.' },
-  { q: 'What are your delivery areas?', a: 'We currently deliver across Delhi NCR, Mumbai, Bangalore, and Pune. Enter your pincode at checkout to confirm availability.' },
+  { q: 'Where are you located?', a: 'We currently operate exclusively in Keonjhar, Odisha. All orders are available for store pickup from our Jagannathpur, Mining Road, or Autopur branches.' },
   { q: 'Can I cancel or modify my order?', a: 'Orders can be cancelled within 15 minutes of placing. After that, the bakers have already started! Please contact support for modifications.' },
   { q: 'What is your refund policy?', a: "If you receive a damaged or incorrect item, we'll replace it or issue a full refund within 24 hours. Contact support with a photo of the product." },
 ];

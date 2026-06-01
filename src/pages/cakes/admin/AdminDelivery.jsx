@@ -92,7 +92,7 @@ export default function AdminPickup() {
                 </span>
                 {o.cakeMessage && (
                   <span style={{ fontSize:'.73rem', color:'#92400E', background:'#FFFBEB', padding:'3px 8px', borderRadius:6, border:'1px solid #FEF3C7' }}>
-                    🎂 "{o.cakeMessage}"
+                    "{o.cakeMessage}"
                   </span>
                 )}
                 {o.note && (
@@ -136,7 +136,7 @@ export default function AdminPickup() {
               </button>
             )}
             <button className="adm-btn adm-btn-ghost adm-btn-sm" onClick={() => window.open(`https://wa.me/91${o.phone}`, '_blank')}>
-              📲 WhatsApp {o.customer.split(' ')[0]}
+              WhatsApp {o.customer.split(' ')[0]}
             </button>
           </div>
         </div>
