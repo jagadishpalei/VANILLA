@@ -170,41 +170,41 @@ function OrderCard({ order, onStatusChange, onApprove, onReject }) {
             </div>
 
 
-            {/* Action bar */}
-            <div style={{ padding: '10px 14px', borderTop: '1px solid var(--adm-border2)', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {/* New request: Approve + Reject */}
+            {/* Action bar — full-width 48px mobile buttons */}
+            <div className="adm-order-actions">
+              {/* New request: Approve + Reject side by side */}
               {order.status === 'new_request' && (
-                <>
-                  <button className="adm-btn adm-btn-sm" style={{ background: '#22c55e', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5 }}
+                <div className="adm-order-actions-row">
+                  <button className="adm-order-action-btn" style={{ background: '#22c55e', color: '#fff' }}
                     onClick={() => onApprove(order.id)}>
-                    <Check size={13} /> Approve Order
+                    <Check size={16} /> Approve
                   </button>
-                  <button className="adm-btn adm-btn-sm" style={{ background: '#ef4444', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5 }}
+                  <button className="adm-order-action-btn" style={{ background: '#ef4444', color: '#fff' }}
                     onClick={() => onReject(order.id)}>
-                    <X size={13} /> Reject
+                    <X size={16} /> Reject
                   </button>
-                </>
+                </div>
               )}
-
-              {/* Progress step button */}
+              {/* Progress step */}
               {nextStep && (
-                <button className="adm-btn adm-btn-primary adm-btn-sm" onClick={() => onStatusChange(order.id, nextStep.status)}>
-                  → {nextStep.label}
+                <button className="adm-order-action-btn" style={{ background: 'var(--adm-orange)', color: '#fff' }}
+                  onClick={() => onStatusChange(order.id, nextStep.status)}>
+                  {nextStep.label}
                 </button>
               )}
-
-              {/* WhatsApp customer */}
-              <button className="adm-btn adm-btn-ghost adm-btn-sm"
-                onClick={() => window.open(`https://wa.me/91${order.phone}`, '_blank')}>
-                WhatsApp Customer
-              </button>
-
-              {/* Cancel if not already terminal */}
-              {!['collected', 'cancelled', 'rejected'].includes(order.status) && (
-                <button className="adm-btn adm-btn-danger adm-btn-sm" onClick={() => onStatusChange(order.id, 'cancelled')}>
-                  Cancel
+              {/* WhatsApp + Cancel row */}
+              <div className="adm-order-actions-row">
+                <button className="adm-order-action-btn" style={{ background: '#25D366', color: '#fff' }}
+                  onClick={() => window.open(`https://wa.me/91${order.phone}`, '_blank')}>
+                  WhatsApp
                 </button>
-              )}
+                {!['collected','cancelled','rejected'].includes(order.status) && (
+                  <button className="adm-order-action-btn" style={{ background: '#FEE2E2', color: 'var(--adm-red)' }}
+                    onClick={() => onStatusChange(order.id, 'cancelled')}>
+                    Cancel
+                  </button>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
@@ -257,12 +257,12 @@ export default function AdminOrders() {
         </div>
       )}
 
-      <div className="adm-search-wrap" style={{ marginBottom: 16, maxWidth: 400 }}>
+      <div className="adm-search-wrap" style={{ marginBottom: 14 }}>
         <Search size={15} className="adm-search-icon" />
         <input className="adm-input" placeholder="Search by name or order ID…" value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
-      <div className="adm-filter-bar" style={{ flexWrap: 'wrap' }}>
+      <div className="adm-filter-bar">
         {FILTERS.map(f => (
           <button key={f} className={`adm-filter-chip${filter === f ? ' active' : ''}`} onClick={() => setFilter(f)}>
             {f === 'all' ? `All (${orders.length})` : `${STATUS_LABEL[f]} (${orders.filter(o => o.status === f).length})`}

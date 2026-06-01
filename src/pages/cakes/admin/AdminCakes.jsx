@@ -114,8 +114,8 @@ export default function AdminCakes() {
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
-        <div className="adm-search-wrap" style={{ maxWidth: 280, flex: 1 }}>
+      <div style={{ marginBottom: 14 }}>
+        <div className="adm-search-wrap">
           <Search size={15} className="adm-search-icon" />
           <input className="adm-input" placeholder="Search cakes…" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
